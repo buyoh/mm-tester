@@ -38,13 +38,15 @@ public class Tester {
                 	g2.drawOval(posX[i] * 10 + 17, posY[i] * 10 + 17, 6, 6);
                 }
 
-                g2.setFont(new Font("Arial", Font.BOLD, 9));
-                FontMetrics fm = g2.getFontMetrics();
-                for (int i = 0; i < N; ++i) {
-                    char[] ch = ("" + i).toCharArray();
-                    int x = posX[i] * 10 + 15;
-                    int y = posY[i] * 10 + 15;
-                    g2.drawChars(ch, 0, ch.length, x, y);
+                if (numb) {
+                    g2.setFont(new Font("Arial", Font.BOLD, 9));
+                    FontMetrics fm = g2.getFontMetrics();
+                    for (int i = 0; i < N; ++i) {
+                        char[] ch = ("" + i).toCharArray();
+                        int x = posX[i] * 10 + 15;
+                        int y = posY[i] * 10 + 15;
+                        g2.drawChars(ch, 0, ch.length, x, y);
+                    }
                 }
 
                 g.drawImage(bi, 0, 0, (SIZE + 4) * 10, (SIZE + 4) * 10, null);
@@ -91,7 +93,7 @@ public class Tester {
 
     static Process proc;
     static String fileName, exec;
-    static boolean save, vis;
+    static boolean save, vis, numb;
 
     final int MAXN = 200, MINN = 50;
     final int SIZE = 50 + 1;
@@ -232,6 +234,8 @@ public class Tester {
                 vis = true;
             } else if (args[i].equals("-save")) {
                 save = true;
+            } else if (args[i].equals("-num")) {
+                numb = true;
             }
         }
         fileName = seed;
