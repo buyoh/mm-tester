@@ -9,11 +9,84 @@ import javax.imageio.*;
 
 public class Tester {
 
-    public class Visualizer extends JPanel {
+    public class Visualizer extends JPanel implements WindowListener {
+    	
+    	public void paint(Graphics g) {
+        	try {
+	            // do painting here
+	            BufferedImage bi = new BufferedImage(SIZE * 10, SIZE * 10, BufferedImage.TYPE_INT_RGB);
+	            Graphics2D g2 = (Graphics2D)bi.getGraphics();
+	            // background
+	            g2.setColor(new Color(0xD3D3D3));
+	            g2.fillRect(0, 0, SIZE * 10, SIZE * 10);
+
+	            g2.setColor(new Color(0x000000));
+
+	            for (int i = 0; i < N; i++) {
+	            	int a = perm[i];
+	            	int b = perm[(i + 1) % N];
+	            	g2.drawLine(posX[a] * 10, posY[a] * 10, posX[b] * 10, posY[b] * 10);
+	            }
+
+	            /*for (int i = 0; i < N; i++) {
+	            	g2.drawOval()
+	            }*/
+
+	            /*// draw the points on the circle
+	            for (int i = 0; i < N; ++i) {
+	                g2.drawOval(SZ + (int)Math.round(SZ*Math.sin(2 * i * Math.PI / N)) + D - 2, 
+	                            SZ - (int)Math.round(SZ*Math.cos(2 * i * Math.PI / N)) + D - 2, 4, 4);
+	            }*/
+
+	            // add labels with points' indices
+	            /*g2.setFont(new Font("Arial", Font.BOLD, 11));
+	            FontMetrics fm = g2.getFontMetrics();
+	            char[] ch;
+	            for (int i = 0; i < N; ++i) {
+	                ch = ("" + perm[i]).toCharArray();
+	                int x = SZ + D + (int)Math.round((SZ+D/2)*Math.sin(2 * i * Math.PI / N)) - 5;
+	                int y = SZ + D - (int)Math.round((SZ+D/2)*Math.cos(2 * i * Math.PI / N)) + fm.getHeight()/2 - 2;
+	                g2.drawChars(ch,0,ch.length, x, y);
+	            }*/
+
+	            g.drawImage(bi, 0, 0, SIZE * 10, SIZE * 10, null);
+	            if (save) {
+	                ImageIO.write(bi, "png", new File(fileName +".png"));
+	            }
+    		} catch (Exception e) { 
+    			e.printStackTrace();
+    		}
+        }
+
+        public Visualizer () {
+            jf.addWindowListener(this);
+        }
+
+        // WindowListener
+        public void windowClosing(WindowEvent e) {
+            if (proc != null) {
+            	try { 
+            		proc.destroy();
+            	} catch (Exception ex) {
+            		ex.printStackTrace();
+            	}
+            }
+            System.exit(0);
+        }
+
+        public void windowActivated(WindowEvent e) { }
+        public void windowDeactivated(WindowEvent e) { }
+        public void windowOpened(WindowEvent e) { }
+        public void windowClosed(WindowEvent e) { }
+        public void windowIconified(WindowEvent e) { }
+        public void windowDeiconified(WindowEvent e) { }
 
     }
 
     /********************************************************************/
+
+    JFrame jf;
+    Visualizer v;
     InputStream is;
     OutputStream os;
     BufferedReader br;
@@ -23,7 +96,7 @@ public class Tester {
     static boolean save, vis, debug;
 
     final int MAXN = 30, MINN = 20;
-    final int SIZE = 100;
+    final int SIZE = 50 + 1;
     int N;
     int [] posX, posY;
     int [] perm;
@@ -110,6 +183,11 @@ public class Tester {
             double dy = (double)(posY[perm[i]] - posY[perm[(i + 1) % N]]);
             score += Math.sqrt(dx * dx + dy * dy);
         }
+
+        if (vis) {
+            jf.setSize(SIZE * 10 + 10, SIZE * 10 + 10);
+            jf.setVisible(true);
+        }
         
         return score;
     }
@@ -132,6 +210,11 @@ public class Tester {
     }
 
     public Tester (String seed) {
+    	if (vis) {
+    		jf = new JFrame();
+            v = new Visualizer();
+            jf.getContentPane().add(v);
+        }
         if (exec != null) {
             try {
                 Runtime rt = Runtime.getRuntime();
