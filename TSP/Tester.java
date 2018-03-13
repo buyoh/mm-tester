@@ -11,58 +11,56 @@ public class Tester {
 
     public class Visualizer extends JPanel implements WindowListener {
     	
-    	public void paint(Graphics g) {
-        	try {
-	            // do painting here
-	            BufferedImage bi = new BufferedImage(SIZE * 10, SIZE * 10, BufferedImage.TYPE_INT_RGB);
-	            Graphics2D g2 = (Graphics2D)bi.getGraphics();
-	            // background
-	            g2.setColor(new Color(0xD3D3D3));
-	            g2.fillRect(0, 0, SIZE * 10, SIZE * 10);
+        public void paint(Graphics g) {
 
-	            g2.setColor(new Color(0x000000));
+            try {
+                BufferedImage bi = new BufferedImage((SIZE + 4) * 10, (SIZE + 4) * 10, BufferedImage.TYPE_INT_RGB);
+                Graphics2D g2 = (Graphics2D)bi.getGraphics();
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                
+                g2.setColor(new Color(0xD3D3D3));
+                g2.fillRect(0, 0, (SIZE + 4) * 10, (SIZE + 4) * 10);
+                g2.setColor(new Color(0xFFFFFF));
+                g2.fillRect(10, 10, (SIZE + 2) * 10, (SIZE + 2) * 10);
 
-	            for (int i = 0; i < N; i++) {
-	            	int a = perm[i];
-	            	int b = perm[(i + 1) % N];
-	            	g2.drawLine(posX[a] * 10, posY[a] * 10, posX[b] * 10, posY[b] * 10);
-	            }
+                g2.setColor(new Color(0x000000));
+                for (int i = 0; i < N; i++) {
+                    int a = perm[i];
+                    int b = perm[(i + 1) % N];
+                    g2.drawLine(posX[a] * 10 + 20, posY[a] * 10 + 20, 
+                                posX[b] * 10 + 20, posY[b] * 10 + 20);
+                }
 
-	            /*for (int i = 0; i < N; i++) {
-	            	g2.drawOval()
-	            }*/
+                for (int i = 0; i < N; i++) {
+                    g2.setColor(new Color(0xFFFFFF));
+                    g2.fillOval(posX[i] * 10 + 17, posY[i] * 10 + 17, 6, 6);
+                    g2.setColor(new Color(0x000000));
+                	g2.drawOval(posX[i] * 10 + 17, posY[i] * 10 + 17, 6, 6);
+                }
 
-	            /*// draw the points on the circle
-	            for (int i = 0; i < N; ++i) {
-	                g2.drawOval(SZ + (int)Math.round(SZ*Math.sin(2 * i * Math.PI / N)) + D - 2, 
-	                            SZ - (int)Math.round(SZ*Math.cos(2 * i * Math.PI / N)) + D - 2, 4, 4);
-	            }*/
+                g2.setFont(new Font("Arial", Font.BOLD, 9));
+                FontMetrics fm = g2.getFontMetrics();
+                for (int i = 0; i < N; ++i) {
+                    char[] ch = ("" + i).toCharArray();
+                    int x = posX[i] * 10 + 15;
+                    int y = posY[i] * 10 + 15;
+                    g2.drawChars(ch, 0, ch.length, x, y);
+                }
 
-	            // add labels with points' indices
-	            /*g2.setFont(new Font("Arial", Font.BOLD, 11));
-	            FontMetrics fm = g2.getFontMetrics();
-	            char[] ch;
-	            for (int i = 0; i < N; ++i) {
-	                ch = ("" + perm[i]).toCharArray();
-	                int x = SZ + D + (int)Math.round((SZ+D/2)*Math.sin(2 * i * Math.PI / N)) - 5;
-	                int y = SZ + D - (int)Math.round((SZ+D/2)*Math.cos(2 * i * Math.PI / N)) + fm.getHeight()/2 - 2;
-	                g2.drawChars(ch,0,ch.length, x, y);
-	            }*/
+                g.drawImage(bi, 0, 0, (SIZE + 4) * 10, (SIZE + 4) * 10, null);
+                if (save) {
+                    ImageIO.write(bi, "png", new File(fileName +".png"));
+                }
 
-	            g.drawImage(bi, 0, 0, SIZE * 10, SIZE * 10, null);
-	            if (save) {
-	                ImageIO.write(bi, "png", new File(fileName +".png"));
-	            }
-    		} catch (Exception e) { 
-    			e.printStackTrace();
-    		}
+            } catch (Exception e) { 
+                e.printStackTrace();
+            }
         }
 
         public Visualizer () {
             jf.addWindowListener(this);
         }
 
-        // WindowListener
         public void windowClosing(WindowEvent e) {
             if (proc != null) {
             	try { 
@@ -93,9 +91,9 @@ public class Tester {
 
     static Process proc;
     static String fileName, exec;
-    static boolean save, vis, debug;
+    static boolean save, vis;
 
-    final int MAXN = 30, MINN = 20;
+    final int MAXN = 200, MINN = 50;
     final int SIZE = 50 + 1;
     int N;
     int [] posX, posY;
@@ -104,8 +102,8 @@ public class Tester {
     /********************************************************************/
 
     public void generate (String seedStr) {
-        try {  
-            
+
+        try {   
             SecureRandom rnd = SecureRandom.getInstance("SHA1PRNG");
             long seed = Long.parseLong(seedStr);
             rnd.setSeed(seed);
@@ -126,15 +124,6 @@ public class Tester {
                 posY[i] = y;
                 usedPos[x][y] = true;
             }
-
-            if (debug) {
-                System.out.println("=================\nN = " + N);
-                System.out.println("=================\nposition");
-                for (int i = 0; i < N; ++i) {
-                    System.out.println(posX[i] + " " + posY[i]);
-                }
-            }
-
         } catch (Exception e) {
             //addFatalError("An exception occurred while generating test case.");
             e.printStackTrace();
@@ -143,38 +132,33 @@ public class Tester {
     }
 
     public double runTest (String seed) {
+
         try {
             generate(seed);
-            if (proc != null) {
-                try {
-                    perm = getPermutation();
-                    boolean [] used = new boolean[N];
-                    for (int i = 0; i < N; ++i) {
-                        if (perm[i] < 0 || perm[i] >= N) {
-                            //addFatalError("All elements of your return must be between 0 and " + (N-1) + ", and your return contained " + perm[i] + ".");
-                            return -1;
-                        }
-                        if (used[perm[i]]) {
-                            //addFatalError("All elements of your return must be unique, and your return contained " + perm[i] + " twice.");
-                            return -1;
-                        }
-                        used[perm[i]] = true;
+            if (proc != null) try {
+                perm = getPermutation();
+                boolean [] used = new boolean[N];
+                for (int i = 0; i < N; ++i) {
+                    if (perm[i] < 0 || perm[i] >= N) {
+                        /*ddFatalError("All elements of your return must be between 0 
+                         and " + (N-1) + ", and your return contained " + perm[i] + ".");*/
+                        return -1;
                     }
-                } catch (Exception e) {
-                    //addFatalError("Failed to get result from permute.");
-                    return -1;
+                    if (used[perm[i]]) {
+                        /*addFatalError("All elements of your return must be unique, 
+                        and your return contained " + perm[i] + " twice."); */
+                        return -1;
+                    }
+                    used[perm[i]] = true;
                 }
+            } catch (Exception e) {
+                //addFatalError("Failed to get result from permute.");
+                return -1;
             }
+
         } catch (Exception e) {
             e.printStackTrace();
             return -1;
-        }
-
-        if (debug) {
-            System.out.println("=================\nresut");
-            for (int i = 0; i < perm.length; i++) {
-                System.out.println(perm[i]);
-            }
         }
 
         double score = 0.0;
@@ -185,7 +169,7 @@ public class Tester {
         }
 
         if (vis) {
-            jf.setSize(SIZE * 10 + 10, SIZE * 10 + 10);
+            jf.setSize((SIZE + 4) * 10, (SIZE + 6) * 10);
             jf.setVisible(true);
         }
         
@@ -248,8 +232,6 @@ public class Tester {
                 vis = true;
             } else if (args[i].equals("-save")) {
                 save = true;
-            } else if (args[i].equals("-debug")) {
-                debug = true;
             }
         }
         fileName = seed;
