@@ -12,12 +12,52 @@ public class Tester {
     public class Visualizer extends JPanel implements WindowListener {
     	
         public void paint(Graphics g) {
-
             try {
+                BufferedImage bi = new BufferedImage(SIZE_VIS_X, SIZE_VIS_Y, BufferedImage.TYPE_INT_RGB);
+                Graphics2D g2 = (Graphics2D)bi.getGraphics();
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
                 
-                /*if (save) {
-                    ImageIO.write(bi, "png", new File(fileName +".png"));
-                }*/
+                g2.setColor(new Color(0xD3D3D3));
+                g2.fillRect(0, 0, SIZE_VIS_X, SIZE_VIS_Y);
+                g2.setColor(new Color(0xFFFFFF));
+                g2.fillRect(10, 10, SIZE_VIS_X - 20, SIZE_VIS_Y - 20);
+
+                for (int i = 0; i < perm.length; i++) {
+                    int x = depotX, y = depotY;
+                    Color c = Color.getHSBColor((1.0f / (float)M) * (float)i, 1.0f, 0.95f);
+                    g2.setColor(c);
+                    for (int j = 0; j < perm[i].length; j++) {
+                        int idx = perm[i][j];
+                        if (j % cap[i] == 0) {
+                            g2.drawLine(x * 10 + 20, y * 10 + 20, 
+                                        depotX * 10 + 20, depotY * 10 + 20);
+                            x = depotX;
+                            y = depotY;
+                        }
+                        g2.drawLine(x * 10 + 20, y * 10 + 20, 
+                                    posX[idx] * 10 + 20, posY[idx] * 10 + 20);
+                        x = posX[idx];
+                        y = posY[idx];
+                    }
+                    g2.drawLine(x * 10 + 20, y * 10 + 20, 
+                                depotX * 10 + 20, depotY * 10 + 20);
+                }
+
+                for (int i = 0; i < perm.length; i++) {
+                    for (int j = 0; j < perm[i].length; j++) {
+                        int idx = perm[i][j];
+                        g2.setColor(new Color(0xFFFFFF));
+                        g2.fillOval(posX[idx] * 10 + 17, posY[idx] * 10 + 17, 6, 6);
+                        g2.setColor(new Color(0x000000));
+                        g2.drawOval(posX[idx] * 10 + 17, posY[idx] * 10 + 17, 6, 6);
+                    }
+                }
+
+                g2.setColor(new Color(0x000000));
+                g2.fillOval(depotX * 10 + 10, depotY * 10 + 10, 20, 20);
+                
+                g.drawImage(bi, 0, 0, SIZE_VIS_X, SIZE_VIS_Y, null);
+                if (save) ImageIO.write(bi, "png", new File(fileName +".png"));
 
             } catch (Exception e) { 
                 e.printStackTrace();
@@ -60,12 +100,12 @@ public class Tester {
     static String fileName, exec;
     static boolean save, vis, numb;
 
-    final int SIZE = 50 + 1;
-    final int SIZE_VIS_X = SIZE * 10;
-    final int SIZE_VIS_Y = SIZE * 10;
+    final int SIZE = 100 + 1;
+    final int SIZE_VIS_X = (SIZE + 3) * 10;
+    final int SIZE_VIS_Y = (SIZE + 3) * 10;
     final int MAXN = 200, MINN = 50;
     final int MAXM = 10,  MINM = 3;
-    final int MAX_CAP = 10, MIN_CAP = 3;
+    final int MAX_CAP = 20, MIN_CAP = 5;
     final int MAX_SPEED = 20, MIN_SPEED = 1;
 
     int N,M;
@@ -249,6 +289,7 @@ public class Tester {
                 vis = true;
             } else if (args[i].equals("-save")) {
                 save = true;
+                vis = true;
             }
         }
         fileName = seed;
