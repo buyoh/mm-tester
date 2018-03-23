@@ -53,6 +53,17 @@ public class Tester {
                     }
                 }
 
+                if (numb) {
+                    g2.setFont(new Font("Arial", Font.BOLD, 10));
+                    FontMetrics fm = g2.getFontMetrics();
+                    for (int i = 0; i < N; ++i) {
+                        char[] ch = ("" + i).toCharArray();
+                        int x = posX[i] * 10 + 15;
+                        int y = posY[i] * 10 + 15;
+                        g2.drawChars(ch, 0, ch.length, x, y);
+                    }
+                }
+
                 g2.setColor(new Color(0x000000));
                 g2.fillOval(depotX * 10 + 10, depotY * 10 + 10, 20, 20);
                 
@@ -290,7 +301,9 @@ public class Tester {
             } else if (args[i].equals("-save")) {
                 save = true;
                 vis = true;
-            }
+            } else if (args[i].equals("-num")) {
+                numb = true;
+            } 
         }
         fileName = seed;
         Tester test = new Tester(seed);
