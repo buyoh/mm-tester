@@ -119,6 +119,12 @@ public class Tester {
 
     }
 
+    double get_dist (int x1, int y1, int x2, int y2) {
+        double lx = (double)(x1 - x2);
+        double ly = (double)(y1 - y2);
+        return Math.sqrt(lx * lx + ly * ly);
+    }
+
     public double runTest (String seed) {
 
         try {
@@ -141,7 +147,22 @@ public class Tester {
         }
         
         double score = -1.0;
-
+        for (int i = 0; i < perm.length; i++) {
+            double dist = 0.0;
+            int x = depotX, y = depotY;
+            for (int j = 0; j < perm[i].length; j++) {
+                if (j % cap[i] == 0) {
+                    dist += get_dist(x, y, depotX, depotY);
+                    x = depotX;
+                    y = depotY;
+                }
+                dist += get_dist(x, y, posX[perm[i][j]], posY[perm[i][j]]);
+                x = posX[perm[i][j]];
+                y = posY[perm[i][j]];
+            }
+            dist += get_dist(x, y, depotX, depotY);
+        }
+        
         return score;
     }
 
