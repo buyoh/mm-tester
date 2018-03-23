@@ -80,7 +80,6 @@ public class Tester {
     public void generate (String seedStr) {
 
         try {
-
             SecureRandom rnd = SecureRandom.getInstance("SHA1PRNG");
             long seed = Long.parseLong(seedStr);
             rnd.setSeed(seed);
@@ -129,12 +128,28 @@ public class Tester {
 
         try {
             generate(seed);
-            if (proc != null) try {
+            if (proc == null) return -1;
+            try {
                 perm = getPermutation();
+                boolean [] used = new boolean[N];
+                for (int i = 0; i < perm.length; i++) {
+                    for (int j = 0; j < perm[i].length; j++) {
+                        if (used[perm[i][j]]) {
+                            //System.err.println("");
+                            return -1;
+                        }
+                        used[perm[i][j]] = true;
+                    }
+                }
+                for (int i = 0; i < N; i++) {
+                    if (!used[i]) {
+                        //System.err.println("");
+                        return -1;
+                    }
+                }
             } catch (Exception e) {
                 return -1;
             }
-
         } catch (Exception e) {
             e.printStackTrace();
             return -1;
