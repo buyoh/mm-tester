@@ -28,9 +28,8 @@ int main(int argc, char *argv[]) {
 
     for (int i = 0; i < M; i++) {
         cout << ans[i].size();
-        int L = (int) ans[i].size();
-        for (int j = 0; j < L; j++) {
-            cout << ans[i][j] << (j < L - 1 ? " " : "");
+        for (int j = 0; j < ans[i].size(); j++) {
+            cout << " " << ans[i][j];
         }
         cout << endl;
     }

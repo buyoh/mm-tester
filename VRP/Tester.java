@@ -54,7 +54,7 @@ public class Tester {
     Visualizer v;
     InputStream is;
     OutputStream os;
-    BufferedReader br;
+    Scanner sc;
 
     static Process proc;
     static String fileName, exec;
@@ -132,7 +132,6 @@ public class Tester {
             if (proc != null) try {
                 perm = getPermutation();
             } catch (Exception e) {
-
                 return -1;
             }
 
@@ -161,22 +160,24 @@ public class Tester {
                 y = posY[perm[i][j]];
             }
             dist += get_dist(x, y, depotX, depotY);
+            double time = dist / (double) speed[i];
+            score = Math.max(score, time);
         }
-        
+
         return score;
     }
 
     private int [][] getPermutation () throws IOException {
         
         StringBuffer sb = new StringBuffer();
-        sb.append(N).append('\n');
+        sb.append(N).append(' ');
+        sb.append(M).append('\n');
         sb.append(depotX).append(' ');
         sb.append(depotY).append('\n');
         for (int i = 0; i < N; i++) {
             sb.append(posX[i]).append(' ');
             sb.append(posY[i]).append('\n'); 
         }
-        sb.append(M).append('\n');
         for (int i = 0; i < M; i++) {
             sb.append(cap[i]).append(' ');
             sb.append(speed[i]).append('\n'); 
@@ -186,11 +187,10 @@ public class Tester {
 
         int [][] ret = new int[M][];
         for (int i = 0; i < M; ++i) {
-            String[] vehicle = br.readLine().split("[\\s]+");
-            int L = Integer.parseInt(vehicle[0]);
+            int L = sc.nextInt();
             ret[i] = new int[L];
             for (int j = 0; j < L; j++) {
-                ret[i][j] = Integer.parseInt(vehicle[i + 1]);
+                ret[i][j] = sc.nextInt();
             }
         }
         return ret;
@@ -208,7 +208,7 @@ public class Tester {
                 proc = rt.exec(exec);
                 os = proc.getOutputStream();
                 is = proc.getInputStream();
-                br = new BufferedReader(new InputStreamReader(is));
+                sc = new Scanner(is);
             } catch (Exception e) {
                 e.printStackTrace();
             }
