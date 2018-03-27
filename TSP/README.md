@@ -28,10 +28,13 @@ v1
 vN-1
 ```
 
+## スコア
+v0 → v1 → ... → vN-1 → V0 と頂点を訪れた時の移動距離をスコアとする．
+
 ## テスタ
 TopCoder の Marathon Match と同じです．```<command>```にプログラムへのパス，```<seed>```に乱数のシードを入れてください．
 ```sh
-java -jar tester.jar -exec "<command>" -seed <seed>
+$ java -jar tester.jar -exec <command> -seed <seed>
 ```
 その他オプション
 ```
@@ -53,6 +56,7 @@ java -jar tester.jar -exec "<command>" -seed <seed>
 8)  579.3091643733519
 9)  352.68717930411583
 10) 558.819510787507  
+  
 
 EvbCFfp1XB さんのスコア[2]．  
 1)  485.4605733810348
@@ -69,5 +73,5 @@ EvbCFfp1XB さんのスコア[2]．
 
 ##  参考文献
 
-[1] [焼き鈍しのコツ Ver. 1.2 - ジジイのプログラミング](http://shindannin.hatenadiary.com/entry/20121224/1356364040)
+[1] [焼き鈍しのコツ Ver. 1.2 - ジジイのプログラミング](http://shindannin.hatenadiary.com/entry/20121224/1356364040)  
 [2] [kosakkun さんの巡回セールスマン問題で練習しました - EvbCFfp1XB](http://spvyxgfbtewiazrl.doorblog.jp/archives/51750209.html)
