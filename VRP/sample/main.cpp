@@ -12,14 +12,8 @@ int main(int argc, char *argv[]) {
     vector < int > cap(M), speed(M);
 
     cin >> depotX >> depotY;
-
-    for (int i = 0; i < N; i++) {
-        cin >> posX[i] >> posY[i];
-    }
-    
-    for (int i = 0; i < M; i++) {
-        cin >> cap[i] >> speed[i];
-    }
+    for (int i = 0; i < N; i++) cin >> posX[i] >> posY[i];
+    for (int i = 0; i < M; i++) cin >> cap[i] >> speed[i];
 
     vector < vector < int > > ans(M);
     for (int i = 0; i < N; i++) {

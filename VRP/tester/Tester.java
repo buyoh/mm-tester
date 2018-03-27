@@ -12,15 +12,16 @@ public class Tester {
     public class Visualizer extends JPanel implements WindowListener {
     	
         public void paint(Graphics g) {
+
             try {
-                BufferedImage bi = new BufferedImage(SIZE_VIS_X, SIZE_VIS_Y, BufferedImage.TYPE_INT_RGB);
+                BufferedImage bi = new BufferedImage(SIZE_VIS_X + VEHICLE_VIEW_WIDTH, SIZE_VIS_Y, BufferedImage.TYPE_INT_RGB);
                 Graphics2D g2 = (Graphics2D)bi.getGraphics();
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
                 
                 g2.setColor(new Color(0xD3D3D3));
-                g2.fillRect(0, 0, SIZE_VIS_X, SIZE_VIS_Y);
+                g2.fillRect(0, 0, SIZE_VIS_X + VEHICLE_VIEW_WIDTH, SIZE_VIS_Y);
                 g2.setColor(new Color(0xFFFFFF));
-                g2.fillRect(10, 10, SIZE_VIS_X - 220, SIZE_VIS_Y - 20);
+                g2.fillRect(10, 10, SIZE_VIS_X - 20, SIZE_VIS_Y - 20);
 
                 for (int i = 0; i < perm.length; i++) {
                     int x = depotX, y = depotY;
@@ -46,15 +47,16 @@ public class Tester {
                 for (int i = 0; i < perm.length; i++) {
                     for (int j = 0; j < perm[i].length; j++) {
                         int idx = perm[i][j];
-                        g2.setColor(new Color(0xFFFFFF));
-                        g2.fillOval(posX[idx] * 10 + 17, posY[idx] * 10 + 17, 6, 6);
+                        Color c = Color.getHSBColor((1.0f / (float)M) * (float)i, 1.0f, 0.95f);
+                        g2.setColor(c);
+                        g2.fillOval(posX[idx] * 10 + 17, posY[idx] * 10 + 16, 8, 8);
                         g2.setColor(new Color(0x000000));
-                        g2.drawOval(posX[idx] * 10 + 17, posY[idx] * 10 + 17, 6, 6);
+                        g2.drawOval(posX[idx] * 10 + 17, posY[idx] * 10 + 16, 8, 8);
                     }
                 }
 
                 if (numb) {
-                    g2.setFont(new Font("Arial", Font.BOLD, 10));
+                    g2.setFont(new Font("Arial", Font.PLAIN, 12));
                     FontMetrics fm = g2.getFontMetrics();
                     for (int i = 0; i < N; ++i) {
                         char[] ch = ("" + i).toCharArray();
@@ -66,8 +68,49 @@ public class Tester {
 
                 g2.setColor(new Color(0x000000));
                 g2.fillOval(depotX * 10 + 10, depotY * 10 + 10, 20, 20);
+
+                /* vehicle infomation */
+                int worst_idx = -1;
+                double worst_time = -1.0;
+                for (int i = 0; i < M; i++) {
+                    if (worst_time < dist[i] / (double)speed[i]) {
+                        worst_time = dist[i] / (double)speed[i];
+                        worst_idx = i;
+                    }
+                }
+
+                BasicStroke wideStroke = new BasicStroke(2.0f);
+                g2.setStroke(wideStroke);
+                for (int i = 0; i < M; i++) {
+                    
+                    g2.setColor(new Color(0xFFFFFF));
+                    g2.fillRect(SIZE_VIS_X, i * 100 + 10, VEHICLE_VIEW_WIDTH - 10, 90);
+                    Color c = Color.getHSBColor((1.0f / (float)M) * (float)i, 1.0f, 0.95f);
+                    g2.setColor(c);
+                    g2.drawRect(SIZE_VIS_X, i * 100 + 10, VEHICLE_VIEW_WIDTH - 10, 90);
+                    
+                    g2.setColor(new Color(0x000000));
+                    FontMetrics fm = g2.getFontMetrics();
+                    char[] ch0 = ("Vehicle" + i).toCharArray();
+                    char[] ch1 = ("capacity : " + cap[i]).toCharArray();
+                    char[] ch2 = ("speed : " + speed[i]).toCharArray();
+                    char[] ch3 = ("distance : " + dist[i]).toCharArray();
+                    char[] ch4 = ("time : " + dist[i] / (double)speed[i] + "\n").toCharArray();
+                    g2.setFont(new Font("Arial", Font.BOLD, 13));
+                    g2.drawChars(ch0, 0, ch0.length, SIZE_VIS_X + 10, i * 100 + 28);
+                    g2.setFont(new Font("Arial", Font.PLAIN, 12));
+                    g2.drawChars(ch1, 0, ch1.length, SIZE_VIS_X + 10, i * 100 + 42);
+                    g2.drawChars(ch2, 0, ch2.length, SIZE_VIS_X + 10, i * 100 + 57);
+                    g2.drawChars(ch3, 0, ch3.length, SIZE_VIS_X + 10, i * 100 + 72);
+
+                    if (i == worst_idx) {
+                        g2.setFont(new Font("Arial", Font.BOLD, 12));
+                        g2.setColor(new Color(0xFF0000));
+                    }
+                    g2.drawChars(ch4, 0, ch4.length, SIZE_VIS_X + 10, i * 100 + 87);
+                }   
                 
-                g.drawImage(bi, 0, 0, SIZE_VIS_X, SIZE_VIS_Y, null);
+                g.drawImage(bi, 0, 0, SIZE_VIS_X + VEHICLE_VIEW_WIDTH, SIZE_VIS_Y, null);
                 if (save) ImageIO.write(bi, "png", new File(fileName +".png"));
 
             } catch (Exception e) { 
@@ -112,9 +155,10 @@ public class Tester {
     static boolean save, vis, numb, debug;
 
     final int SIZE = 100 + 1;
-    final int SIZE_VIS_X = (SIZE + 3) * 10 + 200;
+    final int SIZE_VIS_X = (SIZE + 3) * 10;
     final int SIZE_VIS_Y = (SIZE + 3) * 10;
-    final int MAXN = 200, MINN = 50;
+    final int VEHICLE_VIEW_WIDTH = 250;
+    final int MAXN = 500, MINN = 50;
     final int MAXM = 10,  MINM = 3;
     final int MAX_CAP = 20, MIN_CAP = 5;
     final int MAX_SPEED = 20, MIN_SPEED = 1;
@@ -222,7 +266,7 @@ public class Tester {
         }
 
         if (vis) {
-            jf.setSize(SIZE_VIS_X, SIZE_VIS_Y);
+            jf.setSize(SIZE_VIS_X + VEHICLE_VIEW_WIDTH, SIZE_VIS_Y);
             jf.setVisible(true);
         }
         
