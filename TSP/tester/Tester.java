@@ -10,7 +10,7 @@ import javax.imageio.*;
 public class Tester {
 
     public class Visualizer extends JPanel implements WindowListener {
-    	
+        
         public void paint(Graphics g) {
 
             try {
@@ -35,7 +35,7 @@ public class Tester {
                     g2.setColor(new Color(0xFFFFFF));
                     g2.fillOval(posX[i] * 10 + 17, posY[i] * 10 + 17, 6, 6);
                     g2.setColor(new Color(0x000000));
-                	g2.drawOval(posX[i] * 10 + 17, posY[i] * 10 + 17, 6, 6);
+                    g2.drawOval(posX[i] * 10 + 17, posY[i] * 10 + 17, 6, 6);
                 }
 
                 if (numb) {
@@ -65,11 +65,11 @@ public class Tester {
 
         public void windowClosing(WindowEvent e) {
             if (proc != null) {
-            	try { 
-            		proc.destroy();
-            	} catch (Exception ex) {
-            		ex.printStackTrace();
-            	}
+                try { 
+                    proc.destroy();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
             }
             System.exit(0);
         }
@@ -196,8 +196,8 @@ public class Tester {
     }
 
     public Tester (String seed) {
-    	if (vis) {
-    		jf = new JFrame();
+        if (vis) {
+            jf = new JFrame();
             v = new Visualizer();
             jf.getContentPane().add(v);
         }
@@ -227,7 +227,7 @@ public class Tester {
         String seed = "1";
         for (int i = 0; i < args.length; ++i) {
             if (args[i].equals("-seed")) {
-            	seed = args[++i];
+                seed = args[++i];
             } else if (args[i].equals("-exec")) {
                 exec = args[++i];
             } else if (args[i].equals("-vis")) {
