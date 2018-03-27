@@ -20,7 +20,7 @@ public class Tester {
                 g2.setColor(new Color(0xD3D3D3));
                 g2.fillRect(0, 0, SIZE_VIS_X, SIZE_VIS_Y);
                 g2.setColor(new Color(0xFFFFFF));
-                g2.fillRect(10, 10, SIZE_VIS_X - 20, SIZE_VIS_Y - 20);
+                g2.fillRect(10, 10, SIZE_VIS_X - 220, SIZE_VIS_Y - 20);
 
                 for (int i = 0; i < perm.length; i++) {
                     int x = depotX, y = depotY;
@@ -109,10 +109,10 @@ public class Tester {
 
     static Process proc;
     static String fileName, exec;
-    static boolean save, vis, numb;
+    static boolean save, vis, numb, debug;
 
     final int SIZE = 100 + 1;
-    final int SIZE_VIS_X = (SIZE + 3) * 10;
+    final int SIZE_VIS_X = (SIZE + 3) * 10 + 200;
     final int SIZE_VIS_Y = (SIZE + 3) * 10;
     final int MAXN = 200, MINN = 50;
     final int MAXM = 10,  MINM = 3;
@@ -125,8 +125,22 @@ public class Tester {
     int [] cap;
     int [] speed;
     int [][] perm;
+    double [] dist;
 
     /********************************************************************/
+
+    public void print_debug (double score) {
+        System.err.println("\n" + "Number of vertices : " + N);
+        System.err.println("Number of vehicles : " + M);
+        System.err.println("Worst time : " + score + "\n");
+        for (int i = 0; i < M; i++) {
+            System.err.println("#Vehicle" + i);
+            System.err.println(" capacity : " + cap[i]);
+            System.err.println(" speed    : " + speed[i]);
+            System.err.println(" distance : " + dist[i]);
+            System.err.println(" time     : " + dist[i] / (double)speed[i] + "\n");
+        }
+    }
 
     public void generate (String seedStr) {
 
@@ -186,7 +200,7 @@ public class Tester {
                 for (int i = 0; i < perm.length; i++) {
                     for (int j = 0; j < perm[i].length; j++) {
                         if (used[perm[i][j]]) {
-                            //System.err.println("");
+                            System.err.println("There are vertices that are delivered multiple times.");
                             return -1;
                         }
                         used[perm[i][j]] = true;
@@ -194,7 +208,7 @@ public class Tester {
                 }
                 for (int i = 0; i < N; i++) {
                     if (!used[i]) {
-                        //System.err.println("");
+                        System.err.println("There are vertices that are not delivered.");
                         return -1;
                     }
                 }
@@ -202,6 +216,7 @@ public class Tester {
                 return -1;
             }
         } catch (Exception e) {
+            System.err.println("Failed to get result.");
             e.printStackTrace();
             return -1;
         }
@@ -212,23 +227,26 @@ public class Tester {
         }
         
         double score = -1.0;
+        dist = new double[M];
         for (int i = 0; i < perm.length; i++) {
-            double dist = 0.0;
+            dist[i] = 0.0;
             int x = depotX, y = depotY;
             for (int j = 0; j < perm[i].length; j++) {
                 if (j % cap[i] == 0) {
-                    dist += get_dist(x, y, depotX, depotY);
+                    dist[i] += get_dist(x, y, depotX, depotY);
                     x = depotX;
                     y = depotY;
                 }
-                dist += get_dist(x, y, posX[perm[i][j]], posY[perm[i][j]]);
+                dist[i] += get_dist(x, y, posX[perm[i][j]], posY[perm[i][j]]);
                 x = posX[perm[i][j]];
                 y = posY[perm[i][j]];
             }
-            dist += get_dist(x, y, depotX, depotY);
-            double time = dist / (double) speed[i];
+            dist[i] += get_dist(x, y, depotX, depotY);
+            double time = dist[i] / (double) speed[i];
             score = Math.max(score, time);
         }
+
+        if (debug) print_debug(score);
 
         return score;
     }
@@ -303,7 +321,9 @@ public class Tester {
                 vis = true;
             } else if (args[i].equals("-num")) {
                 numb = true;
-            } 
+            } else if (args[i].equals("-debug")) {
+                debug = true;
+            }
         }
         fileName = seed;
         Tester test = new Tester(seed);
