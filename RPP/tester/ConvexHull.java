@@ -61,7 +61,13 @@ public class ConvexHull {
     }
 
     public double getArea () {
-        return 0.0;
+        double sum = 0;
+        for (int i = 0; i < size(); i++) {
+            int x1 = getX(i), x2 = getX((i + 1) % size());
+            int y1 = getY(i), y2 = getY((i + 1) % size());
+            sum += (double)(x1 * y2 - x2 * y1);
+        }
+        return Math.abs(sum) * 0.5;
     }
 
 }
