@@ -32,14 +32,18 @@ public class Tester {
                     g2.drawRect(posX[i] * 10 + 20, posY[i] * 10 + 20, w[i] * 10, h[i] * 10);
                 }
 
-                BasicStroke wideStroke = new BasicStroke(2.0f);
-                g2.setStroke(wideStroke);
+                g2.setStroke(new BasicStroke(2.0f));
                 for (int i = 0; i < ch.size(); i++) {
                     int x1 = ch.getX(i) * 10 + 20;
                     int y1 = ch.getY(i) * 10 + 20;
                     int x2 = ch.getX((i + 1) % ch.size()) * 10 + 20;
                     int y2 = ch.getY((i + 1) % ch.size()) * 10 + 20;
                     g2.drawLine(x1, y1, x2, y2);
+                }
+
+                g2.setStroke(new BasicStroke(1.0f));
+                for (int i = 0; i < ch.size(); i++) {
+                    g2.fillOval(ch.getX(i) * 10 + 17, ch.getY(i) * 10 + 17, 6, 6);
                 }
 
                 g.drawImage(bi, 0, 0, WIDTH, HEIGHT, null);
@@ -182,8 +186,8 @@ public class Tester {
         StringBuffer sb = new StringBuffer();
         sb.append(N).append('\n');
         for (int i = 0; i < N; ++i) {
-            sb.append(h[i]).append(' ');
-            sb.append(w[i]).append('\n');
+            sb.append(w[i]).append(' ');
+            sb.append(h[i]).append('\n');
         }
         os.write(sb.toString().getBytes());
         os.flush();
