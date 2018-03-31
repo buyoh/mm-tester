@@ -1,11 +1,10 @@
 #Makefile
-ALLSOURCE = Tester.java
-JAVAC = javac
+ALLSOURCE = *.java
 
 .PHONY: all
 all: comp
 comp:
-	${JAVAC} ${ALLSOURCE}
+	javac ${ALLSOURCE}
 	jar cvfm tester.jar tester.mf *.class
 	rm -rf *.class
 

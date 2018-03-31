@@ -50,20 +50,36 @@ public class Tester {
     Visualizer v;
     InputStream is;
     OutputStream os;
-    BufferedReader br;
+    Scanner sc;
 
     static Process proc;
     static String fileName, exec;
     static boolean save, vis;
+
+    final int N = 400;
+    final int RECT_MAX = 5, RECT_MIN = 1;
+    final int BOX_SIZE = 100;
+    int [] h, w;
+    int [] dir;
+    int [] posX, posY;
 
     /********************************************************************/
 
     public void generate (String seedStr) {
 
         try {   
+            SecureRandom rnd = SecureRandom.getInstance("SHA1PRNG");
+            long seed = Long.parseLong(seedStr);
+            rnd.setSeed(seed);
 
+            h = new int[N];
+            w = new int[N];
+            for (int i = 0; i < N; i++) {
+                h[i] = rnd.nextInt(RECT_MAX - RECT_MIN + 1) + RECT_MIN;
+                w[i] = rnd.nextInt(RECT_MAX - RECT_MIN + 1) + RECT_MIN;
+            }
         } catch (Exception e) {
-            //addFatalError("An exception occurred while generating test case.");
+            System.err.println("An exception occurred while generating test case.");
             e.printStackTrace();
         }
 
@@ -73,27 +89,65 @@ public class Tester {
 
         try {
             generate(seed);
-            
+            if (proc != null) try {
+                getPermutation();
+                boolean [][] used = new boolean[BOX_SIZE][BOX_SIZE];
+                for (int i = 0; i < N; i++) {
+                    int a = (dir[i] ? w[i] : h[i]);
+                    int b = (dir[i] ? h[i] : w[i]);
+                    for (int x = posX[i]; x < posX[i] + a; x++) {
+                        for (int y = posY[i]; y < posY[i] + b; y++) {
+                            if (used[x][y]) {
+                                System.err.println("There are overlapping rectangles.");
+                                return -1;
+                            }
+                            if (x < 0 || y < 0 || x >= BOX_SIZE || y >= BOX_SIZE) {
+                                System.err.println("There is a rectangle which does not fit in the box.");
+                                return -1;
+                            }
+                            used[x][y] = true;
+                        }
+                    }
+                }
             } catch (Exception e) {
-                //addFatalError("Failed to get result from permute.");
+                System.err.println("Failed to get result.");
                 return -1;
             }
-
         } catch (Exception e) {
             e.printStackTrace();
             return -1;
         }
 
         if (vis) {
-            //jf.setSize((SIZE + 4) * 10, (SIZE + 6) * 10);
-            //jf.setVisible(true);
+            jf.setSize((SIZE + 4) * 10, (SIZE + 6) * 10);
+            jf.setVisible(true);
         }
         
+        double score = -1.0;
+        //boolean [][] usedPos = new boolean[BOX_SIZE + 1][BOX_SIZE + 1];
+
+
         return score;
     }
 
-    private int [] getPermutation () throws IOException {
-        
+    private void getPermutation () throws IOException {
+        StringBuffer sb = new StringBuffer();
+        sb.append(N).append('\n');
+        for (int i = 0; i < N; ++i) {
+            sb.append(h[i]).append(' ');
+            sb.append(w[i]).append('\n');
+        }
+        os.write(sb.toString().getBytes());
+        os.flush();
+
+        dir  = new int[N];
+        posX = new int[N];
+        posY = new int[N]; 
+        for (int i = 0; i < N; ++i) {
+            dir[i]  = sc.nextInt();
+            posX[i] = sc.nextInt();
+            posY[i] = sc.nextInt();
+        }
     }
 
     public Tester (String seed) {
@@ -108,8 +162,7 @@ public class Tester {
                 proc = rt.exec(exec);
                 os = proc.getOutputStream();
                 is = proc.getInputStream();
-                br = new BufferedReader(new InputStreamReader(is));
-                //new ErrorReader(proc.getErrorStream()).start();
+                sc = new Scanner(is);
             } catch (Exception e) {
                 e.printStackTrace();
             }
