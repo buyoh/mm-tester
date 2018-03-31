@@ -9,7 +9,7 @@ int main(int argc, char *argv[]) {
 
     vector < int > h(N), w(N);
     for (int i = 0; i < N; i++) {
-        cin >> h[i] >> w[i];
+        cin >> w[i] >> h[i];
     }
 
     for (int i = 0; i < N; i++) {

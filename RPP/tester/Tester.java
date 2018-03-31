@@ -182,8 +182,8 @@ public class Tester {
         StringBuffer sb = new StringBuffer();
         sb.append(N).append('\n');
         for (int i = 0; i < N; ++i) {
-            sb.append(h[i]).append(' ');
-            sb.append(w[i]).append('\n');
+            sb.append(w[i]).append(' ');
+            sb.append(h[i]).append('\n');
         }
         os.write(sb.toString().getBytes());
         os.flush();
