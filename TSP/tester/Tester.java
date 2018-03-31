@@ -234,6 +234,7 @@ public class Tester {
                 vis = true;
             } else if (args[i].equals("-save")) {
                 save = true;
+                vis = true;
             } else if (args[i].equals("-num")) {
                 numb = true;
             }
