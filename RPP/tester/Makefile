@@ -1,5 +1,5 @@
 #Makefile
-ALLSOURCE = *.java
+ALLSOURCE = Tester.java
 
 .PHONY: all
 all: comp

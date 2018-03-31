@@ -28,8 +28,18 @@ public class Tester {
                     Color c = Color.getHSBColor((1.0f / (float)N) * (float)i, 1.0f, 0.95f);
                     g2.setColor(c);
                     g2.fillRect(posX[i] * 10 + 20, posY[i] * 10 + 20, w[i] * 10, h[i] * 10);
-                    g2.setColor(new Color(0x000000));
+                    g2.setColor(new Color(0x3F3F3F));
                     g2.drawRect(posX[i] * 10 + 20, posY[i] * 10 + 20, w[i] * 10, h[i] * 10);
+                }
+
+                BasicStroke wideStroke = new BasicStroke(2.0f);
+                g2.setStroke(wideStroke);
+                for (int i = 0; i < ch.size(); i++) {
+                    int x1 = ch.getX(i) * 10 + 20;
+                    int y1 = ch.getY(i) * 10 + 20;
+                    int x2 = ch.getX((i + 1) % ch.size()) * 10 + 20;
+                    int y2 = ch.getY((i + 1) % ch.size()) * 10 + 20;
+                    g2.drawLine(x1, y1, x2, y2);
                 }
 
                 g.drawImage(bi, 0, 0, WIDTH, HEIGHT, null);
@@ -84,6 +94,7 @@ public class Tester {
     int [] h, w;
     int [] dir;
     int [] posX, posY;
+    ConvexHull ch;
 
     /********************************************************************/
 
@@ -94,11 +105,11 @@ public class Tester {
             long seed = Long.parseLong(seedStr);
             rnd.setSeed(seed);
 
-            h = new int[N];
             w = new int[N];
+            h = new int[N];
             for (int i = 0; i < N; i++) {
-                h[i] = rnd.nextInt(RECT_MAX - RECT_MIN + 1) + RECT_MIN;
                 w[i] = rnd.nextInt(RECT_MAX - RECT_MIN + 1) + RECT_MIN;
+                h[i] = rnd.nextInt(RECT_MAX - RECT_MIN + 1) + RECT_MIN;
             }
         } catch (Exception e) {
             System.err.println("An exception occurred while generating test case.");
@@ -115,8 +126,8 @@ public class Tester {
                 getPermutation();
                 boolean [][] used = new boolean[BOX_SIZE][BOX_SIZE];
                 for (int i = 0; i < N; i++) {
-                    int a = (dir[i] == 1 ? w[i] : h[i]);
-                    int b = (dir[i] == 1 ? h[i] : w[i]);
+                    int a = (dir[i] == 0 ? w[i] : h[i]);
+                    int b = (dir[i] == 0 ? h[i] : w[i]);
                     for (int x = posX[i]; x < posX[i] + a; x++) {
                         for (int y = posY[i]; y < posY[i] + b; y++) {
                             if (used[x][y]) {
@@ -140,16 +151,31 @@ public class Tester {
             return -1;
         }
 
+        ch = new ConvexHull();
+        boolean [][] usedPos = new boolean[BOX_SIZE + 1][BOX_SIZE + 1];
+        for (int i = 0; i < N; i++) {
+            int wt = (dir[i] == 0 ? w[i] : h[i]);
+            int ht = (dir[i] == 0 ? h[i] : w[i]);
+            int [] ax = {0, 0, wt, wt};
+            int [] ay = {0, ht, 0, ht};
+            for (int j = 0; j < 4; j++) {
+                int xt = posX[i] + ax[j];
+                int yt = posY[i] + ay[j];
+                if (!usedPos[xt][yt]) {
+                    ch.add_point(xt, yt);
+                    usedPos[xt][yt] = true;
+                }
+            }
+        }
+
+        ch.build();
+        
         if (vis) {
             jf.setSize((BOX_SIZE + 4) * 10, (BOX_SIZE + 4) * 10);
             jf.setVisible(true);
         }
         
-        double score = -1.0;
-        //boolean [][] usedPos = new boolean[BOX_SIZE + 1][BOX_SIZE + 1];
-
-
-        return score;
+        return ch.getArea();
     }
 
     private void getPermutation () throws IOException {
