@@ -14,7 +14,29 @@ public class Tester {
         public void paint(Graphics g) {
 
             try {
-            
+                int WIDTH  = (BOX_SIZE + 4) * 10;
+                int HEIGHT = (BOX_SIZE + 4) * 10;
+                BufferedImage bi = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
+                Graphics2D g2 = (Graphics2D)bi.getGraphics();
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                g2.setColor(new Color(0xD3D3D3));
+                g2.fillRect(0, 0, WIDTH, HEIGHT);
+                g2.setColor(new Color(0xFFFFFF));
+                g2.fillRect(20, 20, WIDTH - 40, HEIGHT - 40);
+
+                for (int i = 0; i < N; i++) {
+                    Color c = Color.getHSBColor((1.0f / (float)N) * (float)i, 1.0f, 0.95f);
+                    g2.setColor(c);
+                    g2.fillRect(posX[i] * 10 + 20, posY[i] * 10 + 20, w[i] * 10, h[i] * 10);
+                    g2.setColor(new Color(0x000000));
+                    g2.drawRect(posX[i] * 10 + 20, posY[i] * 10 + 20, w[i] * 10, h[i] * 10);
+                }
+
+                g.drawImage(bi, 0, 0, WIDTH, HEIGHT, null);
+                if (save) {
+                    ImageIO.write(bi, "png", new File(fileName +".png"));
+                }
+
             } catch (Exception e) { 
                 e.printStackTrace();
             }
@@ -93,8 +115,8 @@ public class Tester {
                 getPermutation();
                 boolean [][] used = new boolean[BOX_SIZE][BOX_SIZE];
                 for (int i = 0; i < N; i++) {
-                    int a = (dir[i] ? w[i] : h[i]);
-                    int b = (dir[i] ? h[i] : w[i]);
+                    int a = (dir[i] == 1 ? w[i] : h[i]);
+                    int b = (dir[i] == 1 ? h[i] : w[i]);
                     for (int x = posX[i]; x < posX[i] + a; x++) {
                         for (int y = posY[i]; y < posY[i] + b; y++) {
                             if (used[x][y]) {
@@ -119,7 +141,7 @@ public class Tester {
         }
 
         if (vis) {
-            jf.setSize((SIZE + 4) * 10, (SIZE + 6) * 10);
+            jf.setSize((BOX_SIZE + 4) * 10, (BOX_SIZE + 4) * 10);
             jf.setVisible(true);
         }
         
@@ -188,6 +210,7 @@ public class Tester {
                 vis = true;
             } else if (args[i].equals("-save")) {
                 save = true;
+                vis = true;
             }
         }
         fileName = seed;
