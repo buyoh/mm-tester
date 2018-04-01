@@ -32,9 +32,9 @@ rN-1 xN-1 yN-1
 N個の長方形全てを包む凸多角形の面積をスコアとします．具体的には，各長方形の四隅の座標の集合から凸包を作成して面積を計算します．100 × 100の箱から飛び出していたり，長方形同士が重なっている場合 -1となります．
 
 ## テスタ
-TopCoder の Marathon Match と同じです．```<command>```にプログラムへのパス，```<seed>```に乱数のシードを入れてください．
+TopCoder の Marathon Match と同じです．```"<command>"```にプログラムの実行コマンド，```<seed>```に乱数のシードを入れてください．
 ```sh
-$ java -jar tester.jar -exec <command> -seed <seed>
+$ java -jar tester.jar -exec "<command>" -seed <seed>
 ```
 その他オプション
 ```
