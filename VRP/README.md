@@ -46,9 +46,9 @@ KM-1 vM-1_0 vM-1_1 vM-1_2 ... vM-1_KM-1
 各トラック毎に，荷物を配達して倉庫に帰ってくるまでの移動距離を算出する．ただし，配達途中に荷物がなくなったら倉庫（depot）に荷物を積みに移動します．この移動距離をトラックのスピードで割り，配達時間とする．スコアは各トラックの配達時間のうち最も時間がかかったものとする．
 
 ## テスタ
-TopCoder の Marathon Match と同じです．```<command>```にプログラムへのパス，```<seed>```に乱数のシードを入れてください．
+TopCoder の Marathon Match と同じです．```"<command>"```にプログラムの実行コマンド，```<seed>```に乱数のシードを入れてください．
 ```sh
-$ java -jar tester.jar -exec <command> -seed <seed>
+$ java -jar tester.jar -exec "<command>" -seed <seed>
 ```
 
 その他オプション
