@@ -14,14 +14,14 @@ public class Tester {
         public void paint(Graphics g) {
 
             try {
-                BufferedImage bi = new BufferedImage((SIZE + 4) * 10, (SIZE + 4) * 10, BufferedImage.TYPE_INT_RGB);
+                BufferedImage bi = new BufferedImage(VIS_SIZE, VIS_SIZE, BufferedImage.TYPE_INT_RGB);
                 Graphics2D g2 = (Graphics2D)bi.getGraphics();
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
                 
                 g2.setColor(new Color(0xD3D3D3));
-                g2.fillRect(0, 0, (SIZE + 4) * 10, (SIZE + 4) * 10);
+                g2.fillRect(0, 0, VIS_SIZE, VIS_SIZE);
                 g2.setColor(new Color(0xFFFFFF));
-                g2.fillRect(10, 10, (SIZE + 2) * 10, (SIZE + 2) * 10);
+                g2.fillRect(10, 10, VIS_SIZE - 20, VIS_SIZE - 20);
 
                 g2.setColor(new Color(0x000000));
                 for (int i = 0; i < N; i++) {
@@ -33,13 +33,13 @@ public class Tester {
 
                 for (int i = 0; i < N; i++) {
                     g2.setColor(new Color(0xFFFFFF));
-                    g2.fillOval(posX[i] * 10 + 17, posY[i] * 10 + 17, 6, 6);
+                    g2.fillOval(posX[i] * 10 + 16, posY[i] * 10 + 16, 8, 8);
                     g2.setColor(new Color(0x000000));
-                    g2.drawOval(posX[i] * 10 + 17, posY[i] * 10 + 17, 6, 6);
+                    g2.drawOval(posX[i] * 10 + 16, posY[i] * 10 + 16, 8, 8);
                 }
 
                 if (numb) {
-                    g2.setFont(new Font("Arial", Font.BOLD, 9));
+                    g2.setFont(new Font("Arial", Font.BOLD, 10));
                     FontMetrics fm = g2.getFontMetrics();
                     for (int i = 0; i < N; ++i) {
                         char[] ch = ("" + i).toCharArray();
@@ -49,7 +49,7 @@ public class Tester {
                     }
                 }
 
-                g.drawImage(bi, 0, 0, (SIZE + 4) * 10, (SIZE + 4) * 10, null);
+                g.drawImage(bi, 0, 0, VIS_SIZE, VIS_SIZE, null);
                 if (save) {
                     ImageIO.write(bi, "png", new File(fileName +".png"));
                 }
@@ -95,8 +95,9 @@ public class Tester {
     static String fileName, exec;
     static boolean save, vis, numb;
 
-    final int MAXN = 200, MINN = 50;
-    final int SIZE = 50 + 1;
+    final int MAXN = 1000, MINN = 50;
+    final int SIZE = 100 + 1;
+    final int VIS_SIZE = (SIZE + 3) * 10;
     int N;
     int [] posX, posY;
     int [] perm;
@@ -110,7 +111,7 @@ public class Tester {
             long seed = Long.parseLong(seedStr);
             rnd.setSeed(seed);
 
-            N = rnd.nextInt(MAXN - MINN) + MINN;
+            N = rnd.nextInt(MAXN - MINN + 1) + MINN;
             perm = new int[N];
             posX = new int[N];
             posY = new int[N];
@@ -127,7 +128,7 @@ public class Tester {
                 usedPos[x][y] = true;
             }
         } catch (Exception e) {
-            //addFatalError("An exception occurred while generating test case.");
+            System.err.println("An exception occurred while generating test case.");
             e.printStackTrace();
         }
 
@@ -142,19 +143,17 @@ public class Tester {
                 boolean [] used = new boolean[N];
                 for (int i = 0; i < N; ++i) {
                     if (perm[i] < 0 || perm[i] >= N) {
-                        /*ddFatalError("All elements of your return must be between 0 
-                         and " + (N-1) + ", and your return contained " + perm[i] + ".");*/
+                        System.err.println("All elements of your return must be between 0 and " + (N-1) + ", and your return contained " + perm[i] + ".");
                         return -1;
                     }
                     if (used[perm[i]]) {
-                        /*addFatalError("All elements of your return must be unique, 
-                        and your return contained " + perm[i] + " twice."); */
+                        System.err.println("All elements of your return must be unique, and your return contained " + perm[i] + " twice.");
                         return -1;
                     }
                     used[perm[i]] = true;
                 }
             } catch (Exception e) {
-                //addFatalError("Failed to get result from permute.");
+                System.err.println("Failed to get result from permute.");
                 return -1;
             }
 
@@ -171,7 +170,7 @@ public class Tester {
         }
 
         if (vis) {
-            jf.setSize((SIZE + 4) * 10, (SIZE + 6) * 10);
+            jf.setSize(VIS_SIZE, VIS_SIZE);
             jf.setVisible(true);
         }
         
@@ -208,7 +207,6 @@ public class Tester {
                 os = proc.getOutputStream();
                 is = proc.getInputStream();
                 br = new BufferedReader(new InputStreamReader(is));
-                //new ErrorReader(proc.getErrorStream()).start();
             } catch (Exception e) {
                 e.printStackTrace();
             }
