@@ -14,8 +14,8 @@ public class Tester {
         public void paint(Graphics g) {
 
             try {
-                int WIDTH  = (BOX_SIZE + 4) * 10;
-                int HEIGHT = (BOX_SIZE + 4) * 10;
+                int WIDTH  = BOX_SIZE + 40;
+                int HEIGHT = BOX_SIZE + 40;
                 BufferedImage bi = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
                 Graphics2D g2 = (Graphics2D)bi.getGraphics();
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -25,26 +25,24 @@ public class Tester {
                 g2.fillRect(20, 20, WIDTH - 40, HEIGHT - 40);
 
                 for (int i = 0; i < N; i++) {
+                    int wt = (dir[i] == 0 ? w[i] : h[i]);
+                    int ht = (dir[i] == 0 ? h[i] : w[i]);
                     Color c = Color.getHSBColor((1.0f / (float)N) * (float)i, 1.0f, 0.95f);
                     g2.setColor(c);
-                    g2.fillRect(posX[i] * 10 + 20, posY[i] * 10 + 20, w[i] * 10, h[i] * 10);
+                    g2.fillRect(20 + posX[i], 1020 - posY[i] - ht, wt, ht);
                     g2.setColor(new Color(0x3F3F3F));
-                    g2.drawRect(posX[i] * 10 + 20, posY[i] * 10 + 20, w[i] * 10, h[i] * 10);
+                    g2.drawRect(20 + posX[i], 1020 - posY[i] - ht, wt, ht);
                 }
 
                 g2.setStroke(new BasicStroke(2.0f));
-                for (int i = 0; i < ch.size(); i++) {
-                    int x1 = ch.getX(i) * 10 + 20;
-                    int y1 = ch.getY(i) * 10 + 20;
-                    int x2 = ch.getX((i + 1) % ch.size()) * 10 + 20;
-                    int y2 = ch.getY((i + 1) % ch.size()) * 10 + 20;
-                    g2.drawLine(x1, y1, x2, y2);
-                }
+                g2.drawLine(20, 1020 - MAX_POSY, 1020, 1020 - MAX_POSY);
 
-                g2.setStroke(new BasicStroke(1.0f));
-                for (int i = 0; i < ch.size(); i++) {
-                    g2.fillOval(ch.getX(i) * 10 + 17, ch.getY(i) * 10 + 17, 6, 6);
-                }
+                g2.setFont(new Font("Arial", Font.BOLD, 15));
+                FontMetrics fm = g2.getFontMetrics();
+                char[] ch = ("Score = " + MAX_POSY).toCharArray();
+                int x = BOX_SIZE / 2;
+                int y = 1020 - MAX_POSY - 5;
+                g2.drawChars(ch, 0, ch.length, x, y);
 
                 g.drawImage(bi, 0, 0, WIDTH, HEIGHT, null);
                 if (save) {
@@ -93,12 +91,12 @@ public class Tester {
     static boolean save, vis;
 
     final int N = 400;
-    final int RECT_MAX = 5, RECT_MIN = 1;
-    final int BOX_SIZE = 100;
+    final int RECT_MAX = 50, RECT_MIN = 5;
+    final int BOX_SIZE = 1000;
     int [] h, w;
     int [] dir;
     int [] posX, posY;
-    ConvexHull ch;
+    int MAX_POSY;
 
     /********************************************************************/
 
@@ -155,31 +153,18 @@ public class Tester {
             return -1;
         }
 
-        ch = new ConvexHull();
-        boolean [][] usedPos = new boolean[BOX_SIZE + 1][BOX_SIZE + 1];
+        MAX_POSY = 0;
         for (int i = 0; i < N; i++) {
-            int wt = (dir[i] == 0 ? w[i] : h[i]);
-            int ht = (dir[i] == 0 ? h[i] : w[i]);
-            int [] ax = {0, 0, wt, wt};
-            int [] ay = {0, ht, 0, ht};
-            for (int j = 0; j < 4; j++) {
-                int xt = posX[i] + ax[j];
-                int yt = posY[i] + ay[j];
-                if (!usedPos[xt][yt]) {
-                    ch.add_point(xt, yt);
-                    usedPos[xt][yt] = true;
-                }
-            }
+            int y = posY[i] + (dir[i] == 0 ? h[i] : w[i]);
+            MAX_POSY = Math.max(MAX_POSY, y);
         }
-
-        ch.build();
         
         if (vis) {
-            jf.setSize((BOX_SIZE + 4) * 10, (BOX_SIZE + 4) * 10);
+            jf.setSize(BOX_SIZE + 40, BOX_SIZE + 40);
             jf.setVisible(true);
         }
         
-        return ch.getArea();
+        return MAX_POSY;
     }
 
     private void getPermutation () throws IOException {
