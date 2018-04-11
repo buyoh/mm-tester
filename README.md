@@ -13,4 +13,4 @@ TopCoder の Marathon Match に最近ハマっています．皆んなやろう�
 
 ## Rectangle Packing (RPP)
 長方形を良い感じで詰め込む問題です．  
-![1.png](RPP/image/1.png)
+![1.png](RPP1/image/1.png)
