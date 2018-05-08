@@ -60,11 +60,10 @@ public class Tester {
     static String fileName, exec;
     static boolean save, vis;
 
-    final int MAXN = 1000, MINN = 50;
-    final int SIZE = 100 + 1;
-    final int VIS_SIZE = (SIZE + 3) * 10;
-    int N;
-    int [][] G;
+    final int MAXN = 200, MINN = 20;
+    int VIS_SIZE;
+    int N,M,L;
+    boolean [][] G;
     int [] perm;
 
     /********************************************************************/
@@ -77,7 +76,19 @@ public class Tester {
             rnd.setSeed(seed);
 
             N = rnd.nextInt(MAXN - MINN + 1) + MINN;
-         
+            M = 0;
+            L = rnd.nextInt(N / 2) + 1;
+            G = new boolean[N][N];
+            for (int i = 0; i < L; i++) {
+                for (int idx = 0; idx < N; idx++) {
+                    int to = rnd.nextInt(N);
+                    while (to == idx) to = rnd.nextInt(N);
+                    if (!G[idx][to]) {
+                        G[idx][to] = true;
+                        G[to][idx] = true;
+                    }
+                }
+            }
         } catch (Exception e) {
             System.err.println("An exception occurred while generating test case.");
             e.printStackTrace();
