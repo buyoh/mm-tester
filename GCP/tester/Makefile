@@ -7,8 +7,7 @@ all: comp
 comp:
 	${JAVAC} ${ALLSOURCE}
 	jar cvfm tester.jar tester.mf *.class
-	rm -rf *.class
 
 .PHONY: clean
 clean:
-	rm -rf *.jar
+	rm -rf *.jar *.class
