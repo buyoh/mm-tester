@@ -6,6 +6,7 @@ import java.util.*;
 import java.security.*;
 import javax.swing.*;
 import javax.imageio.*;
+import java.util.HashMap;
 
 public class Tester {
 
@@ -27,6 +28,7 @@ public class Tester {
     int Score;
     int a[],b[],col[];
     int posX[],posY[];
+    Map<Integer, Integer> map;
 
     /********************************************************************/
 
@@ -46,7 +48,7 @@ public class Tester {
                     g2.drawLine(posX[a[i]], posY[a[i]], posX[b[i]], posY[b[i]]);
                 }
                 for (int i = 0; i < N; i++) {
-                    Color c = Color.getHSBColor((float)i / (float)N, 1.0f, 0.95f);
+                    Color c = Color.getHSBColor((float)map.get(col[i]) / (float)map.size(), 1.0f, 0.95f);
                     g2.setColor(c);
                     g2.fillOval(posX[i] - 6, posY[i] - 6, 12, 12);
                     g2.setColor(new Color(0x000000));
@@ -189,6 +191,18 @@ public class Tester {
             generate(seed);
             if (proc != null) try {
                 col = getColor();
+                map = new HashMap<Integer, Integer>();
+                for (int i = 0; i < N; i++) {
+                    if (!map.containsKey(col[i])) {
+                        map.put(col[i], (int)map.size());
+                    }
+                }
+                Score = (int)map.size();
+                for (int i = 0; i < M; i++) {
+                    if (col[a[i]] == col[b[i]]) {
+                        Score = 100000;
+                    }
+                }
             } catch (Exception e) {
                 System.err.println("Failed to get result from output.");
                 return -1;
@@ -202,9 +216,6 @@ public class Tester {
             jf.setSize(VIS_SIZE + 100, VIS_SIZE);
             jf.setVisible(true);
         }
-
-        Score = 100000;
-
         return (double)Score;
     }
 

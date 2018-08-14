@@ -41,7 +41,6 @@ $ java -jar tester.jar -exec "<command>" -seed <seed>
 その他オプション
 ```
 -vis  : ビジュアライズ
--save : 画像の保存
 ```
 
 
