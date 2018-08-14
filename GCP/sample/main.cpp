@@ -13,7 +13,7 @@ int main () {
     }
 
     for (int i = 0; i < N; i++) {
-        cout << i << endl;
+        cout << i % 3 << endl;
     }
 }
 

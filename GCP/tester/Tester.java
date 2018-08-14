@@ -21,6 +21,7 @@ public class Tester {
     static Process proc;
     static String fileName, exec;
     static boolean vis;
+    static int sel_ver;
 
     final int MAXN = 200, MINN = 20;
     int VIS_SIZE = 1000;
@@ -32,7 +33,7 @@ public class Tester {
 
     /********************************************************************/
 
-    public class Visualizer extends JPanel implements WindowListener {
+    public class Visualizer extends JPanel implements MouseListener, WindowListener {
         
         public void paint(Graphics g) {
             try {
@@ -44,8 +45,21 @@ public class Tester {
                 g2.setColor(new Color(0xFFFFFF));
                 g2.fillRect(10, 10, VIS_SIZE - 20, VIS_SIZE - 20);
                 for (int i = 0; i < M; i++) {
-                    g2.setColor(new Color(0x000000));
+                    if (a[i] == sel_ver) continue;
+                    if (b[i] == sel_ver) continue;
+                    if (sel_ver < 0) continue;
+                    if (col[a[i]] == col[b[i]]) continue;
+                    g2.setColor(new Color(0xD3D3D3));
                     g2.drawLine(posX[a[i]], posY[a[i]], posX[b[i]], posY[b[i]]);
+                }
+                for (int i = 0; i < M; i++) {
+                    if (col[a[i]] == col[b[i]] && (sel_ver == a[i] || sel_ver == b[i])) {
+                        g2.setColor(new Color(0xFF0000));
+                        g2.drawLine(posX[a[i]], posY[a[i]], posX[b[i]], posY[b[i]]);
+                    } else if (a[i] == sel_ver || b[i] == sel_ver || sel_ver < 0) {
+                        g2.setColor(new Color(0x000000));
+                        g2.drawLine(posX[a[i]], posY[a[i]], posX[b[i]], posY[b[i]]);
+                    }
                 }
                 for (int i = 0; i < N; i++) {
                     Color c = Color.getHSBColor((float)map.get(col[i]) / (float)map.size(), 1.0f, 0.95f);
@@ -71,6 +85,7 @@ public class Tester {
         }
 
         public Visualizer () {
+            addMouseListener(this);
             jf.addWindowListener(this);
         }
 
@@ -92,48 +107,19 @@ public class Tester {
         public void windowIconified(WindowEvent e) { }
         public void windowDeiconified(WindowEvent e) { }
 
-
         public void mousePressed(MouseEvent e) {
-        /*// Treat "plain" button
-            int x = e.getX() - SZ * W - 10, y = e.getY() - 10;
-            if (x >= 0 && x <= 100 && y >= 40 && y <= 70) {
-                plain = !plain;
-                repaint();
-                return;
+            int x = e.getX();
+            int y = e.getY();
+            for (int i = 0; i < N; i++) {
+                int dX = posX[i] - x;
+                int dY = posY[i] - y;
+                if (dX * dX + dY * dY <= 6 * 6) {
+                    sel_ver = i;
+                    repaint();
+                    return;
+                }
             }
-
-            // for manual play
-            if (!manual || manualReady) return;
-
-            // "ready" button submits current state of the board
-            if (x >= 0 && x <= 100 && y >= 0 && y <= 30) {
-                manualReady = true;
-                repaint();
-                return;
-            }
-
-            int row = e.getY()/SZ, col = e.getX()/SZ;
-            // convert to args only clicks with valid coordinates
-            if (row < 0 || row >= H || col < 0 || col >= W)
-                return;
-
-            // ignore clicks on pawns
-            if (board[row][col] == 'P')
-                return;
-
-            // a click toggles the state of the knight
-            if (board[row][col] == '.') {
-                board[row][col] = 'K';
-                K++;
-            }
-            else {
-                board[row][col] = '.';
-                K--;
-            }
-            repaint();
-            */
-
-            /*
+      /*
             if (save button) {
                     ImageIO.write(bi, "png", new File(fileName +".png"));
                 }
@@ -179,6 +165,7 @@ public class Tester {
                 posX[i] = (int)xt;
                 posY[i] = (int)yt;
             }
+            sel_ver = -1;
         } catch (Exception e) {
             System.err.println("An exception occurred while generating test case.");
             e.printStackTrace();
