@@ -13,10 +13,10 @@
 
 ### 入力
 辺は頂点```ai```と頂点```bi```を繋ぐ．
-```math
+```
 N M
 a0 b0
-a1 b0
+a1 b1
 ...
 aM-1 bM-1
 ```
@@ -69,7 +69,7 @@ $ java -jar tester.jar -exec "<command>" -seed <seed>
 20) 16.0
 
 ##  参考文献
-[1] [グラフ彩色 - Wikipedia](https://ja.wikipedia.org/wiki/グラフ彩色)
-[2] [Simulated Annealing Algorithm for Graph Coloring](https://arxiv.org/abs/1712.00709) 
-[3] [Poland Lightning Round - MapRecoloring](https://community.topcoder.com/longcontest/?module=ViewProblemStatement&rd=17149&pm=14893)
+[1] [グラフ彩色 - Wikipedia](https://ja.wikipedia.org/wiki/グラフ彩色)  
+[2] [Simulated Annealing Algorithm for Graph Coloring](https://arxiv.org/abs/1712.00709)  
+[3] [Poland Lightning Round - MapRecoloring](https://community.topcoder.com/longcontest/?module=ViewProblemStatement&rd=17149&pm=14893)  
 

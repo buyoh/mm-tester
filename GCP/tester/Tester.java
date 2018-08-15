@@ -99,15 +99,17 @@ public class Tester {
                     g2.fillRect(VIS_SIZE + 5, 230, 80, 25);
                     g2.setColor(new Color(0x000000));
                     g2.drawRect(VIS_SIZE + 5, 230, 80, 25);
+                    char[]chsave = ("save").toCharArray();
+                    g2.drawChars(chsave, 0, chsave.length, VIS_SIZE + 28, 248);
                     ImageIO.write(bi, "png", new File(fileName +".png"));
                 } else {
                     g2.setColor(new Color(0xD4D4D4));
                     g2.fillRect(VIS_SIZE + 5, 230, 80, 25);
                     g2.setColor(new Color(0x000000));
                     g2.drawRect(VIS_SIZE + 5, 230, 80, 25);
+                    char[]chsave = ("save").toCharArray();
+                    g2.drawChars(chsave, 0, chsave.length, VIS_SIZE + 28, 248);
                 }
-                char[]chsave = ("save").toCharArray();
-                g2.drawChars(chsave, 0, chsave.length, VIS_SIZE + 28, 248);
                 g.drawImage(bi, 0, 0, VIS_SIZE + 100, VIS_SIZE, null);
             } catch (Exception e) { 
                 e.printStackTrace();
