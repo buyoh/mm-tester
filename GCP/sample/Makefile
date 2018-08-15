@@ -21,4 +21,7 @@ clean:
 	rm -f $(TARGET)
 
 run:
-	java -jar $(TESTER) -exec "./$(TARGET)" -seed 12 -vis
+	for i in `seq 1 10`; do \
+		echo "case:$$i"; \
+		java -jar $(TESTER) -exec "./$(TARGET)" -seed $$i -vis; \
+	done
