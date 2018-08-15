@@ -55,7 +55,10 @@ public class Tester {
                     g2.drawLine(posX[a[i]], posY[a[i]], posX[b[i]], posY[b[i]]);
                 }
                 for (int i = 0; i < M; i++) {
-                    if (col[a[i]] == col[b[i]] && (sel_ver == a[i] || sel_ver == b[i])) {
+                    if (col[a[i]] == col[b[i]] && sel_ver < 0) {
+                        g2.setColor(new Color(0xFF0000));
+                        g2.drawLine(posX[a[i]], posY[a[i]], posX[b[i]], posY[b[i]]);
+                    } else if (col[a[i]] == col[b[i]] && (sel_ver == a[i] || sel_ver == b[i])) {
                         g2.setColor(new Color(0xFF0000));
                         g2.drawLine(posX[a[i]], posY[a[i]], posX[b[i]], posY[b[i]]);
                     } else if (a[i] == sel_ver || b[i] == sel_ver || sel_ver < 0) {
