@@ -1,4 +1,4 @@
-# TSP（Traveling Salesman Problem）
+# Traveling Salesman
 
 ## 問題文
 巡回セールスマン問題です．座標が重複しない0 ~ N - 1までのN個の頂点の座標xi, yiが与えられるので，訪れる順に頂点番号を出力してください．

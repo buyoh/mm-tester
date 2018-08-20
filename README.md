@@ -3,18 +3,18 @@ TopCoder の Marathon Match に最近ハマっています．皆んなやろう�
 - [過去問](https://community.topcoder.com/longcontest/stats/?module=MatchList)  
 - [TopCoder Event](https://www.topcoder.com/community/events/)
 
-## Traveling Salesman (TSP)
+## Traveling Salesman
 巡回セールスマン問題です．有名です．  
-![1.png](TSP/image/1.png)
+![1.png](TravelingSalesman/image/1.png)
 
-## Vehicle Routing (VRP)
+## Vehicle Routing
 配送計画を考える問題です．巡回セールスマン問題と少し似ています．  
 ![1.png](VRP/image/1.png)
 
-## Rectangle Packing (RPP)
+## Rectangle Packing
 長方形を良い感じで詰め込む問題です．  
 ![1.png](RPP1/image/1.png)
 
-## Graph Coloring (GCP)
+## Graph Coloring
 グラフの彩色問題です．
 ![1.png](GCP/image/1.png)
