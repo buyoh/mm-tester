@@ -16,7 +16,7 @@ TopCoder の Marathon Match に最近ハマっています．皆んなやろう�
 
 ## Rectangle Packing
 長方形を良い感じで詰め込む問題です．  
-![1.png](RPP1/image/1.png)
+![1.png](RectanglePacking/image/1.png)
 
 ## Graph Coloring
 グラフの彩色問題です．
