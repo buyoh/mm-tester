@@ -4,7 +4,7 @@
 
 CXX      = g++
 CXXFLAGS = -O2 -Wall -std=c++11
-TARGET   = main
+TARGET   = TravelingSalesman
 TESTER   = ../../tester/tester.jar
 
 .PHONY: all clean run
@@ -13,7 +13,7 @@ TESTER   = ../../tester/tester.jar
 
 all: $(TARGET)
 	
-$(TARGET): main.cpp
+$(TARGET): $(TARGET).cpp
 	$(CXX) $(CXXFLAGS) -o $@ $^
 
 clean:
