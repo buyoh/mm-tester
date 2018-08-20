@@ -12,8 +12,7 @@ TESTER   = ../../tester/tester.jar
 ###############################################################################
 
 all: $(TARGET)
-	$(MAKE) $(TARGET)
-
+	
 $(TARGET): main.cpp
 	$(CXX) $(CXXFLAGS) -o $@ $^
 
