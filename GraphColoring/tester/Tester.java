@@ -236,7 +236,7 @@ public class Tester {
                 Score = (int)map.size();
                 for (int i = 0; i < M; i++) {
                     if (col[a[i]] == col[b[i]]) {
-                        Score = 100000;
+                        Score = -1;
                     }
                 }
             } catch (Exception e) {
