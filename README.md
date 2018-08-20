@@ -20,4 +20,4 @@ TopCoder の Marathon Match に最近ハマっています．皆んなやろう�
 
 ## Graph Coloring
 グラフの彩色問題です．
-![1.png](GCP/image/1.png)
+![1.png](GraphColoring/image/1.png)
