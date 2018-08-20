@@ -3,20 +3,23 @@
 ###############################################################################
 
 JAVAC  = javac
-JAR    = jar
-TARGET = Tester
+TARGET = TravelingSalesman
+TESTER = ../../tester/tester.jar
 
-.PHONY: all clean
+.PHONY: all clean run
 
 ###############################################################################
 
-all: $(TARGET).jar
+all: $(TARGET)
 
-$(TARGET).jar: tester.mf *.class
-	$(JAR) cvfm $(TARGET).jar $^
-
-*.class: $(TARGET).java
+$(TARGET): $(TARGET).java
 	$(JAVAC) $^
-	
+
 clean:
-	rm -f *.class *.jar
+	rm -f *.class
+
+run:
+	for i in `seq 1 10`; do \
+		echo "case:$$i"; \
+		java -jar $(TESTER) -exec "java $(TARGET)" -seed $$i -vis -save -num; \
+	done
