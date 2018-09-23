@@ -4,7 +4,10 @@ TopCoder の Marathon Match に最近ハマっています．皆んなやろう�
 - [TopCoder Event](https://www.topcoder.com/community/events/)
 
 テスタは Marathon Match 風にしています．使い方は本家と同じなので診断人さんのブログが参考になります．
-- [じじいのプログラミング - TopCoderマラソンマッチのはじめかた](http://shindannin.hatenadiary.com/entry/2014/10/05/003714)
+- [じじいのプログラミング - TopCoderマラソンマッチのはじめかた](http://shindannin.hatenadiary.com/entry/2014/10/05/003714)  
+  
+最適化問題で検索してヒットしたものをテスタにしているだけなので，その問題の研究など理論的な事は全く分かりません．何か間違っていれば指摘していただけるとありがたいです．  
+  
 
 ## Traveling Salesman
 巡回セールスマン問題です．有名です．  
