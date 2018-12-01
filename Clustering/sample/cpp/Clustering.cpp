@@ -6,7 +6,7 @@ int main () {
 
     int N,K;
     cin >> N >> K;
-	
+    
     vector < int > x(N),y(N);
     for (int i = 0; i < N; i++) {
         cin >> x[i] >> y[i];
@@ -16,4 +16,3 @@ int main () {
         cout << i / 4 * 200 + 100 << " " << i % 4 * 250 + 100 << endl;
     }
 }
-
