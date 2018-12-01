@@ -22,7 +22,6 @@ public class Tester {
     static String fileName, exec;
     static boolean vis;
     static int sel_ver;
-    static boolean press;
 
     final int MAXN = 200, MINN = 20;
     int VIS_SIZE = 1000;
@@ -39,13 +38,13 @@ public class Tester {
         
         public void paint(Graphics g) {
             try {
-                BufferedImage bi = new BufferedImage(VIS_SIZE + 100, VIS_SIZE, BufferedImage.TYPE_INT_RGB);
+                BufferedImage bi = new BufferedImage(VIS_SIZE + 20, VIS_SIZE + 20, BufferedImage.TYPE_INT_RGB);
                 Graphics2D g2 = (Graphics2D)bi.getGraphics();
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
                 g2.setColor(new Color(0xD3D3D3));
-                g2.fillRect(0, 0, VIS_SIZE + 100, VIS_SIZE);
+                g2.fillRect(0, 0, VIS_SIZE + 20, VIS_SIZE + 20);
                 g2.setColor(new Color(0xFFFFFF));
-                g2.fillRect(10, 10, VIS_SIZE - 20, VIS_SIZE - 20);
+                g2.fillRect(10, 10, VIS_SIZE, VIS_SIZE);
                 for (int i = 0; i < M; i++) {
                     if (a[i] == sel_ver) continue;
                     if (b[i] == sel_ver) continue;
@@ -86,34 +85,9 @@ public class Tester {
                             g2.drawChars(cht, 0, cht.length, numX[a[i]], numY[a[i]]);
                         }
                     }
-                }
-                g2.setFont(new Font("Arial", Font.PLAIN, 16));
-                FontMetrics fm = g2.getFontMetrics();
-                char[] chs1 = ("     Score").toCharArray();
-                char[] chs2 = ("" + Score).toCharArray();
-                char[] chn = ("   N = " + N).toCharArray();
-                char[] chm = ("   M = " + M).toCharArray();
-                g2.drawChars(chs1, 0, chs1.length, VIS_SIZE, 100);
-                g2.drawChars(chs2, 0, chs2.length, VIS_SIZE + 50 - chs2.length * 8, 120);
-                g2.drawChars(chn, 0, chn.length, VIS_SIZE, 160);
-                g2.drawChars(chm, 0, chm.length, VIS_SIZE, 185);
-                if (press) {
-                    g2.setColor(new Color(0xA6A6A6));
-                    g2.fillRect(VIS_SIZE + 5, 230, 80, 25);
-                    g2.setColor(new Color(0x000000));
-                    g2.drawRect(VIS_SIZE + 5, 230, 80, 25);
-                    char[]chsave = ("save").toCharArray();
-                    g2.drawChars(chsave, 0, chsave.length, VIS_SIZE + 28, 248);
-                    ImageIO.write(bi, "png", new File(fileName +".png"));
-                } else {
-                    g2.setColor(new Color(0xD4D4D4));
-                    g2.fillRect(VIS_SIZE + 5, 230, 80, 25);
-                    g2.setColor(new Color(0x000000));
-                    g2.drawRect(VIS_SIZE + 5, 230, 80, 25);
-                    char[]chsave = ("save").toCharArray();
-                    g2.drawChars(chsave, 0, chsave.length, VIS_SIZE + 28, 248);
-                }
-                g.drawImage(bi, 0, 0, VIS_SIZE + 100, VIS_SIZE, null);
+                }    
+                g.drawImage(bi, 0, 0, VIS_SIZE + 20, VIS_SIZE + 20, null);
+                ImageIO.write(bi, "png", new File(fileName +".png"));
             } catch (Exception e) { 
                 e.printStackTrace();
             }
@@ -154,26 +128,12 @@ public class Tester {
                     return;
                 }
             }
-            if (x <= VIS_SIZE + 85 && x >= VIS_SIZE + 5) {
-                if (y <= 250 && y >= 230) { 
-                    if (!press) {
-                        press = true;
-                        repaint();
-                        return;
-                    }
-                }
-            }
         }
 
-        public void mouseReleased(MouseEvent e) {
-            press = false;
-            repaint();
-        }
-
+        public void mouseReleased(MouseEvent e) { }
         public void mouseClicked(MouseEvent e) { }
         public void mouseEntered(MouseEvent e) { }
         public void mouseExited(MouseEvent e) { }
-
     }
 
     /********************************************************************/
@@ -249,7 +209,7 @@ public class Tester {
         }
 
         if (vis) {
-            jf.setSize(VIS_SIZE + 100, VIS_SIZE);
+            jf.setSize(VIS_SIZE + 20, VIS_SIZE + 20);
             jf.setVisible(true);
         }
         return (double)Score;
