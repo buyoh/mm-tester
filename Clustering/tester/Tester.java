@@ -24,7 +24,7 @@ public class Tester {
     static int sel_ver;
     static boolean press;
 
-    final int MAXN = 500, MINN = 100;
+    final int MAXN = 1000, MINN = 100;
     final int MAXK = 20, MINK = 5;
     final int VIS_SIZE = 1000;
     double Score;
@@ -47,6 +47,7 @@ public class Tester {
                 g2.setColor(new Color(0xFFFFFF));
                 g2.fillRect(10, 10, VIS_SIZE, VIS_SIZE);
 
+                Color [] dotColor = new Color[N];
                 for (int i = 0; i < N; i++) {
                     int idx = -1;
                     double dist = 1.0e9;
@@ -60,12 +61,14 @@ public class Tester {
                         }
                     }
 
+                    dotColor[i] = Color.getHSBColor((1.0f / (float)K) * (float)idx, 1.0f, 0.95f);
                     g2.setColor(new Color(0x000000));
                     g2.setStroke(new BasicStroke(1.0f));
                     g2.drawLine(10 + posX[i], 10 + posY[i], 10 + retX[idx], 10 + retY[idx]);
+                }
 
-                    Color c = Color.getHSBColor((1.0f / (float)K) * (float)idx, 1.0f, 0.95f);
-                    g2.setColor(c);
+                for (int i = 0; i < N; i++) {
+                    g2.setColor(dotColor[i]);
                     g2.fillOval(posX[i] + 6, posY[i] + 6, 8, 8);
                     g2.setColor(new Color(0x000000));
                     g2.drawOval(posX[i] + 6, posY[i] + 6, 8, 8);
