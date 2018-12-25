@@ -14,22 +14,31 @@ public class Tester {
         public void paint(Graphics g) 
         {
             try {
-                BufferedImage bi = new BufferedImage(VIS_SIZE_X + 20, VIS_SIZE_Y + 20, BufferedImage.TYPE_INT_RGB);
+                BufferedImage bi = new BufferedImage(VIS_SIZE_Y + 20, VIS_SIZE_X + 20, BufferedImage.TYPE_INT_RGB);
                 Graphics2D g2 = (Graphics2D)bi.getGraphics();
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
                 g2.setColor(new Color(0xD3D3D3));
-                g2.fillRect(0, 0, VIS_SIZE_X + 20, VIS_SIZE_Y + 20);
+                g2.fillRect(0, 0, VIS_SIZE_Y + 20, VIS_SIZE_X + 20);
                 g2.setColor(new Color(0xFFFFFF));
-                g2.fillRect(10, 10, VIS_SIZE_X, VIS_SIZE_Y);
+                g2.fillRect(10, 10, VIS_SIZE_Y, VIS_SIZE_X);
 
-                g2.setColor(new Color(0x000000));
+                g2.setFont(new Font("Arial", Font.BOLD, 10));
                 for (int x = 0; x < N; x++) {
                     for (int y = 0; y < M; y++) {
-                        g2.drawRect(x * PANNEL_SIZE + 10, y * PANNEL_SIZE + 10, PANNEL_SIZE, PANNEL_SIZE);
+                        if (Board[x][y] >= 0) {
+                            int pos_x = x * PANNEL_SIZE + 10;
+                            int pos_y = y * PANNEL_SIZE + 10;
+                            int num = Board[x][y];
+                            g2.setColor(Color.getHSBColor((1.0f / (float)(N * M)) * (float)num, 1.0f, 0.95f));
+                            g2.fillRect(pos_y, pos_x, PANNEL_SIZE, PANNEL_SIZE);
+                            char[] ch = ("" + num).toCharArray();
+                            g2.setColor(new Color(0x000000));
+                            g2.drawChars(ch, 0, ch.length, pos_y + 16 - ch.length * 3, pos_x + 19);
+                        }
                     }
                 }
 
-                g.drawImage(bi, 0, 0, VIS_SIZE_X + 20, VIS_SIZE_Y + 20, null);
+                g.drawImage(bi, 0, 0, VIS_SIZE_Y + 20, VIS_SIZE_X + 20, null);
             } catch (Exception e) { 
                 e.printStackTrace();
             }
@@ -83,12 +92,44 @@ public class Tester {
     int AnswerN;
     int posX [];
     int posY [];
+    int bposX;
+    int bposY;
 
     /********************************************************************/
 
     private boolean move_pannel (int x, int y)
     {
-        return true;
+        if (x == bposX && y != bposY) {
+            if (y < bposY) {
+                for (int i = bposY; i > y; i--) {
+                    Board[x][i] = Board[x][i - 1];
+                }
+            } else {
+                for (int i = bposY; i < y; i++) {
+                    Board[x][i] = Board[x][i + 1];
+                }
+            }
+            Board[x][y] = -1;
+            bposX = x;
+            bposY = y;
+            return true;
+        }
+        if (x != bposX && y == bposY) {
+            if (x < bposX) {
+                for (int i = bposX; i > x; i--) {
+                    Board[i][y] = Board[i - 1][y];
+                }
+            } else {
+                for (int i = bposX; i < x; i++) {
+                    Board[i][y] = Board[i + 1][y];
+                }
+            }
+            Board[x][y] = -1;
+            bposX = x;
+            bposY = y;
+            return true;
+        }
+        return false;
     }
 
     public void generate (String seedStr) 
@@ -102,15 +143,14 @@ public class Tester {
             VIS_SIZE_X = N * PANNEL_SIZE;
             VIS_SIZE_Y = M * PANNEL_SIZE;
             Board = new int[N][M];
+            bposX = N - 1;
+            bposY = M - 1;
             for (int x = 0; x < N; x++) {
                 for (int y = 0; y < M; y++) {
-                    if (x == N - 1 && y == M - 1) {
-                        Board[x][y] = -1;
-                    } else {
-                        Board[x][y] = x * M + y;
-                    }
+                    Board[x][y] = x * M + y + 1;
                 }
             }
+            Board[bposX][bposY] = -1;
             for (int i = 0; i < SHUFFLE; i++) {
                 while (true) {
                     int x = rnd.nextInt(N);
@@ -130,9 +170,9 @@ public class Tester {
         try {
             generate(seed);
             if (vis) {
-                jf.setSize(VIS_SIZE_X + 20, VIS_SIZE_Y + 45);
+                jf.setSize(VIS_SIZE_Y + 20, VIS_SIZE_X + 45);
                 jf.setVisible(true);
-            }  
+            }
             if (proc != null) try {
                 getAnswer();
                 for (int i = 0; i < AnswerN; i++) {
@@ -154,7 +194,16 @@ public class Tester {
         } catch (Exception e) {
             e.printStackTrace();
             return -1;
-        } 
+        }
+
+        // check
+        for (int x = 0; x < N; x++) {
+            for (int y = 0; y < M; y++) {
+                if (Board[x][y] != x * M + y + 1) {
+                    return -1;
+                }
+            }
+        }
         return AnswerN;
     }
 
@@ -208,7 +257,7 @@ public class Tester {
 
     public static void main (String[] args) {
         String seed = "1";
-        delay = 0.2;
+        delay = 0.01;
         for (int i = 0; i < args.length; ++i) {
             if (args[i].equals("-seed")) {
                 seed = args[++i];
