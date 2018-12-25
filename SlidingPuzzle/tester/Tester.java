@@ -9,8 +9,8 @@ import javax.imageio.*;
 
 public class Tester {
 
-    public class Visualizer extends JPanel implements WindowListener {
-        
+    public class Visualizer extends JPanel implements WindowListener 
+    {    
         public void paint(Graphics g) 
         {
             try {
@@ -175,6 +175,7 @@ public class Tester {
             }
             if (proc != null) try {
                 getAnswer();
+                System.out.println(AnswerN);
                 for (int i = 0; i < AnswerN; i++) {
                     if (move_pannel(posX[i], posY[i])) {
                         if (vis) {
@@ -257,7 +258,7 @@ public class Tester {
 
     public static void main (String[] args) {
         String seed = "1";
-        delay = 0.01;
+        delay = 0.001;
         for (int i = 0; i < args.length; ++i) {
             if (args[i].equals("-seed")) {
                 seed = args[++i];
