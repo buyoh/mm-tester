@@ -186,6 +186,7 @@ public class Tester {
             if (vis) {
                 jf.setSize(VIS_SIZE_Y + 20, VIS_SIZE_X + 43);
                 jf.setVisible(true);
+                Thread.sleep(2000);
             }
             if (proc != null) try {
                 getAnswer();
@@ -194,6 +195,7 @@ public class Tester {
                         if (vis) {
                             v.repaint();
                             Thread.sleep((long)(delay * 1000.0));
+                            System.out.println(posX[i] + " " + posY[i]);
                         }
                     }
                 }
@@ -271,7 +273,7 @@ public class Tester {
 
     public static void main (String[] args) {
         String seed = "1";
-        delay = 0.01;
+        delay = 1.0;
         for (int i = 0; i < args.length; ++i) {
             if (args[i].equals("-seed")) {
                 seed = args[++i];
