@@ -101,6 +101,8 @@ public class Tester {
 
     private boolean move_pannel (int x, int y)
     {
+        if (bposX < 0 || bposX >= N) return false;
+        if (bposY < 0 || bposY >= M) return false;
         if (x == bposX && y != bposY) {
             if (y < bposY) {
                 for (int i = bposY; i > y; i--) {
@@ -177,7 +179,7 @@ public class Tester {
 
     }
 
-    public double runTest (String seed) 
+    public int runTest (String seed) 
     {
         try {
             generate(seed);
@@ -187,16 +189,12 @@ public class Tester {
             }
             if (proc != null) try {
                 getAnswer();
-                System.out.println(AnswerN);
                 for (int i = 0; i < AnswerN; i++) {
                     if (move_pannel(posX[i], posY[i])) {
                         if (vis) {
                             v.repaint();
                             Thread.sleep((long)(delay * 1000.0));
                         }
-                    } else {
-                        System.err.println("Cannot move the pannel x = " + posX[i] + " y = " + posY[i] + ".");
-                        return -1;
                     }
                 }
             } catch (Exception e) {
@@ -209,15 +207,18 @@ public class Tester {
             return -1;
         }
 
-        // check
+        int Score = AnswerN;
         for (int x = 0; x < N; x++) {
             for (int y = 0; y < M; y++) {
-                if (Board[x][y] != x * M + y + 1 && Board[x][y] >= 0) {
-                    return -1;
+                if (Board[x][y] >= 0) {
+                    int nx = (Board[x][y] - 1) / M;
+                    int ny = (Board[x][y] - 1) % M;
+                    int diff = Math.abs(x - nx) + Math.abs(y - ny);
+                    Score += diff * 100000;
                 }
             }
         }
-        return AnswerN;
+        return Score;
     }
 
     private void getAnswer () throws IOException {
