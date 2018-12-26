@@ -29,11 +29,13 @@ public class Tester {
                             int pos_x = x * PANNEL_SIZE + 10;
                             int pos_y = y * PANNEL_SIZE + 10;
                             int num = Board[x][y];
-                            g2.setColor(Color.getHSBColor((1.0f / (float)(N * M)) * (float)num, 1.0f, 0.95f));
+                            g2.setColor(new Color(0xFFFFFF));
                             g2.fillRect(pos_y, pos_x, PANNEL_SIZE, PANNEL_SIZE);
+                            g2.setColor(Color.getHSBColor((1.0f / (float)(N * M)) * (float)num, 1.0f, 0.95f));
+                            g2.fillRect(pos_y + 1, pos_x + 1, PANNEL_SIZE - 2, PANNEL_SIZE - 2);
                             char[] ch = ("" + num).toCharArray();
                             g2.setColor(new Color(0x000000));
-                            g2.drawChars(ch, 0, ch.length, pos_y + 20 - ch.length * 5, pos_x + 25);
+                            g2.drawChars(ch, 0, ch.length, pos_y + 20 - ch.length * 4, pos_x + 25);
                         }
                     }
                 }
@@ -143,6 +145,12 @@ public class Tester {
             if (seedStr.equals("1")) {
                 N = 4;
                 M = 4;
+            } else if (seedStr.equals("2")) {
+                N = 5;
+                M = 5;
+            } else if (seedStr.equals("3")) {
+                N = 10;
+                M = 10;
             }
             VIS_SIZE_X = N * PANNEL_SIZE;
             VIS_SIZE_Y = M * PANNEL_SIZE;

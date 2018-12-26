@@ -48,7 +48,7 @@ int ori_bposY;
 int bposX;
 int bposY;
 
-const int AnsNum = 100;
+const int AnsNum = 500;
 int AnsX[AnsNum];
 int AnsY[AnsNum];
 
@@ -82,6 +82,9 @@ bool accept (double diff, double temp)
 
 bool move_pannel (int x, int y)
 {
+    if (x < 0 && y < 0) {
+        return false;
+    }
     if (x == bposX && y != bposY) {
         if (y < bposY) {
             for (int i = bposY; i > y; i--) {
@@ -126,6 +129,10 @@ void solve ()
         int oriy = AnsY[idx];
         AnsX[idx] = Random.rand() % N;
         AnsY[idx] = Random.rand() % M;
+        if (Random.rand() % 5 == 0) {
+            AnsX[idx] = -1;
+            AnsY[idx] = -1;
+        }
         bposX = ori_bposX;
         bposY = ori_bposY;
         for (int x = 0; x < N; x++) {
