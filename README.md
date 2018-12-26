@@ -6,25 +6,29 @@ TopCoder の Marathon Match に最近ハマっています．皆んなやろう�
 テスタは Marathon Match 風にしています．使い方は本家と同じなので診断人さんのブログが参考になります．
 - [じじいのプログラミング - TopCoderマラソンマッチのはじめかた](http://shindannin.hatenadiary.com/entry/2014/10/05/003714)  
   
-最適化問題で検索してヒットしたものをテスタにしているだけなので，その問題の研究など理論的な事は全く分かりません．何か間違っていれば指摘していただけるとありがたいです．  
+最適化問題で検索してヒットしたものをテスタにしているだけなので，理論的な事は全く分かりません．何か間違っていれば指摘していただけるとありがたいです．  
   
 
 ## [Traveling Salesman](TravelingSalesman/)
 巡回セールスマン問題です．有名です．  
-![1.png](TravelingSalesman/image/1.png)
+<img src="TravelingSalesman/image/1.png" width="500px">
 
 ## [Vehicle Routing](VehicleRouting/)
 配送計画を考える問題です．巡回セールスマン問題と少し似ています．  
-![1.png](VehicleRouting/image/1.png)
+<img src="VehicleRouting/image/1.png" width="500px">
 
 ## [Rectangle Packing](RectanglePacking/)
 長方形を良い感じで詰め込む問題です．  
-![1.png](RectanglePacking/image/1.png)
+<img src="RectanglePacking/image/1.png" width="500px">
 
 ## [Graph Coloring](GraphColoring/)
-グラフの彩色問題です．
-![1.png](GraphColoring/image/1.png)
+グラフの彩色問題です．  
+<img src="GraphColoring/image/1.png" width="500px">
 
 ## [Clustering](Clustering/)
-クラスタリングです．
-![1.png](Clustering/image/1.png)
+クラスタリングです．  
+<img src="Clustering/image/1.png" width="500px">
+
+## [Sliding Puzzle](SlidingPuzzle)
+15-Puzzle(スライドパズル)のN×Nバージョン．  
+<img src="SlidingPuzzle/image/1.gif" width="300px">
