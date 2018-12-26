@@ -22,7 +22,7 @@ public class Tester {
                 g2.setColor(new Color(0xFFFFFF));
                 g2.fillRect(10, 10, VIS_SIZE_Y, VIS_SIZE_X);
 
-                g2.setFont(new Font("Arial", Font.BOLD, 10));
+                g2.setFont(new Font("Arial", Font.BOLD, 15));
                 for (int x = 0; x < N; x++) {
                     for (int y = 0; y < M; y++) {
                         if (Board[x][y] >= 0) {
@@ -33,7 +33,7 @@ public class Tester {
                             g2.fillRect(pos_y, pos_x, PANNEL_SIZE, PANNEL_SIZE);
                             char[] ch = ("" + num).toCharArray();
                             g2.setColor(new Color(0x000000));
-                            g2.drawChars(ch, 0, ch.length, pos_y + 16 - ch.length * 3, pos_x + 19);
+                            g2.drawChars(ch, 0, ch.length, pos_y + 20 - ch.length * 5, pos_x + 25);
                         }
                     }
                 }
@@ -81,10 +81,10 @@ public class Tester {
     static boolean vis;
     static double delay;
 
-    final int MAXN = 30, MINN = 4;
-    final int MAXM = 30, MINM = 4;
+    final int MAXN = 10, MINN = 4;
+    final int MAXM = 10, MINM = 4;
     final int SHUFFLE = 100000;
-    final int PANNEL_SIZE = 30;
+    final int PANNEL_SIZE = 40;
     int VIS_SIZE_X;
     int VIS_SIZE_Y;
     int N,M;
@@ -140,6 +140,10 @@ public class Tester {
             rnd.setSeed(seed);
             N = rnd.nextInt(MAXN - MINN + 1) + MINN;
             M = rnd.nextInt(MAXM - MINM + 1) + MINM;
+            if (seedStr.equals("1")) {
+                N = 4;
+                M = 4;
+            }
             VIS_SIZE_X = N * PANNEL_SIZE;
             VIS_SIZE_Y = M * PANNEL_SIZE;
             Board = new int[N][M];
@@ -170,7 +174,7 @@ public class Tester {
         try {
             generate(seed);
             if (vis) {
-                jf.setSize(VIS_SIZE_Y + 20, VIS_SIZE_X + 45);
+                jf.setSize(VIS_SIZE_Y + 20, VIS_SIZE_X + 43);
                 jf.setVisible(true);
             }
             if (proc != null) try {
@@ -200,7 +204,7 @@ public class Tester {
         // check
         for (int x = 0; x < N; x++) {
             for (int y = 0; y < M; y++) {
-                if (Board[x][y] != x * M + y + 1) {
+                if (Board[x][y] != x * M + y + 1 && Board[x][y] >= 0) {
                     return -1;
                 }
             }
@@ -258,7 +262,7 @@ public class Tester {
 
     public static void main (String[] args) {
         String seed = "1";
-        delay = 0.001;
+        delay = 0.01;
         for (int i = 0; i < args.length; ++i) {
             if (args[i].equals("-seed")) {
                 seed = args[++i];
