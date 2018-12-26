@@ -30,5 +30,5 @@ TopCoder の Marathon Match に最近ハマっています．皆んなやろう�
 <img src="Clustering/image/1.png" width="500px">
 
 ## [Sliding Puzzle](SlidingPuzzle)
-15-Puzzle(スライドパズル)のN×Nバージョン．  
-<img src="SlidingPuzzle/image/1.gif" width="300px">
+15-Puzzle(スライドパズル)のN×Mバージョン．  
+<img src="SlidingPuzzle/image/1.gif" width="500px">
