@@ -2,10 +2,9 @@
 ##### Makefile                                                             ####
 ###############################################################################
 
-CXX      = g++
-CXXFLAGS = -O2 -Wall -std=c++11
-TARGET   = SlidingPuzzle
-TESTER   = ../../tester/tester.jar
+JAVAC  = javac
+TARGET = SlidingPuzzle
+TESTER = ../../tester/tester.jar
 
 .PHONY: all clean run
 
@@ -13,14 +12,14 @@ TESTER   = ../../tester/tester.jar
 
 all: $(TARGET)
 
-$(TARGET): $(TARGET).cpp
-	$(CXX) $(CXXFLAGS) -o $@ $^
+$(TARGET): $(TARGET).java
+	$(JAVAC) $^
 
 clean:
-	rm -f $(TARGET)
+	rm -f *.class
 
 run:
 	for i in `seq 1 10`; do \
 		echo "case:$$i"; \
-		java -jar $(TESTER) -exec "./$(TARGET)" -seed $$i -vis -delay 0.1; \
+		java -jar $(TESTER) -exec "java $(TARGET)" -seed $$i -vis -delay 0.1; \
 	done

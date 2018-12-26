@@ -195,7 +195,6 @@ public class Tester {
                         if (vis) {
                             v.repaint();
                             Thread.sleep((long)(delay * 1000.0));
-                            System.out.println(posX[i] + " " + posY[i]);
                         }
                     }
                 }
