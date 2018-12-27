@@ -145,14 +145,19 @@ public class Tester {
             N = rnd.nextInt(MAXN - MINN + 1) + MINN;
             M = rnd.nextInt(MAXM - MINM + 1) + MINM;
             if (seedStr.equals("1")) {
-                N = 4;
-                M = 4;
+                N = 4; M = 4;
             } else if (seedStr.equals("2")) {
-                N = 5;
-                M = 5;
+                N = 5; M = 5;
             } else if (seedStr.equals("3")) {
-                N = 10;
-                M = 10;
+                N = 6; M = 6;
+            }  else if (seedStr.equals("4")) {
+                N = 7; M = 7;
+            } else if (seedStr.equals("5")) {
+                N = 8; M = 8;
+            }  else if (seedStr.equals("6")) {
+                N = 9; M = 9;
+            } else if (seedStr.equals("7")) {
+                N = 10; M = 10;
             }
             VIS_SIZE_X = N * PANNEL_SIZE;
             VIS_SIZE_Y = M * PANNEL_SIZE;
