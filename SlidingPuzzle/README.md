@@ -3,7 +3,7 @@
 ## 問題文
 15パズルを知ってますか？あれを```N×M```の盤面でより短い手数で解いてください．  
   
-![1.gif](image/1.gif)
+![1.gif](image/4x4.gif)
 
 ## 制約
 4 <= N <= 10  
@@ -59,7 +59,13 @@ $ java -jar tester.jar -exec "<command>" -seed <seed>
 ```
 
 ## 目安？
-
-
+A-star[1]で解いてみた．7x7以降全然終わらない．  
+4x4) 32
+5x5) 154
+6x6) 256
+7x7) -
+8x8) -
+9x9) -
 
 ##  参考文献
+[1] [Wikipedia A-star](https://ja.wikipedia.org/wiki/A*)
