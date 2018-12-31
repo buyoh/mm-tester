@@ -204,7 +204,7 @@ public class Tester {
                     }
                 }
             } catch (Exception e) {
-                System.err.println("Failed to get result from permute.");
+                System.err.println("Failed to get result from your output.");
                 return -1;
             }
 
