@@ -16,18 +16,13 @@ int main ()
     }
 
     const int size = 100;
-    vector < pair < int,int > > ans;
+    cout << size * size - N << endl;
     for (int x = 0; x < size; x++) {
         for (int y = 0; y < size; y++) {
             if (used.find(make_pair(x, y)) == used.end()) {
-                ans.push_back(make_pair(x, y));
+                cout << x << " " << y << endl;
             }
         }
-    }
-
-    cout << ans.size() << endl;
-    for (int i = 0; i < ans.size(); i++) {
-        cout << ans[i].first << " " << ans[i].second << endl;
     }
 
     return 0;
