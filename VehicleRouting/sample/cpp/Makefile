@@ -5,7 +5,7 @@
 CXX      = g++
 CXXFLAGS = -O2 -Wall -std=c++11
 TARGET   = VehicleRouting
-TESTER   = ../../tester/tester.jar
+TESTER   = ../../tester/Tester.jar
 
 .PHONY: all clean run
 
