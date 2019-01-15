@@ -4,7 +4,7 @@
 
 JAVAC  = javac
 TARGET = RectilinearSteinerTree
-TESTER = ../../tester/tester.jar
+TESTER = ../../tester/Tester.jar
 
 .PHONY: all clean run
 
