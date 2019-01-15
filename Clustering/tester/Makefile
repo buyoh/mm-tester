@@ -1,13 +1,23 @@
-#Makefile
-ALLSOURCE = Tester.java
-JAVAC = javac
+###############################################################################
+##### Makefile                                                             ####
+###############################################################################
 
-.PHONY: all
-all: comp
-comp:
-	${JAVAC} ${ALLSOURCE}
-	jar cvfm tester.jar tester.mf *.class
+JAVAC  = javac
+JAR    = jar
+TARGET = Tester
 
-.PHONY: clean
+.PHONY: all clean
+
+###############################################################################
+
+all: $(TARGET).jar
+
+$(TARGET).jar: tester.mf *.class
+	$(JAR) cvfm $(TARGET).jar $^
+
+*.class: $(TARGET).java
+	$(JAVAC) $^
+	
 clean:
-	rm -rf *.jar *.class
+	rm -f *.class *.jar
+

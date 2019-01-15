@@ -34,7 +34,7 @@ v0 → v1 → ... → vN-1 → V0 と頂点を訪れた時の移動距離をス�
 ## テスタ
 TopCoder の Marathon Match と同じです．```"<command>"```にプログラムの実行コマンド，```<seed>```に乱数のシードを入れてください．
 ```sh
-$ java -jar tester.jar -exec "<command>" -seed <seed>
+$ java -jar Tester.jar -exec "<command>" -seed <seed>
 ```
 その他オプション
 ```

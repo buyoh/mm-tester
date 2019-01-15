@@ -1,4 +1,4 @@
-TESTER=../../tester/tester.jar
+TESTER=../../tester/Tester.jar
 
 for i in `seq 1 10`; do 
     echo "case:$i"

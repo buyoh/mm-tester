@@ -50,7 +50,7 @@ rN cN
 ## テスタ
 TopCoder の Marathon Match と同じです．```"<command>"```にプログラムの実行コマンド，```<seed>```に乱数のシードを入れてください．
 ```sh
-$ java -jar tester.jar -exec "<command>" -seed <seed>
+$ java -jar Tester.jar -exec "<command>" -seed <seed>
 ```
 その他オプション
 ```
