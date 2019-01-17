@@ -14,7 +14,36 @@ public class Tester {
         public void paint(Graphics g) 
         {
             try {
+                BufferedImage bi = new BufferedImage(SIZE_VIS + 20, SIZE_VIS + 20, BufferedImage.TYPE_INT_RGB);
+                Graphics2D g2 = (Graphics2D)bi.getGraphics();
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
                 
+                g2.setColor(new Color(0xD3D3D3));
+                g2.fillRect(0, 0, SIZE_VIS + 20, SIZE_VIS + 20);
+                g2.setColor(new Color(0xFFFFFF));
+                g2.fillRect(10, 10, SIZE_VIS, SIZE_VIS);
+
+                g2.setColor(new Color(0xFF0000));
+                for (int i = 0; i < N; i++) {
+                    g2.fillRect(posX[i] * 10 + 10, posY[i] * 10 + 10, 10, 10);
+                }
+
+                g2.setColor(new Color(0x0000FF));
+                for (int i = 0; i < M; i++) {
+                    g2.fillRect(ansX[i] * 10 + 10, ansY[i] * 10 + 10, 10, 10);
+                }
+
+                g2.setStroke(new BasicStroke(1.0f));
+                g2.setColor(new Color(0xD3D3D3));
+                for (int i = 1; i <= SIZE; i++) {
+                    g2.drawLine(i * 10, 0, i * 10, SIZE_VIS + 20);
+                    g2.drawLine(0, i * 10, SIZE_VIS + 20, i * 10);
+                }
+
+                g.drawImage(bi, 0, 0, SIZE_VIS + 20, SIZE_VIS + 20, null);
+                if (save) {
+                    ImageIO.write(bi, "png", new File(fileName +".png"));
+                }
             } catch (Exception e) { 
                 e.printStackTrace();
             }
@@ -56,13 +85,16 @@ public class Tester {
     static String fileName, exec;
     static boolean vis, save;
 
-    final int MAXN = 10, MINN = 100;
+    final int[] dx = {1, 0, -1, 0};
+    final int[] dy = {0, 1, 0, -1};
+    final int MAXN = 100, MINN = 10;
     final int SIZE = 100;
+    final int SIZE_VIS = SIZE * 10;
     boolean [][] Board;
-    int N;
+    boolean [][] Connect;
+    int N,M;
     int posX [];
     int posY [];
-    int M;
     int ansX [];
     int ansY [];
 
@@ -78,8 +110,8 @@ public class Tester {
 
             N = rnd.nextInt(MAXN - MINN + 1) + MINN;
             Board = new boolean[SIZE][SIZE];
-            posX = new int[SIZE];
-            posY = new int[SIZE];
+            posX = new int[N];
+            posY = new int[N];
             for (int i = 0; i < N; i++) {
                 while (true) {
                     int x = rnd.nextInt(SIZE);
@@ -101,12 +133,45 @@ public class Tester {
 
     }
 
+    private void dfs (int x, int y)
+    {
+        if (Connect[x][y]) return;
+        Connect[x][y] = true;
+        for (int i = 0; i < 4; i++) {
+            int nx = x + dx[i];
+            int ny = y + dy[i];
+            if (nx < 0 || ny < 0 || nx >= SIZE || ny >= SIZE) continue;
+            if (!Board[x][y]) continue; 
+            dfs(nx, ny);
+        }
+    }
+
     public int runTest (String seed) 
     {
         try 
         {
             generate(seed);
-
+            if (proc != null) try {
+                getAnswer();
+                for (int i = 0; i < M; i++) {
+                    if (Board[ansX[i]][ansY[i]]) {
+                        System.err.println("Panels overlap with x = " + ansX[i] + ", y = " + ansY[i] + ".");
+                        return -1;
+                    }
+                    Board[ansX[i]][ansY[i]] = true;
+                }
+                Connect = new boolean[SIZE][SIZE];
+                dfs(posX[0], posY[0]);
+                for (int i = 0; i < N; i++) {
+                    if (!Connect[posX[i]][posY[i]]) {
+                        System.err.println("Panels are not consolidated.");
+                        return -1;
+                    }
+                }
+            } catch (Exception e) {
+                System.err.println("Failed to get result from output.");
+                return -1;
+            }
         } 
         catch (Exception e) 
         {
@@ -114,11 +179,31 @@ public class Tester {
             return -1;
         }
 
-        return -1;
+        if (vis) {
+            jf.setSize(SIZE_VIS + 20, SIZE_VIS + 20);
+            jf.setVisible(true);
+        }
+
+        return M;
     }
 
     private void getAnswer () throws IOException {
-        
+        StringBuffer sb = new StringBuffer();
+        sb.append(N).append('\n');
+        for (int i = 0; i < N; ++i) {
+            sb.append(posX[i]).append(' ');
+            sb.append(posY[i]).append('\n');
+        }
+        os.write(sb.toString().getBytes());
+        os.flush();
+
+        M = sc.nextInt();
+        ansX = new int[M];
+        ansY = new int[M];
+        for (int i = 0; i < M; i++) {
+            ansX[i] = sc.nextInt();
+            ansY[i] = sc.nextInt();
+        }
     }
 
     public Tester (String seed) {
