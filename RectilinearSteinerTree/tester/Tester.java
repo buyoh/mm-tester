@@ -23,12 +23,12 @@ public class Tester {
                 g2.setColor(new Color(0xFFFFFF));
                 g2.fillRect(10, 10, SIZE_VIS, SIZE_VIS);
 
-                g2.setColor(new Color(0xFF0000));
+                g2.setColor(new Color(0xdc143c));
                 for (int i = 0; i < N; i++) {
                     g2.fillRect(posX[i] * 10 + 10, posY[i] * 10 + 10, 10, 10);
                 }
 
-                g2.setColor(new Color(0x0000FF));
+                g2.setColor(new Color(0x4169e1));
                 for (int i = 0; i < M; i++) {
                     g2.fillRect(ansX[i] * 10 + 10, ansY[i] * 10 + 10, 10, 10);
                 }
@@ -87,7 +87,7 @@ public class Tester {
 
     final int[] dx = {1, 0, -1, 0};
     final int[] dy = {0, 1, 0, -1};
-    final int MAXN = 100, MINN = 10;
+    final int MAXN = 200, MINN = 10;
     final int SIZE = 100;
     final int SIZE_VIS = SIZE * 10;
     boolean [][] Board;
