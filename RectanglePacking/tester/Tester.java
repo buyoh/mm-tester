@@ -9,37 +9,37 @@ import javax.imageio.*;
 
 public class Tester {
 
-    public class Visualizer extends JPanel implements WindowListener {
-        
-        public void paint(Graphics g) {
-
+    public class Visualizer extends JPanel implements WindowListener 
+    {    
+        public void paint(Graphics g) 
+        {
             try {
-                int WIDTH  = BOX_SIZE + 40;
-                int HEIGHT = BOX_SIZE + 40;
+                int WIDTH  = BOX_SIZE + 20;
+                int HEIGHT = BOX_SIZE + 20;
                 BufferedImage bi = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
                 Graphics2D g2 = (Graphics2D)bi.getGraphics();
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
                 g2.setColor(new Color(0xD3D3D3));
                 g2.fillRect(0, 0, WIDTH, HEIGHT);
                 g2.setColor(new Color(0xFFFFFF));
-                g2.fillRect(20, 20, WIDTH - 40, HEIGHT - 40);
+                g2.fillRect(10, 10, WIDTH - 20, HEIGHT - 20);
 
                 for (int i = 0; i < N; i++) {
                     Color c = Color.getHSBColor((1.0f / (float)N) * (float)i, 1.0f, 0.95f);
                     g2.setColor(c);
-                    g2.fillRect(20 + posX[i], 1020 - posY[i] - h[i], w[i], h[i]);
+                    g2.fillRect(10 + posX[i], 1010 - posY[i] - h[i], w[i], h[i]);
                     g2.setColor(new Color(0x3F3F3F));
-                    g2.drawRect(20 + posX[i], 1020 - posY[i] - h[i], w[i], h[i]);
+                    g2.drawRect(10 + posX[i], 1010 - posY[i] - h[i], w[i], h[i]);
                 }
 
                 g2.setStroke(new BasicStroke(2.0f));
-                g2.drawLine(20, 1020 - MAX_POSY, 1020, 1020 - MAX_POSY);
+                g2.drawLine(10, 1010 - MAX_POSY, 1010, 1010 - MAX_POSY);
 
                 g2.setFont(new Font("Arial", Font.BOLD, 15));
                 FontMetrics fm = g2.getFontMetrics();
                 char[] ch = ("Score = " + MAX_POSY).toCharArray();
                 int x = BOX_SIZE / 2;
-                int y = 1020 - MAX_POSY - 5;
+                int y = 1010 - MAX_POSY - 5;
                 g2.drawChars(ch, 0, ch.length, x, y);
 
                 g.drawImage(bi, 0, 0, WIDTH, HEIGHT, null);
@@ -97,8 +97,8 @@ public class Tester {
 
     /********************************************************************/
 
-    public void generate (String seedStr) {
-
+    public void generate (String seedStr) 
+    {
         try {   
             SecureRandom rnd = SecureRandom.getInstance("SHA1PRNG");
             long seed = Long.parseLong(seedStr);
@@ -117,8 +117,8 @@ public class Tester {
 
     }
 
-    public double runTest (String seed) {
-
+    public double runTest (String seed) 
+    {
         try {
             generate(seed);
             if (proc != null) try {
@@ -155,7 +155,7 @@ public class Tester {
         }
         
         if (vis) {
-            jf.setSize(BOX_SIZE + 40, BOX_SIZE + 40);
+            jf.setSize(BOX_SIZE + 20, BOX_SIZE + 20);
             jf.setVisible(true);
         }
         
