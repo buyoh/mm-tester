@@ -164,7 +164,7 @@ public class Tester {
                 dfs(posX[0], posY[0]);
                 for (int i = 0; i < N; i++) {
                     if (!Connect[posX[i]][posY[i]]) {
-                        System.err.println("Panels are not consolidated.");
+                        System.err.println("Panels are not connected.");
                         return -1;
                     }
                 }
