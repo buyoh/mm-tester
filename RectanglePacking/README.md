@@ -55,7 +55,5 @@ $ java -jar Tester.jar -exec "<command>" -seed <seed>
 8)  314
 9)  306
 10) 315  
-  
-![1.png](image/1.png)
 
 ##  参考文献
