@@ -27,15 +27,15 @@ public class Tester {
                 for (int i = 0; i < N; i++) {
                     int a = perm[i];
                     int b = perm[(i + 1) % N];
-                    g2.drawLine(posX[a] * 10 + 20, posY[a] * 10 + 20, 
-                                posX[b] * 10 + 20, posY[b] * 10 + 20);
+                    g2.drawLine(posX[a] + 10, posY[a] + 10, 
+                                posX[b] + 10, posY[b] + 10);
                 }
 
                 for (int i = 0; i < N; i++) {
                     g2.setColor(new Color(0xFFFFFF));
-                    g2.fillOval(posX[i] * 10 + 16, posY[i] * 10 + 16, 8, 8);
+                    g2.fillOval(posX[i] + 6, posY[i] + 6, 8, 8);
                     g2.setColor(new Color(0x000000));
-                    g2.drawOval(posX[i] * 10 + 16, posY[i] * 10 + 16, 8, 8);
+                    g2.drawOval(posX[i] + 6, posY[i] + 6, 8, 8);
                 }
 
                 if (numb) {
@@ -43,8 +43,8 @@ public class Tester {
                     FontMetrics fm = g2.getFontMetrics();
                     for (int i = 0; i < N; ++i) {
                         char[] ch = ("" + i).toCharArray();
-                        int x = posX[i] * 10 + 15;
-                        int y = posY[i] * 10 + 15;
+                        int x = posX[i] + 5;
+                        int y = posY[i] + 5;
                         g2.drawChars(ch, 0, ch.length, x, y);
                     }
                 }
@@ -96,17 +96,18 @@ public class Tester {
     static boolean save, vis, numb;
 
     final int MAXN = 1000, MINN = 50;
-    final int SIZE = 100 + 1;
-    final int VIS_SIZE = (SIZE + 3) * 10;
+    final int SIZE = 1000 + 1;
+    final int VIS_SIZE = 1020;
     int N;
     int [] posX, posY;
     int [] perm;
 
     /********************************************************************/
 
-    public void generate (String seedStr) {
-
-        try {   
+    public void generate (String seedStr) 
+    {
+        try 
+        {   
             SecureRandom rnd = SecureRandom.getInstance("SHA1PRNG");
             long seed = Long.parseLong(seedStr);
             rnd.setSeed(seed);
@@ -116,7 +117,6 @@ public class Tester {
             posX = new int[N];
             posY = new int[N];
             boolean [][] usedPos = new boolean[SIZE][SIZE];
-
             for (int i = 0; i < N; ++i) {
                 int x = -1, y = -1;
                 do {
@@ -131,7 +131,6 @@ public class Tester {
             System.err.println("An exception occurred while generating test case.");
             e.printStackTrace();
         }
-
     }
 
     public double runTest (String seed) {
@@ -153,7 +152,7 @@ public class Tester {
                     used[perm[i]] = true;
                 }
             } catch (Exception e) {
-                System.err.println("Failed to get result from permute.");
+                System.err.println("Failed to get result from your answer.");
                 return -1;
             }
 
