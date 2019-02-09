@@ -144,7 +144,7 @@ public class Tester {
                         }
                     }
                     if (!flag) {
-                        System.err.println("Point at coordinate x = " + ansX[i] + ", y = " + ansY[i] + " is not covered by a circle.");
+                        System.err.println("Point at coordinate x = " + posX[i] + ", y = " + posY[i] + " is not covered by a circle.");
                         return -1;
                     }
                 }
