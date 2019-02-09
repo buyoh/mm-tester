@@ -36,3 +36,7 @@ TopCoder の Marathon Match に最近ハマっています．皆んなやろう�
 ## [Rectilinear Steiner Tree](RectilinearSteinerTree/)
 シュタイナー木のカクカクしたタイプのやつです．  
 <img src="RectilinearSteinerTree/image/1.png" width="500px">
+
+## [Disk Covering](DiskCovering/)
+円で点をカバーする問題です．  
+<img src="DiskCovering/image/1.png" width="500px">
