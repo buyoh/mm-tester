@@ -19,10 +19,18 @@ public class Tester {
                 Graphics2D g2 = (Graphics2D)bi.getGraphics();
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
                 
-                g2.setColor(new Color(0xD3D3D3));
-                g2.fillRect(0, 0, SIZE_VIS, SIZE_VIS);
                 g2.setColor(new Color(0xFFFFFF));
                 g2.fillRect(10, 10, SIZE_VIS - 20, SIZE_VIS - 20);
+
+                g2.setColor(new Color(0xF4F4FF));
+                for (int i = 0; i < M; i++) {
+                    g2.fillOval(ansX[i] + 10 - R, ansY[i] + 10 - R, R * 2, R * 2);
+                }
+
+                g2.setColor(new Color(0x4169e1));
+                for (int i = 0; i < M; i++) {
+                    g2.drawOval(ansX[i] + 10 - R, ansY[i] + 10 - R, R * 2, R * 2);
+                }
 
                 for (int i = 0; i < N; i++) {
                     g2.setColor(new Color(0x454552));
@@ -31,10 +39,11 @@ public class Tester {
                     g2.drawOval(posX[i] + 7, posY[i] + 7, 6, 6);
                 }
 
-                g2.setColor(new Color(0x4169e1));
-                for (int i = 0; i < M; i++) {
-                    g2.drawOval(ansX[i] + 10 - R, ansY[i] + 10 - R, R * 2, R * 2);
-                }
+                g2.setColor(new Color(0xD3D3D3));
+                g2.fillRect(0, 0, SIZE_VIS, 10);
+                g2.fillRect(0, 0, 10, SIZE_VIS);
+                g2.fillRect(SIZE_VIS - 10, 0, 10, SIZE_VIS);
+                g2.fillRect(0, SIZE_VIS - 10, SIZE_VIS, 10);
 
                 g.drawImage(bi, 0, 0, SIZE_VIS, SIZE_VIS, null);
                 if (save) {
