@@ -9,67 +9,103 @@ import javax.imageio.*;
 
 public class Tester {
 
+    /********************************************************************/
+
+    JFrame jf;
+    Visualizer v;
+    InputStream is;
+    OutputStream os;
+    Scanner sc;
+
+    static Process proc;
+    static String fileName, exec;
+    static boolean save, vis, numb, debug;
+
+    final int FIELD_WIDTH  = 1000;
+    final int FIELD_HEIGHT = 1000;
+    final int MAXN = 500, MINN = 50;
+    final int MAXM = 10,  MINM = 3;
+    final int MAX_CAP = 20, MIN_CAP = 5;
+    final int MAX_SPEED = 20, MIN_SPEED = 1;
+
+    final int VEHICLE_VIEW_WIDTH = 250;
+    final int VIS_X_SIZE = FIELD_WIDTH + VEHICLE_VIEW_WIDTH + 20;
+    final int VIS_Y_SIZE = FIELD_HEIGHT + 20;
+
+    int N,M;
+    int depotX, depotY;
+    int [] posX, posY;
+    int [] cap;
+    int [] speed;
+    int [][] ans;
+    double [] dist;
+
+    /********************************************************************/
+
     public class Visualizer extends JPanel implements WindowListener {
-    	
+    
         public void paint(Graphics g) {
 
-            try {
-                BufferedImage bi = new BufferedImage(SIZE_VIS_X + VEHICLE_VIEW_WIDTH, SIZE_VIS_Y, BufferedImage.TYPE_INT_RGB);
+            try 
+            {
+                BufferedImage bi = new BufferedImage(VIS_X_SIZE, VIS_Y_SIZE, BufferedImage.TYPE_INT_RGB);
                 Graphics2D g2 = (Graphics2D)bi.getGraphics();
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
                 
                 g2.setColor(new Color(0xD3D3D3));
-                g2.fillRect(0, 0, SIZE_VIS_X + VEHICLE_VIEW_WIDTH, SIZE_VIS_Y);
+                g2.fillRect(0, 0, VIS_X_SIZE, VIS_Y_SIZE);
                 g2.setColor(new Color(0xFFFFFF));
-                g2.fillRect(10, 10, SIZE_VIS_X - 20, SIZE_VIS_Y - 20);
+                g2.fillRect(10, 10, FIELD_WIDTH, FIELD_HEIGHT);
 
-                for (int i = 0; i < perm.length; i++) {
-                    int x = depotX, y = depotY;
+                /* Draw delivery routes. */
+                for (int i = 0; i < ans.length; i++) {
                     Color c = Color.getHSBColor((1.0f / (float)M) * (float)i, 1.0f, 0.95f);
                     g2.setColor(c);
-                    for (int j = 0; j < perm[i].length; j++) {
-                        int idx = perm[i][j];
+                    int cur_x = depotX;
+                    int cur_y = depotY;
+                    for (int j = 0; j < ans[i].length; j++) {
+                        int idx = ans[i][j];
                         if (j % cap[i] == 0) {
-                            g2.drawLine(x * 10 + 20, y * 10 + 20, 
-                                        depotX * 10 + 20, depotY * 10 + 20);
-                            x = depotX;
-                            y = depotY;
+                            g2.drawLine(cur_x + 10, cur_y + 10, depotX + 10, depotY + 10);
+                            cur_x = depotX;
+                            cur_y = depotY;
                         }
-                        g2.drawLine(x * 10 + 20, y * 10 + 20, 
-                                    posX[idx] * 10 + 20, posY[idx] * 10 + 20);
-                        x = posX[idx];
-                        y = posY[idx];
+                        g2.drawLine(cur_x + 10, cur_y + 10, posX[idx] + 10, posY[idx] + 10);
+                        cur_x = posX[idx];
+                        cur_y = posY[idx];
                     }
-                    g2.drawLine(x * 10 + 20, y * 10 + 20, 
-                                depotX * 10 + 20, depotY * 10 + 20);
+                    g2.drawLine(cur_x + 10, cur_y + 10, depotX + 10, depotY + 10);
                 }
 
-                for (int i = 0; i < perm.length; i++) {
-                    for (int j = 0; j < perm[i].length; j++) {
-                        int idx = perm[i][j];
+                /* Draw the destinations. */
+                for (int i = 0; i < ans.length; i++) {
+                    for (int j = 0; j < ans[i].length; j++) {
                         Color c = Color.getHSBColor((1.0f / (float)M) * (float)i, 1.0f, 0.95f);
                         g2.setColor(c);
-                        g2.fillOval(posX[idx] * 10 + 17, posY[idx] * 10 + 16, 8, 8);
+                        int idx = ans[i][j];
+                        g2.fillOval(posX[idx] + 6, posY[idx] + 6, 8, 8);
                         g2.setColor(new Color(0x000000));
-                        g2.drawOval(posX[idx] * 10 + 17, posY[idx] * 10 + 16, 8, 8);
+                        g2.drawOval(posX[idx] + 6, posY[idx] + 6, 8, 8);
                     }
                 }
 
+                /* Draw the depot. */
+                g2.setColor(new Color(0x000000));
+                g2.fillOval(depotX, depotY, 20, 20);
+
+                /* Draw the numbers of the destinations. */
                 if (numb) {
                     g2.setFont(new Font("Arial", Font.PLAIN, 12));
                     FontMetrics fm = g2.getFontMetrics();
                     for (int i = 0; i < N; ++i) {
                         char[] ch = ("" + i).toCharArray();
-                        int x = posX[i] * 10 + 15;
-                        int y = posY[i] * 10 + 15;
+                        int x = posX[i];
+                        int y = posY[i] + 5;
                         g2.drawChars(ch, 0, ch.length, x, y);
                     }
                 }
 
-                g2.setColor(new Color(0x000000));
-                g2.fillOval(depotX * 10 + 10, depotY * 10 + 10, 20, 20);
-
-                /* vehicle infomation */
+                /* Draw information of vehicles. */
                 int worst_idx = -1;
                 double worst_time = -1.0;
                 for (int i = 0; i < M; i++) {
@@ -84,10 +120,10 @@ public class Tester {
                 for (int i = 0; i < M; i++) {
                     
                     g2.setColor(new Color(0xFFFFFF));
-                    g2.fillRect(SIZE_VIS_X, i * 100 + 10, VEHICLE_VIEW_WIDTH - 10, 90);
+                    g2.fillRect(FIELD_WIDTH + 20, i * 100 + 10, VEHICLE_VIEW_WIDTH - 10, 90);
                     Color c = Color.getHSBColor((1.0f / (float)M) * (float)i, 1.0f, 0.95f);
                     g2.setColor(c);
-                    g2.drawRect(SIZE_VIS_X, i * 100 + 10, VEHICLE_VIEW_WIDTH - 10, 90);
+                    g2.drawRect(FIELD_WIDTH + 20, i * 100 + 10, VEHICLE_VIEW_WIDTH - 10, 90);
                     
                     g2.setColor(new Color(0x000000));
                     FontMetrics fm = g2.getFontMetrics();
@@ -97,21 +133,24 @@ public class Tester {
                     char[] ch3 = ("distance : " + dist[i]).toCharArray();
                     char[] ch4 = ("time : " + dist[i] / (double)speed[i] + "\n").toCharArray();
                     g2.setFont(new Font("Arial", Font.BOLD, 13));
-                    g2.drawChars(ch0, 0, ch0.length, SIZE_VIS_X + 10, i * 100 + 28);
+                    g2.drawChars(ch0, 0, ch0.length, FIELD_WIDTH + 30, i * 100 + 28);
                     g2.setFont(new Font("Arial", Font.PLAIN, 12));
-                    g2.drawChars(ch1, 0, ch1.length, SIZE_VIS_X + 10, i * 100 + 42);
-                    g2.drawChars(ch2, 0, ch2.length, SIZE_VIS_X + 10, i * 100 + 57);
-                    g2.drawChars(ch3, 0, ch3.length, SIZE_VIS_X + 10, i * 100 + 72);
+                    g2.drawChars(ch1, 0, ch1.length, FIELD_WIDTH + 30, i * 100 + 42);
+                    g2.drawChars(ch2, 0, ch2.length, FIELD_WIDTH + 30, i * 100 + 57);
+                    g2.drawChars(ch3, 0, ch3.length, FIELD_WIDTH + 30, i * 100 + 72);
 
                     if (i == worst_idx) {
                         g2.setFont(new Font("Arial", Font.BOLD, 12));
                         g2.setColor(new Color(0xFF0000));
                     }
-                    g2.drawChars(ch4, 0, ch4.length, SIZE_VIS_X + 10, i * 100 + 87);
-                }   
+                    g2.drawChars(ch4, 0, ch4.length, FIELD_WIDTH + 30, i * 100 + 87);
+                }
                 
-                g.drawImage(bi, 0, 0, SIZE_VIS_X + VEHICLE_VIEW_WIDTH, SIZE_VIS_Y, null);
-                if (save) ImageIO.write(bi, "png", new File(fileName +".png"));
+                /* ---------------- */
+                g.drawImage(bi, 0, 0, VIS_X_SIZE, VIS_Y_SIZE, null);
+                if (save) {
+                    ImageIO.write(bi, "png", new File(fileName +".png"));
+                }
 
             } catch (Exception e) { 
                 e.printStackTrace();
@@ -144,35 +183,6 @@ public class Tester {
 
     /********************************************************************/
 
-    JFrame jf;
-    Visualizer v;
-    InputStream is;
-    OutputStream os;
-    Scanner sc;
-
-    static Process proc;
-    static String fileName, exec;
-    static boolean save, vis, numb, debug;
-
-    final int SIZE = 100 + 1;
-    final int SIZE_VIS_X = (SIZE + 3) * 10;
-    final int SIZE_VIS_Y = (SIZE + 3) * 10;
-    final int VEHICLE_VIEW_WIDTH = 250;
-    final int MAXN = 500, MINN = 50;
-    final int MAXM = 10,  MINM = 3;
-    final int MAX_CAP = 20, MIN_CAP = 5;
-    final int MAX_SPEED = 20, MIN_SPEED = 1;
-
-    int N,M;
-    int depotX, depotY;
-    int [] posX, posY;
-    int [] cap;
-    int [] speed;
-    int [][] perm;
-    double [] dist;
-
-    /********************************************************************/
-
     public void print_debug (double score) {
         System.err.println("\n" + "Number of vertices : " + N);
         System.err.println("Number of vehicles : " + M);
@@ -196,17 +206,17 @@ public class Tester {
             N = rnd.nextInt(MAXN - MINN + 1) + MINN;
             M = rnd.nextInt(MAXM - MINM + 1) + MINM;
 
-            depotX = rnd.nextInt(SIZE);
-            depotY = rnd.nextInt(SIZE);
-            boolean [][] usedPos = new boolean[SIZE][SIZE];
+            depotX = rnd.nextInt(FIELD_WIDTH + 1);
+            depotY = rnd.nextInt(FIELD_HEIGHT + 1);
+            boolean [][] usedPos = new boolean[FIELD_WIDTH + 1][FIELD_HEIGHT + 1];
             usedPos[depotX][depotY] = true;
             posX = new int[N];
             posY = new int[N];
             for (int i = 0; i < N; i++) {
                 int x,y;
                 do {
-                    x = rnd.nextInt(SIZE);
-                    y = rnd.nextInt(SIZE);
+                    x = rnd.nextInt(FIELD_WIDTH + 1);
+                    y = rnd.nextInt(FIELD_HEIGHT + 1);
                 } while (usedPos[x][y]);
                 usedPos[x][y] = true;
                 posX[i] = x;
@@ -239,15 +249,15 @@ public class Tester {
             generate(seed);
             if (proc == null) return -1;
             try {
-                perm = getPermutation();
+                ans = getAnswer();
                 boolean [] used = new boolean[N];
-                for (int i = 0; i < perm.length; i++) {
-                    for (int j = 0; j < perm[i].length; j++) {
-                        if (used[perm[i][j]]) {
+                for (int i = 0; i < ans.length; i++) {
+                    for (int j = 0; j < ans[i].length; j++) {
+                        if (used[ans[i][j]]) {
                             System.err.println("There are vertices that are delivered multiple times.");
                             return -1;
                         }
-                        used[perm[i][j]] = true;
+                        used[ans[i][j]] = true;
                     }
                 }
                 for (int i = 0; i < N; i++) {
@@ -266,24 +276,25 @@ public class Tester {
         }
 
         if (vis) {
-            jf.setSize(SIZE_VIS_X + VEHICLE_VIEW_WIDTH, SIZE_VIS_Y);
+            jf.getContentPane().setPreferredSize(new Dimension(VIS_X_SIZE, VIS_Y_SIZE));
+            jf.pack();
             jf.setVisible(true);
         }
         
         double score = -1.0;
         dist = new double[M];
-        for (int i = 0; i < perm.length; i++) {
+        for (int i = 0; i < ans.length; i++) {
             dist[i] = 0.0;
             int x = depotX, y = depotY;
-            for (int j = 0; j < perm[i].length; j++) {
+            for (int j = 0; j < ans[i].length; j++) {
                 if (j % cap[i] == 0) {
                     dist[i] += get_dist(x, y, depotX, depotY);
                     x = depotX;
                     y = depotY;
                 }
-                dist[i] += get_dist(x, y, posX[perm[i][j]], posY[perm[i][j]]);
-                x = posX[perm[i][j]];
-                y = posY[perm[i][j]];
+                dist[i] += get_dist(x, y, posX[ans[i][j]], posY[ans[i][j]]);
+                x = posX[ans[i][j]];
+                y = posY[ans[i][j]];
             }
             dist[i] += get_dist(x, y, depotX, depotY);
             double time = dist[i] / (double) speed[i];
@@ -295,8 +306,7 @@ public class Tester {
         return score;
     }
 
-    private int [][] getPermutation () throws IOException {
-        
+    private int [][] getAnswer () throws IOException {
         StringBuffer sb = new StringBuffer();
         sb.append(N).append(' ');
         sb.append(M).append('\n');
