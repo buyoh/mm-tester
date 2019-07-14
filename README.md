@@ -1,7 +1,16 @@
 # Typical-MM
 
+## Ubuntu
+
 ```
-git clone --depth 1 https://github.com/kosakkun/Typical-MM.git
+$ sudo apt update
+$ sudo apt install default-jre default-jdk
+```
+
+```
+$ git clone --depth 1 https://github.com/kosakkun/Typical-MM.git
+$ cd Typical-MM
+$ make
 ```
 
 ## 問題
