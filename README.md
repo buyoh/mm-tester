@@ -9,8 +9,15 @@ $ sudo apt install default-jre default-jdk build-essential git
 ```
 
 ### macOS
+1. [Xcode](https://apps.apple.com/jp/app/xcode/id497799835?mt=12)とCommand Line Tools
 ```
-$
+$ xcode-select --install
+```
+2. [Homebrew](https://brew.sh)
+```
+$ brew update
+$ brew install git
+$ brew cask install java
 ```
 
 ## 使い方
