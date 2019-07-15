@@ -66,7 +66,7 @@ C++，Java，Pythonはサンプルを用意しました．
 
 ### [Sliding Puzzle](SlidingPuzzle)
 15-Puzzle(スライドパズル)のN×Mバージョン．  
-<img src="SlidingPuzzle/image/6x6.gif" width="400px">
+<img src="images/SlidingPuzzle.gif" width="400px">
 
 ### [Rectilinear Steiner Tree](RectilinearSteinerTree/)
 シュタイナー木のカクカクしたタイプのやつです．  

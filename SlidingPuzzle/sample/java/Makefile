@@ -3,7 +3,7 @@
 ###############################################################################
 
 JAVAC  = javac
-TARGET = SlidingPuzzle
+TARGET = Main
 TESTER = ../../tester/Tester.jar
 
 .PHONY: all clean run

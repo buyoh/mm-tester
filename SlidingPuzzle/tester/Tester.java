@@ -189,7 +189,8 @@ public class Tester {
         try {
             generate(seed);
             if (vis) {
-                jf.setSize(VIS_SIZE_Y + 20, VIS_SIZE_X + 43);
+                jf.getContentPane().setPreferredSize(new Dimension(VIS_SIZE_Y + 20, VIS_SIZE_X + 20));
+                jf.pack();
                 jf.setVisible(true);
                 Thread.sleep(2000);
             }
