@@ -169,7 +169,8 @@ public class Tester {
         }
 
         if (vis) {
-            jf.setSize(SIZE_VIS, SIZE_VIS);
+            jf.getContentPane().setPreferredSize(new Dimension(SIZE_VIS, SIZE_VIS));
+            jf.pack();
             jf.setVisible(true);
         }
 

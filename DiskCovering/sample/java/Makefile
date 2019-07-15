@@ -3,7 +3,7 @@
 ###############################################################################
 
 JAVAC  = javac
-TARGET = DiskCovering
+TARGET = Main
 TESTER = ../../tester/Tester.jar
 
 .PHONY: all clean run

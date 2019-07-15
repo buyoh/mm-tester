@@ -74,4 +74,4 @@ C++，Java，Pythonはサンプルを用意しました．
 
 ### [Disk Covering](DiskCovering/)
 円で点をカバーする問題です．  
-<img src="DiskCovering/image/1.png" width="400px">
+<img src="images/DiskCovering.png" width="400px">
