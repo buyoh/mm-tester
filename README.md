@@ -1,16 +1,49 @@
 # Typical-MM
 
-## Ubuntu
+## 環境
 
+### Ubuntu
 ```
 $ sudo apt update
-$ sudo apt install default-jre default-jdk
+$ sudo apt install default-jre default-jdk build-essential git
 ```
 
+### macOS
+```
+$
+```
+
+## 使い方
+
+### 入手
 ```
 $ git clone --depth 1 https://github.com/kosakkun/Typical-MM.git
 $ cd Typical-MM
 $ make
+```
+
+### 問題毎のファイル構成
+testerの下にTester.jarがあります．C++，Java，Pythonはサンプルを用意しました．
+```
+	.
+	├── README.md
+	├── image
+	│   ├── 1.png
+	│   ...
+	├── tester
+	│   ├── Tester.jar
+	│   ├── Tester.java
+	│   ...
+	└── sample
+	    ├── cpp
+	    │   ├── Makefile
+	    │   └── TravelingSalesman.cpp
+	    ├── java
+	    │   ├── Makefile
+	    │   └── TravelingSalesman.java
+	    └── python
+	        ├── run.sh
+	        └── TravelingSalesman.py
 ```
 
 ## 問題
