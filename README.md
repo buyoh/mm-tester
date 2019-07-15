@@ -70,7 +70,7 @@ C++，Java，Pythonはサンプルを用意しました．
 
 ### [Rectilinear Steiner Tree](RectilinearSteinerTree/)
 シュタイナー木のカクカクしたタイプのやつです．  
-<img src="RectilinearSteinerTree/image/1.png" width="400px">
+<img src="images/RectilinearSteinerTree.png" width="400px">
 
 ### [Disk Covering](DiskCovering/)
 円で点をカバーする問題です．  

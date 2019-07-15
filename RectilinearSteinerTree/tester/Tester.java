@@ -180,7 +180,8 @@ public class Tester {
         }
 
         if (vis) {
-            jf.setSize(SIZE_VIS + 20, SIZE_VIS + 20);
+            jf.getContentPane().setPreferredSize(new Dimension(SIZE_VIS + 20, SIZE_VIS + 20));
+            jf.pack();
             jf.setVisible(true);
         }
 
