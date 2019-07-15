@@ -54,7 +54,7 @@ C++，Java，Pythonはサンプルを用意しました．
 
 ### [Rectangle Packing](RectanglePacking/)
 長方形を良い感じで詰め込む問題です．  
-<img src="RectanglePacking/image/1.png" width="400px">
+<img src="images/RectanglePacking.png" width="400px">
 
 ### [Graph Coloring](GraphColoring/)
 グラフの彩色問題です．  
