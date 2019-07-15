@@ -2,7 +2,7 @@ import java.io.*;
 import java.security.*;
 import java.util.*;
 
-public class TravelingSalesman {
+public class Main {
 
     public static void main (String[] args) {
         try {

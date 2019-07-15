@@ -46,7 +46,7 @@ C++，Java，Pythonはサンプルを用意しました．
 ## 問題
 ### [Traveling Salesman](TravelingSalesman/)
 巡回セールスマン問題です．有名です．  
-<img src="TravelingSalesman/image/1.png" width="400px">
+<img src="images/TravelingSalesman.png" width="400px">
 
 ### [Vehicle Routing](VehicleRouting/)
 配送計画を考える問題です．巡回セールスマン問題と少し似ています．  
