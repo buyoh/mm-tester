@@ -58,7 +58,7 @@ C++，Java，Pythonはサンプルを用意しました．
 
 ### [Graph Coloring](GraphColoring/)
 グラフの彩色問題です．  
-<img src="GraphColoring/image/1.png" width="400px">
+<img src="images/GraphColoring.png" width="400px">
 
 ### [Clustering](Clustering/)
 クラスタリングです．  
