@@ -62,7 +62,7 @@ C++，Java，Pythonはサンプルを用意しました．
 
 ### [Clustering](Clustering/)
 クラスタリングです．  
-<img src="Clustering/image/1.png" width="400px">
+<img src="images/Clustering.png" width="400px">
 
 ### [Sliding Puzzle](SlidingPuzzle)
 15-Puzzle(スライドパズル)のN×Mバージョン．  
