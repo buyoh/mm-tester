@@ -15,7 +15,7 @@ $
 
 ## 使い方
 
-### 入手
+### 入手 & テスタのビルド
 ```
 $ git clone --depth 1 https://github.com/kosakkun/Typical-MM.git
 $ cd Typical-MM
@@ -23,27 +23,24 @@ $ make
 ```
 
 ### 問題毎のファイル構成
-testerの下にTester.jarがあります．C++，Java，Pythonはサンプルを用意しました．
+C++，Java，Pythonはサンプルを用意しました．
 ```
-	.
-	├── README.md
-	├── image
-	│   ├── 1.png
-	│   ...
-	├── tester
-	│   ├── Tester.jar
-	│   ├── Tester.java
-	│   ...
-	└── sample
-	    ├── cpp
-	    │   ├── Makefile
-	    │   └── TravelingSalesman.cpp
-	    ├── java
-	    │   ├── Makefile
-	    │   └── TravelingSalesman.java
-	    └── python
-	        ├── run.sh
-	        └── TravelingSalesman.py
+.
+├── README.md
+├── tester
+│   ├── Tester.jar
+│   ├── Tester.java
+│   ...
+└── sample
+    ├── cpp
+    │   ├── Makefile
+    │   └── main.cpp
+    ├── java
+    │   ├── Makefile
+    │   └── Main.java
+    └── python
+        ├── run.sh
+        └── main.py
 ```
 
 ## 問題
@@ -53,7 +50,7 @@ testerの下にTester.jarがあります．C++，Java，Pythonはサンプルを
 
 ### [Vehicle Routing](VehicleRouting/)
 配送計画を考える問題です．巡回セールスマン問題と少し似ています．  
-<img src="VehicleRouting/image/1.png" width="400px">
+<img src="images/VehicleRouting.png" width="400px">
 
 ### [Rectangle Packing](RectanglePacking/)
 長方形を良い感じで詰め込む問題です．  
