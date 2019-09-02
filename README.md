@@ -1,4 +1,4 @@
-# Typical-MM
+# MM-Tester 
 
 ## 環境
 
