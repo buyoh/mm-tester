@@ -24,8 +24,8 @@ $ brew cask install java
 
 ### 入手 & テスタのビルド
 ```
-$ git clone --depth 1 https://github.com/kosakkun/Typical-MM.git
-$ cd Typical-MM
+$ git clone --depth 1 https://github.com/kosakkun/MM-Tester.git
+$ cd MM-Tester
 $ make
 ```
 
