@@ -24,27 +24,27 @@ public class Tester {
                 g2.fillRect(10, 10, VIS_SIZE - 20, VIS_SIZE - 20);
 
                 g2.setColor(new Color(0x000000));
-                for (int i = 0; i < Input.N; i++) {
-                    int a = perm[i];
-                    int b = perm[(i + 1) % Input.N];
-                    g2.drawLine(Input.posX[a] + 10, Input.posY[a] + 10, 
-                                Input.posX[b] + 10, Input.posY[b] + 10);
+                for (int i = 0; i < input.N; i++) {
+                    int a = output.perm[i];
+                    int b = output.perm[(i + 1) % input.N];
+                    g2.drawLine(input.posX[a] + 10, input.posY[a] + 10, 
+                                input.posX[b] + 10, input.posY[b] + 10);
                 }
 
-                for (int i = 0; i < Input.N; i++) {
+                for (int i = 0; i < input.N; i++) {
                     g2.setColor(new Color(0xFFFFFF));
-                    g2.fillOval(Input.posX[i] + 6, Input.posY[i] + 6, 8, 8);
+                    g2.fillOval(input.posX[i] + 6, input.posY[i] + 6, 8, 8);
                     g2.setColor(new Color(0x000000));
-                    g2.drawOval(Input.posX[i] + 6, Input.posY[i] + 6, 8, 8);
+                    g2.drawOval(input.posX[i] + 6, input.posY[i] + 6, 8, 8);
                 }
 
                 if (numb) {
                     g2.setFont(new Font("Arial", Font.BOLD, 10));
                     FontMetrics fm = g2.getFontMetrics();
-                    for (int i = 0; i < Input.N; ++i) {
+                    for (int i = 0; i < input.N; ++i) {
                         char[] ch = ("" + i).toCharArray();
-                        int x = Input.posX[i] + 5;
-                        int y = Input.posY[i] + 5;
+                        int x = input.posX[i] + 5;
+                        int y = input.posY[i] + 5;
                         g2.drawChars(ch, 0, ch.length, x, y);
                     }
                 }
@@ -89,35 +89,34 @@ public class Tester {
     Visualizer v;
     InputStream is;
     OutputStream os;
-    BufferedReader br;
 
     static Process proc;
     static String fileName, exec;
     static boolean save, vis, numb;
 
-    InputGenerator Input;
+    InputData input;
+    OutputData output;
     final int VIS_SIZE = 1020;
-    int [] perm;
 
     /********************************************************************/
 
     public double runTest (String seed) {
 
         try {
-            Input = new InputGenerator(Long.parseLong(seed));
+            input = new InputData(Long.parseLong(seed));
             if (proc != null) try {
-                perm = getPermutation();
-                boolean [] used = new boolean[Input.N];
-                for (int i = 0; i < Input.N; ++i) {
-                    if (perm[i] < 0 || perm[i] >= Input.N) {
-                        System.err.println("All elements of your return must be between 0 and " + (Input.N-1) + ", and your return contained " + perm[i] + ".");
+                output = new OutputData(input, is, os);
+                boolean [] used = new boolean[input.N];
+                for (int i = 0; i < input.N; ++i) {
+                    if (output.perm[i] < 0 || output.perm[i] >= input.N) {
+                        System.err.println("All elements of your return must be between 0 and " + (input.N-1) + ", and your return contained " + output.perm[i] + ".");
                         return -1;
                     }
-                    if (used[perm[i]]) {
-                        System.err.println("All elements of your return must be unique, and your return contained " + perm[i] + " twice.");
+                    if (used[output.perm[i]]) {
+                        System.err.println("All elements of your return must be unique, and your return contained " + output.perm[i] + " twice.");
                         return -1;
                     }
-                    used[perm[i]] = true;
+                    used[output.perm[i]] = true;
                 }
             } catch (Exception e) {
                 System.err.println("Failed to get result from your answer.");
@@ -130,9 +129,9 @@ public class Tester {
         }
 
         double score = 0.0;
-        for (int i = 0; i < Input.N; i++) {
-            double dx = (double)(Input.posX[perm[i]] - Input.posX[perm[(i + 1) % Input.N]]);
-            double dy = (double)(Input.posY[perm[i]] - Input.posY[perm[(i + 1) % Input.N]]);
+        for (int i = 0; i < input.N; i++) {
+            double dx = (double)(input.posX[output.perm[i]] - input.posX[output.perm[(i + 1) % input.N]]);
+            double dy = (double)(input.posY[output.perm[i]] - input.posY[output.perm[(i + 1) % input.N]]);
             score += Math.sqrt(dx * dx + dy * dy);
         }
 
@@ -143,23 +142,6 @@ public class Tester {
         }
         
         return score;
-    }
-
-    private int [] getPermutation () throws IOException {
-        StringBuffer sb = new StringBuffer();
-        sb.append(Input.N).append('\n');
-        for (int i = 0; i < Input.N; ++i) {
-            sb.append(Input.posX[i]).append(' ');
-            sb.append(Input.posY[i]).append('\n');
-        }
-        os.write(sb.toString().getBytes());
-        os.flush();
-
-        int [] ret = new int[Input.N];
-        for (int i = 0; i < Input.N; ++i) {
-            ret[i] = Integer.parseInt(br.readLine());
-        }
-        return ret;
     }
 
     public Tester (String seed) {
@@ -175,7 +157,6 @@ public class Tester {
                 proc = rt.exec(exec);
                 os = proc.getOutputStream();
                 is = proc.getInputStream();
-                br = new BufferedReader(new InputStreamReader(is));
             } catch (Exception e) {
                 e.printStackTrace();
             }
