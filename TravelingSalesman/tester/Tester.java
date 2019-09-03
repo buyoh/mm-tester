@@ -24,27 +24,27 @@ public class Tester {
                 g2.fillRect(10, 10, VIS_SIZE - 20, VIS_SIZE - 20);
 
                 g2.setColor(new Color(0x000000));
-                for (int i = 0; i < N; i++) {
+                for (int i = 0; i < Input.N; i++) {
                     int a = perm[i];
-                    int b = perm[(i + 1) % N];
-                    g2.drawLine(posX[a] + 10, posY[a] + 10, 
-                                posX[b] + 10, posY[b] + 10);
+                    int b = perm[(i + 1) % Input.N];
+                    g2.drawLine(Input.posX[a] + 10, Input.posY[a] + 10, 
+                                Input.posX[b] + 10, Input.posY[b] + 10);
                 }
 
-                for (int i = 0; i < N; i++) {
+                for (int i = 0; i < Input.N; i++) {
                     g2.setColor(new Color(0xFFFFFF));
-                    g2.fillOval(posX[i] + 6, posY[i] + 6, 8, 8);
+                    g2.fillOval(Input.posX[i] + 6, Input.posY[i] + 6, 8, 8);
                     g2.setColor(new Color(0x000000));
-                    g2.drawOval(posX[i] + 6, posY[i] + 6, 8, 8);
+                    g2.drawOval(Input.posX[i] + 6, Input.posY[i] + 6, 8, 8);
                 }
 
                 if (numb) {
                     g2.setFont(new Font("Arial", Font.BOLD, 10));
                     FontMetrics fm = g2.getFontMetrics();
-                    for (int i = 0; i < N; ++i) {
+                    for (int i = 0; i < Input.N; ++i) {
                         char[] ch = ("" + i).toCharArray();
-                        int x = posX[i] + 5;
-                        int y = posY[i] + 5;
+                        int x = Input.posX[i] + 5;
+                        int y = Input.posY[i] + 5;
                         g2.drawChars(ch, 0, ch.length, x, y);
                     }
                 }
@@ -60,7 +60,7 @@ public class Tester {
         }
 
         public Visualizer () {
-            jf.addWindowListener(this);
+            
         }
 
         public void windowClosing(WindowEvent e) {
@@ -95,54 +95,22 @@ public class Tester {
     static String fileName, exec;
     static boolean save, vis, numb;
 
-    final int MAXN = 1000, MINN = 50;
-    final int SIZE = 1000 + 1;
+    InputGenerator Input;
     final int VIS_SIZE = 1020;
-    int N;
-    int [] posX, posY;
     int [] perm;
 
     /********************************************************************/
 
-    public void generate (String seedStr) 
-    {
-        try 
-        {   
-            SecureRandom rnd = SecureRandom.getInstance("SHA1PRNG");
-            long seed = Long.parseLong(seedStr);
-            rnd.setSeed(seed);
-
-            N = rnd.nextInt(MAXN - MINN + 1) + MINN;
-            perm = new int[N];
-            posX = new int[N];
-            posY = new int[N];
-            boolean [][] usedPos = new boolean[SIZE][SIZE];
-            for (int i = 0; i < N; ++i) {
-                int x = -1, y = -1;
-                do {
-                    x = rnd.nextInt(SIZE);
-                    y = rnd.nextInt(SIZE);
-                } while (usedPos[x][y]);
-                posX[i] = x;
-                posY[i] = y;
-                usedPos[x][y] = true;
-            }
-        } catch (Exception e) {
-            System.err.println("An exception occurred while generating test case.");
-            e.printStackTrace();
-        }
-    }
-
     public double runTest (String seed) {
 
         try {
-            generate(seed);
+            Input = new InputGenerator(Long.parseLong(seed));
             if (proc != null) try {
                 perm = getPermutation();
-                boolean [] used = new boolean[N];
-                for (int i = 0; i < N; ++i) {
-                    if (perm[i] < 0 || perm[i] >= N) {
-                        System.err.println("All elements of your return must be between 0 and " + (N-1) + ", and your return contained " + perm[i] + ".");
+                boolean [] used = new boolean[Input.N];
+                for (int i = 0; i < Input.N; ++i) {
+                    if (perm[i] < 0 || perm[i] >= Input.N) {
+                        System.err.println("All elements of your return must be between 0 and " + (Input.N-1) + ", and your return contained " + perm[i] + ".");
                         return -1;
                     }
                     if (used[perm[i]]) {
@@ -162,9 +130,9 @@ public class Tester {
         }
 
         double score = 0.0;
-        for (int i = 0; i < N; i++) {
-            double dx = (double)(posX[perm[i]] - posX[perm[(i + 1) % N]]);
-            double dy = (double)(posY[perm[i]] - posY[perm[(i + 1) % N]]);
+        for (int i = 0; i < Input.N; i++) {
+            double dx = (double)(Input.posX[perm[i]] - Input.posX[perm[(i + 1) % Input.N]]);
+            double dy = (double)(Input.posY[perm[i]] - Input.posY[perm[(i + 1) % Input.N]]);
             score += Math.sqrt(dx * dx + dy * dy);
         }
 
@@ -179,16 +147,16 @@ public class Tester {
 
     private int [] getPermutation () throws IOException {
         StringBuffer sb = new StringBuffer();
-        sb.append(N).append('\n');
-        for (int i = 0; i < N; ++i) {
-            sb.append(posX[i]).append(' ');
-            sb.append(posY[i]).append('\n');
+        sb.append(Input.N).append('\n');
+        for (int i = 0; i < Input.N; ++i) {
+            sb.append(Input.posX[i]).append(' ');
+            sb.append(Input.posY[i]).append('\n');
         }
         os.write(sb.toString().getBytes());
         os.flush();
 
-        int [] ret = new int[N];
-        for (int i = 0; i < N; ++i) {
+        int [] ret = new int[Input.N];
+        for (int i = 0; i < Input.N; ++i) {
             ret[i] = Integer.parseInt(br.readLine());
         }
         return ret;
@@ -198,6 +166,7 @@ public class Tester {
         if (vis) {
             jf = new JFrame();
             v = new Visualizer();
+            jf.addWindowListener(v);
             jf.getContentPane().add(v);
         }
         if (exec != null) {
