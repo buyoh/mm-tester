@@ -10,28 +10,21 @@ public class Tester
     static boolean save = false;
     static boolean vis  = false;
 
-    private boolean checkOutput (final InputData input, final OutputData output) throws NullPointerException
+    private double calcScore (final InputData input, final OutputData output) throws NullPointerException
     {
         boolean[] used = new boolean[input.N];
         for (int i = 0; i < input.N; i++) {
             if (output.perm[i] < 0 || output.perm[i] >= input.N) {
                 System.err.println("All elements of your return must be between 0 and " +
                                    (input.N - 1) + ", and your return contained " + output.perm[i] + ".");
-                return false;
+                return -1.0;
             }
             if (used[output.perm[i]]) {
-                System.err.println("All elements of your return must be unique, and your return contained " + output.perm[i] + " twice.");
-                return false;
+                System.err.println("All elements of your return must be unique, " +
+                                   "and your return contained " + output.perm[i] + " twice.");
+                return -1.0;
             }
             used[output.perm[i]] = true;
-        }
-        return true;
-    }
-
-    private double calcScore (final InputData input, final OutputData output) throws NullPointerException
-    {
-        if (!checkOutput(input, output)) {
-            return -1.0;
         }
         double score = 0.0;
         for (int i = 0; i < input.N; i++) {
