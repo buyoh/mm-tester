@@ -5,51 +5,34 @@ import java.util.*;
 
 public class Tester 
 {
-    /********************************************************************/
+    static long seed    = 1;
+    static String exec  = "";
+    static boolean save = false;
+    static boolean vis  = false;
 
-    JFrame jf;
-    Visualizer v;
-    InputStream is;
-    OutputStream os;
-
-    static Process proc;
-    static String fileName, exec;
-    static boolean save, vis, numb;
-
-    InputData input;
-    OutputData output;
-    final int VIS_SIZE = 1020;
-
-    /********************************************************************/
-
-    public double runTest (String seed) {
-
-        try {
-            input = new InputData(Long.parseLong(seed));
-            if (proc != null) try {
-                output = new OutputData(input, is, os);
-                boolean [] used = new boolean[input.N];
-                for (int i = 0; i < input.N; ++i) {
-                    if (output.perm[i] < 0 || output.perm[i] >= input.N) {
-                        System.err.println("All elements of your return must be between 0 and " + (input.N-1) + ", and your return contained " + output.perm[i] + ".");
-                        return -1;
-                    }
-                    if (used[output.perm[i]]) {
-                        System.err.println("All elements of your return must be unique, and your return contained " + output.perm[i] + " twice.");
-                        return -1;
-                    }
-                    used[output.perm[i]] = true;
-                }
-            } catch (Exception e) {
-                System.err.println("Failed to get result from your answer.");
-                return -1;
+    private boolean checkOutput (final InputData input, final OutputData output) throws NullPointerException
+    {
+        boolean[] used = new boolean[input.N];
+        for (int i = 0; i < input.N; i++) {
+            if (output.perm[i] < 0 || output.perm[i] >= input.N) {
+                System.err.println("All elements of your return must be between 0 and " +
+                                   (input.N - 1) + ", and your return contained " + output.perm[i] + ".");
+                return false;
             }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            return -1;
+            if (used[output.perm[i]]) {
+                System.err.println("All elements of your return must be unique, and your return contained " + output.perm[i] + " twice.");
+                return false;
+            }
+            used[output.perm[i]] = true;
         }
+        return true;
+    }
 
+    private double calcScore (final InputData input, final OutputData output) throws NullPointerException
+    {
+        if (!checkOutput(input, output)) {
+            return -1.0;
+        }
         double score = 0.0;
         for (int i = 0; i < input.N; i++) {
             double dx = (double)(input.posX[output.perm[i]] - input.posX[output.perm[(i + 1) % input.N]]);
@@ -59,41 +42,35 @@ public class Tester
         return score;
     }
 
-    public Tester (String seed) {
-        if (exec != null) {
-            try {
-                Runtime rt = Runtime.getRuntime();
-                proc = rt.exec(exec);
-                os = proc.getOutputStream();
-                is = proc.getInputStream();
-            } catch (Exception e) {
-                e.printStackTrace();
+    private Tester ()
+    {
+        try {
+            Runtime rt = Runtime.getRuntime();
+            Process proc = rt.exec(exec);
+            InputData input = new InputData(seed);
+            OutputData output = new OutputData(input, proc.getInputStream(), proc.getOutputStream());
+            System.out.println("Score = " + calcScore(input, output));
+            proc.destroy();
+            if (vis) {
+                JFrame jf = new JFrame();
+                Visualizer v = new Visualizer(input, output);
+                jf.getContentPane().setPreferredSize(new Dimension(v.VIS_SIZE, v.VIS_SIZE));
+                jf.pack();
+                jf.setVisible(true);
+                jf.addWindowListener(v);
+                jf.getContentPane().add(v);
             }
-        }
-        System.out.println("Score = " + runTest(seed));
-        if (proc != null) {
-            try { 
-                proc.destroy(); 
-            } catch (Exception e) { 
-                e.printStackTrace(); 
-            }
-        }
-        if (vis) {
-            jf = new JFrame();
-            v = new Visualizer(input, output);
-            jf.getContentPane().setPreferredSize(new Dimension(VIS_SIZE, VIS_SIZE));
-            jf.pack();
-            jf.setVisible(true);
-            jf.addWindowListener(v);
-            jf.getContentPane().add(v);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("Failed to get result from your answer.");
         }
     }
 
-    public static void main (String[] args) {
-        String seed = "1";
+    public static void main (String[] args)
+    {
         for (int i = 0; i < args.length; ++i) {
             if (args[i].equals("-seed")) {
-                seed = args[++i];
+                seed = Long.parseLong(args[++i]);
             } else if (args[i].equals("-exec")) {
                 exec = args[++i];
             } else if (args[i].equals("-vis")) {
@@ -101,12 +78,9 @@ public class Tester
             } else if (args[i].equals("-save")) {
                 save = true;
                 vis = true;
-            } else if (args[i].equals("-num")) {
-                numb = true;
             }
         }
-        fileName = seed;
-        Tester test = new Tester(seed);
+        Tester test = new Tester();
     }
 
 }

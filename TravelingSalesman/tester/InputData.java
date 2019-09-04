@@ -8,9 +8,9 @@ public class InputData
     final int WIDTH  = 1000 + 1;
     final int HEIGHT = 1000 + 1;
 
-    int N;
-    int[] posX;
-    int[] posY;
+    final int N;
+    final int[] posX;
+    final int[] posY;
 
     public String getString ()
     {

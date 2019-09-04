@@ -6,8 +6,8 @@ import javax.imageio.*;
 
 public class Visualizer extends JPanel implements WindowListener {
         
-    InputData input;
-    OutputData output;
+    final InputData input;
+    final OutputData output;
     final int VIS_SIZE = 1020;
 
     public void paint(Graphics g) {
@@ -59,8 +59,8 @@ public class Visualizer extends JPanel implements WindowListener {
     }
 
     public Visualizer (final InputData input_, final OutputData output_) {
-        input = input_;
-        output = output_;
+        this.input = input_;
+        this.output = output_;
     }
 
     public void windowClosing(WindowEvent e) {

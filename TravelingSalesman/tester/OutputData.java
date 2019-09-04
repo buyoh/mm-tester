@@ -3,7 +3,7 @@ import java.util.*;
 
 public class OutputData
 {
-    int[] perm;
+    final int[] perm;
 
     public String getString ()
     {
@@ -14,7 +14,7 @@ public class OutputData
         return sb.toString();
     }
 
-    public OutputData (InputData input, InputStream is, OutputStream os) throws IOException
+    public OutputData (final InputData input, InputStream is, OutputStream os) throws IOException
     {
         os.write(input.getString().getBytes());
         os.flush();
