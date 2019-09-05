@@ -5,7 +5,7 @@ import java.util.*;
 
 public class Tester 
 {
-    static long seed    = 1;
+    static String seed  = "1";
     static String exec  = "";
     static boolean save = false;
     static boolean vis  = false;
@@ -40,14 +40,20 @@ public class Tester
         try {
             Runtime rt = Runtime.getRuntime();
             Process proc = rt.exec(exec);
-            InputData input = new InputData(seed);
+            InputData input = new InputData(Long.parseLong(seed));
             OutputData output = new OutputData(input, proc.getInputStream(), proc.getOutputStream());
             System.out.println("Score = " + calcScore(input, output));
             proc.destroy();
+            Visualizer v = new Visualizer(input, output);
+            if (save) {
+                v.saveImage(seed);
+            }
             if (vis) {
+                final int HEIGHT = v.VIS_SIZE + v.PADDING * 2;
+                final int WIDTH  = v.VIS_SIZE + v.PADDING * 2;
+                Dimension dm = new Dimension(HEIGHT, WIDTH);
                 JFrame jf = new JFrame();
-                Visualizer v = new Visualizer(input, output);
-                jf.getContentPane().setPreferredSize(new Dimension(v.VIS_SIZE, v.VIS_SIZE));
+                jf.getContentPane().setPreferredSize(dm);
                 jf.pack();
                 jf.setVisible(true);
                 jf.addWindowListener(v);
@@ -63,7 +69,7 @@ public class Tester
     {
         for (int i = 0; i < args.length; ++i) {
             if (args[i].equals("-seed")) {
-                seed = Long.parseLong(args[++i]);
+                seed = args[++i];
             } else if (args[i].equals("-exec")) {
                 exec = args[++i];
             } else if (args[i].equals("-vis")) {
