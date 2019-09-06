@@ -9,6 +9,7 @@ public class Tester
     static String exec  = "";
     static boolean save = false;
     static boolean vis  = false;
+    public static ErrorReader stderr;
 
     private double calcScore (final InputData input, final OutputData output) throws NullPointerException
     {
@@ -40,6 +41,8 @@ public class Tester
         try {
             Runtime rt = Runtime.getRuntime();
             Process proc = rt.exec(exec);
+            stderr = new ErrorReader(proc.getErrorStream());
+            stderr.start();
             InputData input = new InputData(Long.parseLong(seed));
             OutputData output = new OutputData(input, proc.getInputStream(), proc.getOutputStream());
             System.out.println("Score = " + calcScore(input, output));
