@@ -1,15 +1,15 @@
 import sys
 
-N = int(raw_input())
+N = int(input())
 posX = [];
 posY = [];
 
 for i in range(N):
-	p = map(int,raw_input().split())
-	posX.append(p[0])
-	posY.append(p[1])
+	x,y = map(int,input().split())
+	posX.append(x)
+	posY.append(y)
 
 for i in range(N):
-    print i
+	print (i)
 
 sys.stdout.flush()

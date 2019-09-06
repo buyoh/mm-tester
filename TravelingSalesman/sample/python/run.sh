@@ -1,6 +1,9 @@
-TESTER=../../tester/Tester.jar
+#!/bin/bash
 
-for i in `seq 1 10`; do 
-    echo "case:$i"
-    java -jar $TESTER -exec "python main.py" -seed $i -vis -save -num
+PYTHON="python3"
+TESTER="../../tester/Tester.jar"
+TESTNUM=10
+
+for i in `seq 1 $TESTNUM`; do
+    java -jar $TESTER -exec "$PYTHON main.py" -seed $i -save | { read rslt; echo "case $i: $rslt"; }
 done

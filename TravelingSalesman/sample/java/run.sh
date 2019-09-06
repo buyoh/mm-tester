@@ -5,7 +5,7 @@ TESTER="../../tester/Tester.jar"
 TESTNUM=10
 
 if [ -e *.class ]; then
-	rm *.class
+    rm *.class
 fi
 
 $JAVAC Main.java
