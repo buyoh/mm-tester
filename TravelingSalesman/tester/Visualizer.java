@@ -45,13 +45,13 @@ public class Visualizer extends JPanel implements WindowListener
         Graphics2D g2 = (Graphics2D)bi.getGraphics();
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             
-        /** Draw background. */
+        /* Draw background */
         g2.setColor(new Color(0xD3D3D3));
         g2.fillRect(0, 0, VIS_SIZE + PADDING * 2, VIS_SIZE + PADDING * 2);
         g2.setColor(new Color(0xFFFFFF));
         g2.fillRect(PADDING, PADDING, VIS_SIZE, VIS_SIZE);
 
-        /** Draw path. */
+        /* Draw path */
         g2.setColor(new Color(0x000000));
         for (int i = 0; i < input.N; i++) {
             int a = output.perm[i];
@@ -60,7 +60,7 @@ public class Visualizer extends JPanel implements WindowListener
                         input.posX[b] + PADDING, input.posY[b] + PADDING);
         }
 
-        /** Draw vertex. */
+        /* Draw vertex */
         final int R = 8;
         for (int i = 0; i < input.N; i++) {
             g2.setColor(new Color(0xFFFFFF));

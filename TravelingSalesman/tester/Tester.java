@@ -33,7 +33,7 @@ public class Tester
             score += Math.sqrt(dx * dx + dy * dy);
         }
         return score;
-    } 
+    }
 
     private Tester ()
     {
