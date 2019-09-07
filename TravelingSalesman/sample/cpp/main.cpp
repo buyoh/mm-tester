@@ -3,7 +3,7 @@
 using namespace std;
 
 int main () {
-
+cerr<<"ASDFA" << endl;
     int N; 
     cin >> N;
 

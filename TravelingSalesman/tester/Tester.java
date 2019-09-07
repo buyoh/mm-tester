@@ -9,7 +9,6 @@ public class Tester
     static String exec  = "";
     static boolean save = false;
     static boolean vis  = false;
-    public static ErrorReader stderr;
 
     private double calcScore (final InputData input, final OutputData output) throws NullPointerException
     {
@@ -34,22 +33,26 @@ public class Tester
             score += Math.sqrt(dx * dx + dy * dy);
         }
         return score;
-    }
+    } 
 
     private Tester ()
     {
+        InputData input;
+        OutputData output;
+        double score = -1.0;
         try {
             Runtime rt = Runtime.getRuntime();
             Process proc = rt.exec(exec);
-            stderr = new ErrorReader(proc.getErrorStream());
-            stderr.start();
-            InputData input = new InputData(Long.parseLong(seed));
-            OutputData output = new OutputData(input, proc.getInputStream(), proc.getOutputStream());
-            System.out.println("Score = " + calcScore(input, output));
+            new ErrorReader(proc.getErrorStream()).start();
+            input = new InputData(Long.parseLong(seed));
+            output = new OutputData(input, proc.getInputStream(), proc.getOutputStream());
+            proc.waitFor();
             proc.destroy();
+            score = calcScore(input, output);
             Visualizer v = new Visualizer(input, output);
             if (save) {
-                v.saveImage(seed);
+                String filename = seed;
+                v.saveImage(filename);
             }
             if (vis) {
                 final int HEIGHT = v.VIS_SIZE + v.PADDING * 2;
@@ -66,6 +69,7 @@ public class Tester
             e.printStackTrace();
             System.err.println("Failed to get result from your answer.");
         }
+        System.out.println("Score = " + score);
     }
 
     public static void main (String[] args)
