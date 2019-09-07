@@ -11,11 +11,10 @@ int main () {
     for (int i = 0; i < N; i++) {
         cin >> posX[i] >> posY[i];
     }
-
+    
     for (int i = 0; i < N; i++) {
         cout << i << endl;
     }
-
-    return 0;
     
+    return 0;
 }
