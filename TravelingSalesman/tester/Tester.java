@@ -1,3 +1,8 @@
+/**
+ * The main class of the tester.
+ * @author kosakkun
+ */
+
 import java.awt.*;
 import javax.swing.*;
 import java.io.*;
@@ -10,6 +15,15 @@ public class Tester
     static boolean save = false;
     static boolean vis  = false;
 
+    /**
+     * Calculate the score from the input data and output data and return it.
+     * Returns -1 if the constraint is not met.
+     * @param input The input data of the problem.
+     * @param output The output data of the problem.
+     * @return The solver output score for the problem.
+     * @see InputData
+     * @see OutputData
+     */
     private double calcScore (final InputData input, final OutputData output) throws NullPointerException
     {
         boolean[] used = new boolean[input.N];
@@ -35,6 +49,15 @@ public class Tester
         return score;
     }
 
+    /**
+     * Generates input data from the seed given by the -seed option. The input data is passed to 
+     * the program execution command given by the -exec option, and the output data is obtained from 
+     * the standard output. And output the result.
+     * @see InputData
+     * @see OutputData
+     * @see Visualizer
+     * @see ErrorReader
+     */
     private Tester ()
     {
         InputData input;
@@ -72,6 +95,10 @@ public class Tester
         System.out.println("Score = " + score);
     }
 
+    /**
+     * Set the tester from the options.
+     * @param args Tester options.
+     */
     public static void main (String[] args)
     {
         for (int i = 0; i < args.length; ++i) {
@@ -87,5 +114,4 @@ public class Tester
         }
         Tester test = new Tester();
     }
-
 }

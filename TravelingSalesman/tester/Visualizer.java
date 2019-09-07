@@ -1,3 +1,8 @@
+/**
+ * Visualizer class.
+ * @author kosakkun
+ */
+
 import java.io.*;
 import java.awt.*;
 import java.awt.image.*;
@@ -34,11 +39,22 @@ public class Visualizer extends JPanel implements WindowListener
     @Override public void windowActivated(WindowEvent e) {}
     @Override public void windowDeactivated(WindowEvent e) {}
 
+    /**
+     * Output visualized image as png format data.
+     * @param fileName The name of the image data to be output.
+     */
     public void saveImage (String fileName) throws IOException
     {
         ImageIO.write(bi, "png", new File(fileName +".png"));
     }
 
+    /**
+     * Draw from input data and output data.
+     * @param input The input data of the problem.
+     * @param output The output data of the problem.
+     * @see InputData
+     * @see OutputData
+     */
     public Visualizer (final InputData input, final OutputData output) throws Exception
     {
         bi = new BufferedImage(VIS_SIZE + PADDING * 2, VIS_SIZE + PADDING * 2, BufferedImage.TYPE_INT_RGB);
@@ -50,6 +66,13 @@ public class Visualizer extends JPanel implements WindowListener
         g2.fillRect(0, 0, VIS_SIZE + PADDING * 2, VIS_SIZE + PADDING * 2);
         g2.setColor(new Color(0xFFFFFF));
         g2.fillRect(PADDING, PADDING, VIS_SIZE, VIS_SIZE);
+
+        /*
+         * input.N     Number of vertices.
+         * input.posX  The x coordinate of the vertex.
+         * input.posY  The y coordinate of the vertex.
+         * output.perm Order of visiting vertices.
+         */
 
         /* Draw path */
         g2.setColor(new Color(0x000000));
@@ -69,5 +92,4 @@ public class Visualizer extends JPanel implements WindowListener
             g2.drawOval(input.posX[i] + PADDING - R / 2, input.posY[i] + PADDING - R / 2, R, R);
         }   
     }
-
 }
