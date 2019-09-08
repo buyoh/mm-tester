@@ -12,27 +12,23 @@
 
 <h4>入力</h4>
 <div class = "iodata">
-<pre>
-$N$
-$x_{0} \ y_{0}$
-$x_{1} \ x_{1}$  
-$\vdots$
-$x_{N-1} \ y_{N-1}$
-</pre>
+$N$<br>
+$x_{0} \ y_{0}$<br>
+$x_{1} \ x_{1}$<br>
+$\vdots$<br>
+$x_{N-1} \ y_{N-1}$<br>
 </div>
 
 <h4>出力</h4>
 <div class = "iodata">
-<pre>
-$v_{0}$
-$v_{1}$
-$\vdots$
-$v_{N-1}$
-</pre>
+$v_{0}$<br>
+$v_{1}$<br>
+$\vdots$<br>
+$v_{N-1}$<br>
 </div>
 
 <h3>スコア</h3>
-$v_{0} \ \rightarrow v_{1} \ \rightarrow \ \cdots \ \rightarrow \ v_{N-1} \ \rightarrow \ v_{0}$と頂点を訪れた時の移動距離をスコアとする．
+$v_{0} \ \rightarrow v_{1} \ \rightarrow \ \cdots \ \rightarrow \ v_{N-1} \ \rightarrow \ v_{0}$と頂点を訪れた時の移動距離をスコアとする．訪れていない頂点がある場合のスコアは$-1$となります．
 
 <h3>テスタ</h3>
 TopCoder の Marathon Match と同じです．<code>"[command]"</code>にプログラムの実行コマンド，<code>[seed]</code>に乱数のシードを入れてください．

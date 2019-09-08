@@ -49,6 +49,9 @@ $ make
         └── main.py
 ```
 
+### 問題文が読めない時
+Githubが数式に対応していないので，[ここ](http://marxi.co)とかに貼り付けて読んでください．
+
 ## 問題
 ### [Traveling Salesman](TravelingSalesman/)
 <img src="images/TravelingSalesman.png" width="400px">
