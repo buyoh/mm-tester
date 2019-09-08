@@ -78,9 +78,7 @@ public class Tester
                 v.saveImage(filename);
             }
             if (vis) {
-                final int HEIGHT = v.VIS_SIZE + v.PADDING * 2;
-                final int WIDTH  = v.VIS_SIZE + v.PADDING * 2;
-                Dimension dm = new Dimension(HEIGHT, WIDTH);
+                Dimension dm = new Dimension(v.VIS_SIZE_X, v.VIS_SIZE_Y);
                 JFrame jf = new JFrame();
                 jf.getContentPane().setPreferredSize(dm);
                 jf.pack();

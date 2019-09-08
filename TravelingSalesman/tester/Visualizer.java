@@ -12,8 +12,11 @@ import javax.imageio.*;
 
 public class Visualizer extends JPanel implements WindowListener 
 {
-    final int VIS_SIZE = 1000;
+    final int FIELD_HEIGHT = 1000;
+    final int FIELD_WIDTH  = 1000;
     final int PADDING = 10;
+    final int VIS_SIZE_X = FIELD_WIDTH + PADDING * 2;
+    final int VIS_SIZE_Y = FIELD_HEIGHT + PADDING * 2;
     final BufferedImage bi;
 
     @Override
@@ -21,7 +24,7 @@ public class Visualizer extends JPanel implements WindowListener
     {
         try {
             super.paint(g);
-            g.drawImage(bi, 0, 0, VIS_SIZE + PADDING * 2, VIS_SIZE + PADDING * 2, null);
+            g.drawImage(bi, 0, 0, VIS_SIZE_X, VIS_SIZE_Y, null);
         } catch (Exception e) { 
             e.printStackTrace();
         }
@@ -57,15 +60,15 @@ public class Visualizer extends JPanel implements WindowListener
      */
     public Visualizer (final InputData input, final OutputData output) throws Exception
     {
-        bi = new BufferedImage(VIS_SIZE + PADDING * 2, VIS_SIZE + PADDING * 2, BufferedImage.TYPE_INT_RGB);
+        bi = new BufferedImage(VIS_SIZE_X, VIS_SIZE_Y, BufferedImage.TYPE_INT_RGB);
         Graphics2D g2 = (Graphics2D)bi.getGraphics();
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             
         /* Draw background */
         g2.setColor(new Color(0xD3D3D3));
-        g2.fillRect(0, 0, VIS_SIZE + PADDING * 2, VIS_SIZE + PADDING * 2);
+        g2.fillRect(0, 0, VIS_SIZE_X, VIS_SIZE_Y);
         g2.setColor(new Color(0xFFFFFF));
-        g2.fillRect(PADDING, PADDING, VIS_SIZE, VIS_SIZE);
+        g2.fillRect(PADDING, PADDING, FIELD_WIDTH, FIELD_HEIGHT);
 
         /*
          * input.N     Number of vertices.
