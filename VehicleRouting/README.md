@@ -16,42 +16,36 @@
 
 <h4>入力</h4>
 <div class = "iodata">
-<pre>
-$N \ M$
-$depot_{x} \ depot_{y}$
-$x_{0} \ y_{0}$
-$x_{1} \ y_{1}$
-$\vdots$
-$x_{N-1} \ y_{N-1}$
-$cap_{0} \ speed_{0}$
-$cap_{1} \ speed_{1}$
-$\vdots$
-$cap_{M-1} \ speed_{M-1}$
-</pre>
+$N \ M$<br>
+$depot_{x} \ depot_{y}$<br>
+$x_{0} \ y_{0}$<br>
+$x_{1} \ y_{1}$<br>
+$\vdots$<br>
+$x_{N-1} \ y_{N-1}$<br>
+$cap_{0} \ speed_{0}$<br>
+$cap_{1} \ speed_{1}$<br>
+$\vdots$<br>
+$cap_{M-1} \ speed_{M-1}$<br>
 </div>
 
 <h4>出力</h4>
 $1$行目にトラックの出撃回数$K$を出力してください．続く$K$行の各行には，トラックの種類$T_{i}(0 \leqq T_{i} \leqq M-1)$，荷物の個数$L_{i}(1 \leqq L_{i} \leqq cap_{T_{i}})$，$L$個の目的地$D_{i,0},D_{i,1},\cdots,D_{i,L_{i}-1} \ (0 \leqq D_{i,j} \leqq N-1)$を出力してください．
 
 <div class = "iodata">
-<pre>
-$K$
-$T_{0} \ L_{0} \ D_{0,0} \ D_{0,1} \ \cdots \ D_{0,L_{0}-1}$
-$T_{1} \ L_{1} \ D_{1,0} \ D_{1,1} \ \cdots \ D_{1,L_{1}-1}$
-$\vdots$
-$T_{K-1} \ L_{K-1} \ D_{K-1,0} \ D_{K-1,1} \ \cdots \ D_{K-1,L_{K-1}-1}$
-</pre>
+$K$<br>
+$T_{0} \ L_{0} \ D_{0,0} \ D_{0,1} \ \cdots \ D_{0,L_{0}-1}$<br>
+$T_{1} \ L_{1} \ D_{1,0} \ D_{1,1} \ \cdots \ D_{1,L_{1}-1}$<br>
+$\vdots$<br>
+$T_{K-1} \ L_{K-1} \ D_{K-1,0} \ D_{K-1,1} \ \cdots \ D_{K-1,L_{K-1}-1}$<br>
 </div>
 <br>
 
 出力例）
 <div class = "iodata">
-<pre>
-3
-1 5 3 9 4 1 2
-0 2 0 8
-2 3 5 7 6
-</pre>
+3<br>
+1 5 3 9 4 1 2<br>
+0 2 0 8<br>
+2 3 5 7 6<br>
 </div>
 
 <h3>スコア</h3>
