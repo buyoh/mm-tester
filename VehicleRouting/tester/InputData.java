@@ -1,8 +1,3 @@
-/**
- * Class that generates input data.
- * @author kosakkun
- */
-
 import java.io.*;
 import java.security.*;
 
@@ -15,16 +10,12 @@ public class InputData
     final int WIDTH  = 1000 + 1;
     final int HEIGHT = 1000 + 1;
 
-    int N,M;
-    int depotX, depotY;
-    int[] posX, posY;
-    int[] cap;
-    int[] speed;
+    final int N,M;
+    final int depotX, depotY;
+    final int[] posX, posY;
+    final int[] cap;
+    final int[] speed;
 
-    /**
-     * The input data is converted to a character string and returned.
-     * @return Input data in character string format.
-     */
     public String getString ()
     {
         StringBuffer sb = new StringBuffer();
@@ -43,10 +34,6 @@ public class InputData
         return sb.toString();
     }
 
-    /**
-     * Generate input data from a random seed.
-     * @param seed Random number seed.
-     */
     public InputData (final long seed) throws Exception
     {
         SecureRandom rnd = SecureRandom.getInstance("SHA1PRNG");

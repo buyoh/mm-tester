@@ -1,8 +1,3 @@
-/**
- * Visualizer class.
- * @author kosakkun
- */
-
 import java.io.*;
 import java.awt.*;
 import java.awt.image.*;
@@ -18,13 +13,28 @@ public class Visualizer extends JPanel implements WindowListener
     final int PADDING = 10;
     final int VIS_SIZE_X = FIELD_WIDTH + VEHICLE_VIEW_WIDTH + PADDING * 2;
     final int VIS_SIZE_Y = FIELD_HEIGHT + PADDING * 2;
-    final BufferedImage bi;
+    
+    final InputData input;
+    final OutputData output;
+
+    public Visualizer (final InputData _input, final OutputData _output) throws Exception
+    {
+        this.input = _input;
+        this.output = _output;
+    }
+
+    public void saveImage (String fileName) throws IOException
+    {
+        BufferedImage bi = drawImage();
+        ImageIO.write(bi, "png", new File(fileName +".png"));
+    }
 
     @Override
     public void paint (Graphics g)
     {
         try {
             super.paint(g);
+            BufferedImage bi = drawImage();
             g.drawImage(bi, 0, 0, VIS_SIZE_X, VIS_SIZE_Y, null);
         } catch (Exception e) { 
             e.printStackTrace();
@@ -42,15 +52,10 @@ public class Visualizer extends JPanel implements WindowListener
     @Override public void windowDeiconified(WindowEvent e) {}
     @Override public void windowActivated(WindowEvent e) {}
     @Override public void windowDeactivated(WindowEvent e) {}
-    
-    public void saveImage (String fileName) throws IOException
-    {
-        ImageIO.write(bi, "png", new File(fileName +".png"));
-    }
 
-    public Visualizer (final InputData input, final OutputData output) throws Exception
+    private BufferedImage drawImage ()
     {
-        bi = new BufferedImage(VIS_SIZE_X, VIS_SIZE_Y, BufferedImage.TYPE_INT_RGB);
+        BufferedImage bi = new BufferedImage(VIS_SIZE_X, VIS_SIZE_Y, BufferedImage.TYPE_INT_RGB);
         Graphics2D g2 = (Graphics2D)bi.getGraphics();
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
@@ -60,8 +65,26 @@ public class Visualizer extends JPanel implements WindowListener
         g2.setColor(new Color(0xFFFFFF));
         g2.fillRect(PADDING, PADDING, FIELD_WIDTH, FIELD_HEIGHT);
 
+        /* input
+         * int N,M;
+         * int depotX,depotY;
+         * int[] posX,posY;
+         * int[] cap;
+         * int[] speed;
+         *
+         * output
+         * int K;
+         * int[] T;
+         * int[] L;
+         * int[][] D;
+         * double[] dist:
+         * double[] time;
+         * int[] last_idx;
+         * double score;
+         */
+
         /* Draw delivery routes */
-        for (int i = 0; i < output.plan.length; i++) {
+        /*for (int i = 0; i < output.plan.length; i++) {
             Color c = Color.getHSBColor((1.0f / (float)input.M) * (float)i, 1.0f, 0.95f);
             g2.setColor(c);
             int cur_x = input.depotX;
@@ -78,10 +101,10 @@ public class Visualizer extends JPanel implements WindowListener
                 cur_y = input.posY[idx];
             }
             g2.drawLine(cur_x + PADDING, cur_y + PADDING, input.depotX + PADDING, input.depotY + PADDING);
-        }
+        }*/
 
         /* Draw the destinations */
-        final int R1 = 8;
+        /*final int R1 = 8;
         for (int i = 0; i < output.plan.length; i++) {
             for (int j = 0; j < output.plan[i].length; j++) {
                 Color c = Color.getHSBColor((1.0f / (float)input.M) * (float)i, 1.0f, 0.95f);
@@ -91,13 +114,13 @@ public class Visualizer extends JPanel implements WindowListener
                 g2.setColor(new Color(0x000000));
                 g2.drawOval(input.posX[idx] + PADDING - R1 / 2, input.posY[idx] + PADDING - R1 / 2, R1, R1);
             }
-        }
+        }*/
 
         /* Draw the depot */
-        final int R2 = 20;
+        /*final int R2 = 20;
         g2.setColor(new Color(0x000000));
         g2.fillOval(input.depotX + PADDING - R2 / 2, input.depotY + PADDING - R2 / 2, R2, R2);
-
+*/
         /* Draw information of vehicles */
         /*int worst_idx = -1;
         double worst_time = -1.0;
@@ -108,14 +131,14 @@ public class Visualizer extends JPanel implements WindowListener
             }
         }*/
 
-        BasicStroke wideStroke = new BasicStroke(2.0f);
-        g2.setStroke(wideStroke);
-        for (int i = 0; i < input.M; i++) {
-            g2.setColor(new Color(0xFFFFFF));
-            g2.fillRect(FIELD_WIDTH + 20, i * 100 + 10, VEHICLE_VIEW_WIDTH - 10, 90);
-            Color c = Color.getHSBColor((1.0f / (float)input.M) * (float)i, 1.0f, 0.95f);
-            g2.setColor(c);
-            g2.drawRect(FIELD_WIDTH + 20, i * 100 + 10, VEHICLE_VIEW_WIDTH - 10, 90);
+  //      BasicStroke wideStroke = new BasicStroke(2.0f);
+    //    g2.setStroke(wideStroke);
+      //  for (int i = 0; i < input.M; i++) {
+        //    g2.setColor(new Color(0xFFFFFF));
+          //  g2.fillRect(FIELD_WIDTH + 20, i * 100 + 10, VEHICLE_VIEW_WIDTH - 10, 90);
+           // Color c = Color.getHSBColor((1.0f / (float)input.M) * (float)i, 1.0f, 0.95f);
+            //g2.setColor(c);
+            //g2.drawRect(FIELD_WIDTH + 20, i * 100 + 10, VEHICLE_VIEW_WIDTH - 10, 90);
             
             /*g2.setColor(new Color(0x000000));
             FontMetrics fm = g2.getFontMetrics();
@@ -137,6 +160,8 @@ public class Visualizer extends JPanel implements WindowListener
             }
             g2.drawChars(ch4, 0, ch4.length, FIELD_WIDTH + 30, i * 100 + 87);
             */
-        }
+        //}
+            return bi;
     }
+
 }
