@@ -5,7 +5,7 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.imageio.*;
 
-public class Visualizer extends JPanel implements WindowListener 
+public class Visualizer extends JPanel
 {
     final int FIELD_HEIGHT = 1000;
     final int FIELD_WIDTH  = 1000;
@@ -40,18 +40,6 @@ public class Visualizer extends JPanel implements WindowListener
             e.printStackTrace();
         }
     }
-
-    @Override
-    public void windowClosing(WindowEvent e) {
-        System.exit(0);
-    }
-
-    @Override public void windowOpened(WindowEvent e) {}
-    @Override public void windowClosed(WindowEvent e) {}
-    @Override public void windowIconified(WindowEvent e) {}
-    @Override public void windowDeiconified(WindowEvent e) {}
-    @Override public void windowActivated(WindowEvent e) {}
-    @Override public void windowDeactivated(WindowEvent e) {}
 
     private BufferedImage drawImage ()
     {

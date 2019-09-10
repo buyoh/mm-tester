@@ -33,7 +33,6 @@ public class Tester
                 jf.pack();
                 jf.setVisible(true);
                 jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                //jf.addWindowListener(v);
                 jf.getContentPane().add(v);
             }
         } catch (Exception e) {
