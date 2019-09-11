@@ -9,6 +9,7 @@ public class InputData
     final int MAX_SPEED = 20, MIN_SPEED = 1;
     final int WIDTH  = 1000 + 1;
     final int HEIGHT = 1000 + 1;
+    final int NEAREST = 50;
 
     final int N,M;
     final int depotX, depotY;
@@ -51,10 +52,14 @@ public class InputData
                 int x = rnd.nextInt(WIDTH);
                 int y = rnd.nextInt(HEIGHT);
                 if (usedPos[x][y]) continue;
-                usedPos[x][y] = true;
-                posX[i] = x;
-                posY[i] = y;
-                break;
+                int lx = x - depotX;
+                int ly = y - depotY;
+                if (lx * lx + ly * ly >= NEAREST * NEAREST) {
+                    usedPos[x][y] = true;
+                    posX[i] = x;
+                    posY[i] = y;
+                    break;
+                }
             }
         }
         cap   = new int[M];
