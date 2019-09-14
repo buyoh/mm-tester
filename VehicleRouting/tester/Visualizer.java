@@ -6,7 +6,7 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.imageio.*;
 
-public class Visualizer extends JPanel
+public class Visualizer extends JFrame
 {
     final int FIELD_HEIGHT = 1000;
     final int FIELD_WIDTH  = 1000;
@@ -30,18 +30,50 @@ public class Visualizer extends JPanel
         ImageIO.write(bi, "png", new File(fileName +".png"));
     }
 
+    public void visualize ()
+    {
+        this.setVisible(true);
+        Insets insets = getInsets();
+        final int width  = VIS_SIZE_X + insets.left + insets.right;
+        final int height = VIS_SIZE_Y + insets.top + insets.bottom;
+        this.setSize(width, height);
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setResizable(false);
+        this.setVisible(true);
+    }
+
     @Override
     public void paint (Graphics g)
     {
         try {
             super.paint(g);
             BufferedImage bi = drawImage();
-            g.drawImage(bi, 0, 0, VIS_SIZE_X, VIS_SIZE_Y, null);
+            g.drawImage(bi, getInsets().left, getInsets().top, VIS_SIZE_X, VIS_SIZE_Y, null);
         } catch (Exception e) { 
             e.printStackTrace();
         }
     }
 
+    /**
+     * int input.N           Number of destinations.
+     * int input.M           Number of trucks.
+     * int depotX,depotY     Warehouse coordinates.
+     * int[] posX,posY       The coordinates of the i-th destination.
+     * int[] cap             Loading capacity of the i-th truck.
+     * int[] speed           The traveling speed of the i-th track.
+     *
+     * int output.K          The number of lines in the answer.
+     * int[] T               Track number.
+     * int[] L               Number of destinations.
+     * int[][] D             Destination number.
+     * double[] dist         Total mileage of the i-th track.
+     * double[] time         Total travel time for the i-th track.
+     * int[] last_idx        The destination number last delivered by the i-th truck.
+     * double score          Score.
+     * 
+     * @see InputData
+     * @see OutputData
+     */
     private BufferedImage drawImage ()
     {
         BufferedImage bi = new BufferedImage(VIS_SIZE_X, VIS_SIZE_Y, BufferedImage.TYPE_INT_RGB);
@@ -53,24 +85,6 @@ public class Visualizer extends JPanel
         g2.fillRect(0, 0, VIS_SIZE_X, VIS_SIZE_Y);
         g2.setColor(new Color(0xFFFFFF));
         g2.fillRect(PADDING, PADDING, FIELD_WIDTH, FIELD_HEIGHT);
-
-        /* input
-         * int N,M;
-         * int depotX,depotY;
-         * int[] posX,posY;
-         * int[] cap;
-         * int[] speed;
-         *
-         * output
-         * int K;
-         * int[] T;
-         * int[] L;
-         * int[][] D;
-         * double[] dist:
-         * double[] time;
-         * int[] last_idx;
-         * double score;
-         */
 
         /* Converts the origin of the graphics context to a 
            point (x, y) in the current coordinate system.*/
@@ -122,7 +136,7 @@ public class Visualizer extends JPanel
         g2.translate(FIELD_WIDTH + PADDING, 0);
 
         /* Draw information of vehicles */
-        final int vht = FIELD_HEIGHT / 10 + 1;
+        final int vht = FIELD_HEIGHT / 10;
         final int vwt = VEHICLE_VIEW_WIDTH - 10;
         g2.setStroke(new BasicStroke(2.0f));
         for (int i = 0; i < input.M; i++) {
@@ -133,6 +147,10 @@ public class Visualizer extends JPanel
             g2.drawRect(0, vht * i, vwt, vht - 10);
         }
 
+        /* Converts the origin of the graphics context to a 
+           point (x, y) in the current coordinate system.*/
+        g2.translate(10, 0);
+
         int worst_idx = -1;
         double worst_time = -1.0;
         for (int i = 0; i < input.M; i++) {
@@ -142,11 +160,6 @@ public class Visualizer extends JPanel
             }
         }
 
-
-        /* Converts the origin of the graphics context to a 
-           point (x, y) in the current coordinate system.*/
-        g2.translate(10, 0);
-
         for (int i = 0; i < input.M; i++) {
             g2.setColor(new Color(0x000000));
             FontMetrics fm = g2.getFontMetrics();
@@ -155,17 +168,17 @@ public class Visualizer extends JPanel
             char[] ch2 = ("speed : " + input.speed[i]).toCharArray();
             char[] ch3 = ("distance : " + output.dist[i]).toCharArray();
             char[] ch4 = ("time : " + output.dist[i] / (double)input.speed[i] + "\n").toCharArray();
-            g2.setFont(new Font("Arial", Font.BOLD, 13));
-            g2.drawChars(ch0, 0, ch0.length, 0, i * 100 + 28);
-            g2.setFont(new Font("Arial", Font.PLAIN, 12));
-            g2.drawChars(ch1, 0, ch1.length, 0, i * 100 + 42);
-            g2.drawChars(ch2, 0, ch2.length, 0, i * 100 + 57);
-            g2.drawChars(ch3, 0, ch3.length, 0, i * 100 + 72);
+            g2.setFont(new Font("Courier", Font.BOLD, 14));
+            g2.drawChars(ch0, 0, ch0.length, 0, i * 100 + 20);
+            g2.setFont(new Font("Courier", Font.BOLD, 12));
+            g2.drawChars(ch1, 0, ch1.length, 0, i * 100 + 34);
+            g2.drawChars(ch2, 0, ch2.length, 0, i * 100 + 49);
+            g2.drawChars(ch3, 0, ch3.length, 0, i * 100 + 64);
             if (i == worst_idx) {
-                g2.setFont(new Font("Arial", Font.BOLD, 12));
+                g2.setFont(new Font("Courier", Font.BOLD, 12));
                 g2.setColor(new Color(0xFF0000));
             }
-            g2.drawChars(ch4, 0, ch4.length, 0, i * 100 + 87);
+            g2.drawChars(ch4, 0, ch4.length, 0, i * 100 + 79);
             
         }
         return bi;

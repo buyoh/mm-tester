@@ -1,7 +1,7 @@
-import java.awt.*;
-import javax.swing.*;
 import java.io.*;
 import java.util.*;
+import java.awt.*;
+import javax.swing.*;
 
 public class Tester
 {
@@ -9,37 +9,28 @@ public class Tester
     static String exec  = "";
     static boolean save = false;
     static boolean vis  = false;
-
+    
     public Tester ()
     {
-        InputData input;
-        OutputData output;
-        double score = -1.0;
         try {
-            Runtime rt = Runtime.getRuntime();
-            Process proc = rt.exec(exec);
+            Process proc = Runtime.getRuntime().exec(exec);
             new ErrorReader(proc.getErrorStream()).start();
-            input = new InputData(Long.parseLong(seed));
-            output = new OutputData(input, proc.getInputStream(), proc.getOutputStream());
-            score = output.score;
+            InputData input = new InputData(Long.parseLong(seed));
+            OutputData output = new OutputData(input, proc.getInputStream(), proc.getOutputStream());
             proc.waitFor();
             proc.destroy();
-            Visualizer v = new Visualizer(input, output);
-            v.saveImage(seed);
-            if (vis) {
-                Dimension dm = new Dimension(v.VIS_SIZE_X, v.VIS_SIZE_Y);
-                JFrame jf = new JFrame();
-                jf.getContentPane().setPreferredSize(dm);
-                jf.pack();
-                jf.setVisible(true);
-                jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                jf.getContentPane().add(v);
+            System.out.println("Score = " + output.score);
+            if (output.score >= 0.0) {
+                Visualizer v = new Visualizer(input, output);
+                if (save) v.saveImage(seed);
+                if (vis ) v.visualize();
             }
         } catch (Exception e) {
             e.printStackTrace();
             System.err.println("Failed to get result from your answer.");
+            System.out.println("Score = -1");
         }
-        System.out.println("Score = " + score);
+        
     }
 
     public static void main (String[] args)
