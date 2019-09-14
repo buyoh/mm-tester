@@ -28,7 +28,7 @@ public class Tester
         } catch (Exception e) {
             e.printStackTrace();
             System.err.println("Failed to get result from your answer.");
-            System.out.println("Score = -1");
+            System.out.println("Score = -1.0");
         }
         
     }
