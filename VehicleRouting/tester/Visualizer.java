@@ -91,10 +91,11 @@ public class Visualizer extends JFrame
         g2.translate(PADDING, PADDING);
 
         /* Draw delivery routes */
+        g2.setStroke(new BasicStroke(1.5f));
         int[] last_idx = new int[input.M];
         Arrays.fill(last_idx, -1);
         for (int i = 0; i < output.K; i++) {
-            Color c = Color.getHSBColor((1.0f / (float)input.M) * (float)output.T[i], 1.0f, 0.95f);
+            Color c = Color.getHSBColor((1.0f / (float)input.M) * (float)output.T[i], 1.0f, 0.80f);
             g2.setColor(c);
             if (last_idx[output.T[i]] >= 0) {
                 g2.drawLine(input.posX[last_idx[output.T[i]]], input.posY[last_idx[output.T[i]]], 
@@ -114,6 +115,7 @@ public class Visualizer extends JFrame
 
         /* Draw the destinations */
         final int R1 = 8;
+        g2.setStroke(new BasicStroke(1.5f));
         for (int i = 0; i < output.K; i++) {
             Color c = Color.getHSBColor((1.0f / (float)input.M) * (float)output.T[i], 1.0f, 0.95f);
             for (int j = 0; j < output.L[i]; j++) {
@@ -125,10 +127,21 @@ public class Visualizer extends JFrame
             }
         }
 
+        /* Draw the last destination visited by each track. */
+        final int R2 = 12;
+        g2.setStroke(new BasicStroke(3.0f));
+        for (int i = 0; i < input.M; i++) {
+            Color c = Color.getHSBColor((1.0f / (float)input.M) * (float)i, 1.0f, 0.95f);
+            g2.setColor(c);
+            g2.fillOval(input.posX[last_idx[i]] - R2 / 2, input.posY[last_idx[i]] - R2 / 2, R2, R2);
+            g2.setColor(new Color(0x000000));
+            g2.drawOval(input.posX[last_idx[i]] - R2 / 2, input.posY[last_idx[i]] - R2 / 2, R2, R2);
+        }
+
         /* Draw the depot */
-        final int R2 = 20;
+        final int R3 = 20;
         g2.setColor(new Color(0x000000));
-        g2.fillOval(input.depotX - R2 / 2, input.depotY - R2 / 2, R2, R2);
+        g2.fillOval(input.depotX - R3 / 2, input.depotY - R3 / 2, R3, R3);
 
 
         /* Converts the origin of the graphics context to a 

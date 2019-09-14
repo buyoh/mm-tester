@@ -103,7 +103,7 @@ public class OutputData
                     dist[T[i]] += calcDist(input.posX[last_idx[T[i]]], input.posY[last_idx[T[i]]], input.depotX, input.depotY);
                     dist[T[i]] += calcDist(input.depotX, input.depotY, input.posX[D[i][j]], input.posY[D[i][j]]);
                 } else {
-                    dist[T[i]] += calcDist(input.posX[last_idx[T[i]]], input.posY[last_idx[T[i]]], input.depotX, input.depotY);
+                    dist[T[i]] += calcDist(input.posX[last_idx[T[i]]], input.posY[last_idx[T[i]]],  input.posX[D[i][j]], input.posY[D[i][j]]);
                 }
                 last_idx[T[i]] = D[i][j];
             }
