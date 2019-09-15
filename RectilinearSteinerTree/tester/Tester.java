@@ -220,7 +220,6 @@ public class Tester {
                 os = proc.getOutputStream();
                 is = proc.getInputStream();
                 sc = new Scanner(is);
-                new ErrorReader(proc.getErrorStream()).start();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -252,25 +251,4 @@ public class Tester {
         Tester test = new Tester(seed);
     }
 
-}
-
-class ErrorReader extends Thread {
-
-    private final InputStream error;
-
-    public ErrorReader(InputStream is) {
-        error = is;
-    }
-
-    @Override
-    public void run() {
-        try (Scanner scanner = new Scanner(error)) {
-            while (scanner.hasNextLine()) {
-                String s = scanner.nextLine();
-                
-                System.out.println("[STDERR] " + s);
-                System.out.flush();
-            }
-        }
-    }
 }
