@@ -1,8 +1,3 @@
-/**
- * Visualizer class.
- * @author kosakkun
- */
-
 import java.io.*;
 import java.awt.*;
 import java.awt.image.*;
@@ -10,57 +5,65 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.imageio.*;
 
-public class Visualizer extends JPanel implements WindowListener 
+public class Visualizer extends JFrame
 {
     final int FIELD_HEIGHT = 1000;
     final int FIELD_WIDTH  = 1000;
     final int PADDING = 10;
     final int VIS_SIZE_X = FIELD_WIDTH + PADDING * 2;
     final int VIS_SIZE_Y = FIELD_HEIGHT + PADDING * 2;
-    final BufferedImage bi;
+    
+    final InputData input;
+    final OutputData output;
+
+    public Visualizer (final InputData _input, final OutputData _output) throws Exception
+    {
+        this.input = _input;
+        this.output = _output;
+    }
+
+    public void saveImage (String fileName) throws IOException
+    {
+        BufferedImage bi = drawImage();
+        ImageIO.write(bi, "png", new File(fileName +".png"));
+    }
+
+    public void visualize ()
+    {
+        this.setVisible(true);
+        Insets insets = getInsets();
+        final int width  = VIS_SIZE_X + insets.left + insets.right;
+        final int height = VIS_SIZE_Y + insets.top + insets.bottom;
+        this.setSize(width, height);
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setResizable(false);
+        this.setVisible(true);
+    }
 
     @Override
     public void paint (Graphics g)
     {
         try {
             super.paint(g);
-            g.drawImage(bi, 0, 0, VIS_SIZE_X, VIS_SIZE_Y, null);
+            BufferedImage bi = drawImage();
+            g.drawImage(bi, getInsets().left, getInsets().top, VIS_SIZE_X, VIS_SIZE_Y, null);
         } catch (Exception e) { 
             e.printStackTrace();
         }
     }
 
-    @Override
-    public void windowClosing(WindowEvent e) {
-        System.exit(0);
-    }
-
-    @Override public void windowOpened(WindowEvent e) {}
-    @Override public void windowClosed(WindowEvent e) {}
-    @Override public void windowIconified(WindowEvent e) {}
-    @Override public void windowDeiconified(WindowEvent e) {}
-    @Override public void windowActivated(WindowEvent e) {}
-    @Override public void windowDeactivated(WindowEvent e) {}
-
     /**
-     * Output visualized image as png format data.
-     * @param fileName The name of the image data to be output.
-     */
-    public void saveImage (String fileName) throws IOException
-    {
-        ImageIO.write(bi, "png", new File(fileName +".png"));
-    }
-
-    /**
-     * Draw from input data and output data.
-     * @param input The input data of the problem.
-     * @param output The output data of the problem.
+     * int input.N          Number of vertices.
+     * int[] input.posX     The x coordinate of the vertex.
+     * int[] input.posY     The y coordinate of the vertex.
+     * int[] output.perm    Order of visiting vertices.
+     *
      * @see InputData
      * @see OutputData
      */
-    public Visualizer (final InputData input, final OutputData output) throws Exception
+    private BufferedImage drawImage ()
     {
-        bi = new BufferedImage(VIS_SIZE_X, VIS_SIZE_Y, BufferedImage.TYPE_INT_RGB);
+        BufferedImage bi = new BufferedImage(VIS_SIZE_X, VIS_SIZE_Y, BufferedImage.TYPE_INT_RGB);
         Graphics2D g2 = (Graphics2D)bi.getGraphics();
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             
@@ -70,29 +73,29 @@ public class Visualizer extends JPanel implements WindowListener
         g2.setColor(new Color(0xFFFFFF));
         g2.fillRect(PADDING, PADDING, FIELD_WIDTH, FIELD_HEIGHT);
 
-        /*
-         * input.N     Number of vertices.
-         * input.posX  The x coordinate of the vertex.
-         * input.posY  The y coordinate of the vertex.
-         * output.perm Order of visiting vertices.
-         */
+        /* Converts the origin of the graphics context to a 
+           point (x, y) in the current coordinate system.*/
+        g2.translate(PADDING, PADDING);
 
         /* Draw path */
         g2.setColor(new Color(0x000000));
+        g2.setStroke(new BasicStroke(1.5f));
         for (int i = 0; i < input.N; i++) {
             int a = output.perm[i];
             int b = output.perm[(i + 1) % input.N];
-            g2.drawLine(input.posX[a] + PADDING, input.posY[a] + PADDING, 
-                        input.posX[b] + PADDING, input.posY[b] + PADDING);
+            g2.drawLine(input.posX[a], input.posY[a], input.posX[b], input.posY[b]);
         }
 
         /* Draw vertex */
-        final int R = 8;
+        final int R = 6;
+        g2.setStroke(new BasicStroke(1.5f));
         for (int i = 0; i < input.N; i++) {
             g2.setColor(new Color(0xFFFFFF));
-            g2.fillOval(input.posX[i] + PADDING - R / 2, input.posY[i] + PADDING - R / 2, R, R);
+            g2.fillOval(input.posX[i] - R / 2, input.posY[i] - R / 2, R, R);
             g2.setColor(new Color(0x000000));
-            g2.drawOval(input.posX[i] + PADDING - R / 2, input.posY[i] + PADDING - R / 2, R, R);
-        }   
+            g2.drawOval(input.posX[i] - R / 2, input.posY[i] - R / 2, R, R);
+        }
+
+        return bi;
     }
 }

@@ -12,5 +12,5 @@ if [ $? -ne 0 ]; then
 fi
 
 for i in `seq 1 $TESTNUM`; do
-    java -jar $TESTER -exec "./main" -seed $i -save | { read rslt; echo "case $i: $rslt"; }
+    java -jar $TESTER -exec "./main" -seed $i -vis -save | { read rslt; echo "case $i: $rslt"; }
 done

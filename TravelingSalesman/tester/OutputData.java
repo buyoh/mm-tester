@@ -1,19 +1,11 @@
-/**
- * Class that generates output data.
- * @author kosakkun
- */
-
 import java.io.*;
 import java.util.*;
 
 public class OutputData
 {
     final int[] perm;
+    final double score;
 
-    /**
-     * The output data is converted to a character string and returned.
-     * @return Output data in character string format.
-     */
     public String getString ()
     {
         StringBuffer sb = new StringBuffer();
@@ -23,13 +15,6 @@ public class OutputData
         return sb.toString();
     }
 
-    /**
-     * Give input data to the solver and get output data.
-     * @param input The input data of the problem.
-     * @param is The input stream connected to the output of the solver.
-     * @param os The output stream connected to the solver input.
-     * @see InputData
-     */
     public OutputData (final InputData input, InputStream is, OutputStream os) throws IOException
     {
         os.write(input.getString().getBytes());
@@ -39,5 +24,32 @@ public class OutputData
         for (int i = 0; i < input.N; i++) {
             perm[i] = sc.nextInt();
         }
+
+        /* Check whether the output satisfies the constraints. */
+        boolean[] used = new boolean[input.N];
+        for (int i = 0; i < input.N; i++) {
+            if (perm[i] < 0 || perm[i] >= input.N) {
+                System.err.println("All elements of your return must be between 0 and " +
+                                   (input.N - 1) + ", and your return contained " + perm[i] + ".");
+                score = -1.0;
+                return;
+            }
+            if (used[perm[i]]) {
+                System.err.println("All elements of your return must be unique, " +
+                                   "and your return contained " + perm[i] + " twice.");
+                score = -1.0;
+                return;
+            }
+            used[perm[i]] = true;
+        }
+
+        /* Calculate the score. */
+        double dist = 0.0;
+        for (int i = 0; i < input.N; i++) {
+            double dx = (double)(input.posX[perm[i]] - input.posX[perm[(i + 1) % input.N]]);
+            double dy = (double)(input.posY[perm[i]] - input.posY[perm[(i + 1) % input.N]]);
+            dist += Math.sqrt(dx * dx + dy * dy);
+        }
+        score = dist;
     }
 }

@@ -1,8 +1,3 @@
-/**
- * Class that obtains standard error output of solver.
- * @author kosakkun
- */
-
 import java.io.*;
 
 class ErrorReader extends Thread
@@ -11,10 +6,6 @@ class ErrorReader extends Thread
     final InputStream error;
     final StringBuilder sb;
 
-    /**
-     * Set the input stream for the solver.
-     * @param is The input stream connected to the output of the solver.
-     */
     public ErrorReader (InputStream is)
     {
         error = is;
