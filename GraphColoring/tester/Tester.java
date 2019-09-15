@@ -1,268 +1,39 @@
 import java.awt.*;
-import java.awt.event.*;
-import java.awt.image.*;
+import javax.swing.*;
 import java.io.*;
 import java.util.*;
-import java.security.*;
-import javax.swing.*;
-import javax.imageio.*;
-import java.util.HashMap;
 
-public class Tester {
+public class Tester 
+{
+    static String seed  = "1";
+    static String exec  = "";
+    static boolean save = false;
+    static boolean vis  = false;
 
-    /********************************************************************/
-
-    JFrame jf;
-    Visualizer v;
-    InputStream is;
-    OutputStream os;
-    BufferedReader br;
-
-    static Process proc;
-    static String fileName, exec;
-    static boolean vis;
-    static int sel_ver;
-
-    final int MAXN = 200, MINN = 20;
-    int VIS_SIZE = 1000;
-    int N,M;
-    int Score;
-    int a[],b[],col[];
-    int posX[],posY[];
-    int numX[],numY[];
-    Map<Integer, Integer> map;
-
-    /********************************************************************/
-
-    public class Visualizer extends JPanel implements MouseListener, WindowListener {
-        
-        public void paint(Graphics g) {
-            try {
-                BufferedImage bi = new BufferedImage(VIS_SIZE + 20, VIS_SIZE + 20, BufferedImage.TYPE_INT_RGB);
-                Graphics2D g2 = (Graphics2D)bi.getGraphics();
-                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                g2.setColor(new Color(0xD3D3D3));
-                g2.fillRect(0, 0, VIS_SIZE + 20, VIS_SIZE + 20);
-                g2.setColor(new Color(0xFFFFFF));
-                g2.fillRect(10, 10, VIS_SIZE, VIS_SIZE);
-                for (int i = 0; i < M; i++) {
-                    if (a[i] == sel_ver) continue;
-                    if (b[i] == sel_ver) continue;
-                    if (sel_ver < 0) continue;
-                    if (col[a[i]] == col[b[i]]) continue;
-                    g2.setColor(new Color(0xD3D3D3));
-                    g2.drawLine(posX[a[i]], posY[a[i]], posX[b[i]], posY[b[i]]);
-                }
-                for (int i = 0; i < M; i++) {
-                    if (col[a[i]] == col[b[i]] && sel_ver < 0) {
-                        g2.setColor(new Color(0xFF0000));
-                        g2.drawLine(posX[a[i]], posY[a[i]], posX[b[i]], posY[b[i]]);
-                    } else if (col[a[i]] == col[b[i]] && (sel_ver == a[i] || sel_ver == b[i])) {
-                        g2.setColor(new Color(0xFF0000));
-                        g2.drawLine(posX[a[i]], posY[a[i]], posX[b[i]], posY[b[i]]);
-                    } else if (a[i] == sel_ver || b[i] == sel_ver || sel_ver < 0) {
-                        g2.setColor(new Color(0x000000));
-                        g2.drawLine(posX[a[i]], posY[a[i]], posX[b[i]], posY[b[i]]);
-                    }
-                }
-                for (int i = 0; i < N; i++) {
-                    Color c = Color.getHSBColor((float)map.get(col[i]) / (float)map.size(), 1.0f, 0.95f);
-                    g2.setColor(c);
-                    g2.fillOval(posX[i] - 6, posY[i] - 6, 12, 12);
-                    g2.setColor(new Color(0x000000));
-                    g2.drawOval(posX[i] - 6, posY[i] - 6, 12, 12);
-                }
-                if (sel_ver >= 0) {
-                    g2.setFont(new Font("Arial", Font.PLAIN, 10));
-                    char[] ch = ("" + sel_ver).toCharArray();
-                    g2.drawChars(ch, 0, ch.length, numX[sel_ver], numY[sel_ver]);
-                    for (int i = 0; i < M; i++) {
-                        if (a[i] == sel_ver) {
-                            char[] cht = ("" + b[i]).toCharArray();
-                            g2.drawChars(cht, 0, cht.length, numX[b[i]], numY[b[i]]);
-                        } else if (b[i] == sel_ver) {
-                            char[] cht = ("" + a[i]).toCharArray();
-                            g2.drawChars(cht, 0, cht.length, numX[a[i]], numY[a[i]]);
-                        }
-                    }
-                }    
-                g.drawImage(bi, 0, 0, VIS_SIZE + 20, VIS_SIZE + 20, null);
-                ImageIO.write(bi, "png", new File(fileName +".png"));
-            } catch (Exception e) { 
-                e.printStackTrace();
-            }
-        }
-
-        public Visualizer () {
-            addMouseListener(this);
-            jf.addWindowListener(this);
-        }
-
-        public void windowClosing(WindowEvent e) {
-            if (proc != null) {
-                try { 
-                    proc.destroy();
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            }
-            System.exit(0);
-        }
-
-        public void windowActivated(WindowEvent e) { }
-        public void windowDeactivated(WindowEvent e) { }
-        public void windowOpened(WindowEvent e) { }
-        public void windowClosed(WindowEvent e) { }
-        public void windowIconified(WindowEvent e) { }
-        public void windowDeiconified(WindowEvent e) { }
-
-        public void mousePressed(MouseEvent e) {
-            int x = e.getX();
-            int y = e.getY();
-            for (int i = 0; i < N; i++) {
-                int dX = posX[i] - x;
-                int dY = posY[i] - y;
-                if (dX * dX + dY * dY <= 6 * 6) {
-                    sel_ver = i;
-                    repaint();
-                    return;
-                }
-            }
-        }
-
-        public void mouseReleased(MouseEvent e) { }
-        public void mouseClicked(MouseEvent e) { }
-        public void mouseEntered(MouseEvent e) { }
-        public void mouseExited(MouseEvent e) { }
-    }
-
-    /********************************************************************/
-
-    public void generate (String seedStr) {
+    private Tester ()
+    {
         try {
-            SecureRandom rnd = SecureRandom.getInstance("SHA1PRNG");
-            long seed = Long.parseLong(seedStr);
-            rnd.setSeed(seed);
-            N = rnd.nextInt(MAXN - MINN + 1) + MINN;
-            M = rnd.nextInt(N * (N - 1) / 5 - 2 * N) + 2 * N;
-            a = new int[M];
-            b = new int[M];
-            boolean used[][] = new boolean[N][N];
-            int esum = 0;
-            while (esum < M) {
-                int at = rnd.nextInt(N);
-                int bt = rnd.nextInt(N);
-                if (at == bt || used[at][bt]) continue;
-                used[at][bt] = true;
-                used[bt][at] = true;
-                a[esum] = at;
-                b[esum] = bt;
-                esum++;
+            Process proc = Runtime.getRuntime().exec(exec);
+            new ErrorReader(proc.getErrorStream()).start();
+            InputData input = new InputData(Long.parseLong(seed));
+            OutputData output = new OutputData(input, proc.getInputStream(), proc.getOutputStream());
+            proc.waitFor();
+            proc.destroy();
+            if (output.score >= 0) {
+                Visualizer v = new Visualizer(input, output);
+                if (save) v.saveImage(seed);
+                if (vis ) v.visualize();
             }
-            posX = new int[N];
-            posY = new int[N];
-            numX = new int[N];
-            numY = new int[N];
-            for (int i = 0; i < N; i++) {
-                double theta = 2.0 * Math.PI * (double)i / (double)N;
-                double xt = Math.cos(theta) * (double)VIS_SIZE * 0.45 + (double)VIS_SIZE / 2;
-                double yt = Math.sin(theta) * (double)VIS_SIZE * 0.45 + (double)VIS_SIZE / 2;
-                posX[i] = (int)xt;
-                posY[i] = (int)yt;
-                xt = Math.cos(theta) * (double)VIS_SIZE * 0.47 + (double)VIS_SIZE / 2 - 6;
-                yt = Math.sin(theta) * (double)VIS_SIZE * 0.47 + (double)VIS_SIZE / 2 + 6;
-                numX[i] = (int)xt;
-                numY[i] = (int)yt;
-            }
-            sel_ver = -1;
-        } catch (Exception e) {
-            System.err.println("An exception occurred while generating test case.");
-            e.printStackTrace();
-        }
-    }
-
-    public double runTest (String seed) {
-
-        try {
-            generate(seed);
-            if (proc != null) try {
-                col = getColor();
-                map = new HashMap<Integer, Integer>();
-                for (int i = 0; i < N; i++) {
-                    if (!map.containsKey(col[i])) {
-                        map.put(col[i], (int)map.size());
-                    }
-                }
-                Score = (int)map.size();
-                for (int i = 0; i < M; i++) {
-                    if (col[a[i]] == col[b[i]]) {
-                        Score = -1;
-                    }
-                }
-            } catch (Exception e) {
-                System.err.println("Failed to get result from output.");
-                return -1;
-            }
+            System.out.println("Score = " + output.score);
         } catch (Exception e) {
             e.printStackTrace();
-            return -1;
-        }
-
-        if (vis) {
-            jf.getContentPane().setPreferredSize(new Dimension(VIS_SIZE + 20, VIS_SIZE + 20));
-            jf.pack();
-            jf.setVisible(true);
-        }
-        return (double)Score;
-    }
-
-    private int [] getColor () throws IOException {
-        StringBuffer sb = new StringBuffer();
-        sb.append(N).append(' ');
-        sb.append(M).append('\n');
-        for (int i = 0; i < M; ++i) {
-            sb.append(a[i]).append(' ');
-            sb.append(b[i]).append('\n');
-        }
-        os.write(sb.toString().getBytes());
-        os.flush();
-
-        int [] ret = new int[N];
-        for (int i = 0; i < N; ++i) {
-            ret[i] = Integer.parseInt(br.readLine());
-        }
-        return ret;
-    }
-
-    public Tester (String seed) {
-        if (vis) {
-            jf = new JFrame();
-            v = new Visualizer();
-            jf.getContentPane().add(v);
-        }
-        if (exec != null) {
-            try {
-                Runtime rt = Runtime.getRuntime();
-                proc = rt.exec(exec);
-                os = proc.getOutputStream();
-                is = proc.getInputStream();
-                br = new BufferedReader(new InputStreamReader(is));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        System.out.println("Score = " + runTest(seed));
-        if (proc != null) {
-            try { 
-                proc.destroy(); 
-            } catch (Exception e) { 
-                e.printStackTrace(); 
-            }
+            System.err.println("Failed to get result from your answer.");
+            System.out.println("Score = -1");
         }
     }
 
-    public static void main (String[] args) {
-        String seed = "1";
+    public static void main (String[] args)
+    {
         for (int i = 0; i < args.length; ++i) {
             if (args[i].equals("-seed")) {
                 seed = args[++i];
@@ -270,10 +41,10 @@ public class Tester {
                 exec = args[++i];
             } else if (args[i].equals("-vis")) {
                 vis = true;
+            } else if (args[i].equals("-save")) {
+                save = true;
             }
         }
-        fileName = seed;
-        Tester test = new Tester(seed);
+        Tester test = new Tester();
     }
-
 }
