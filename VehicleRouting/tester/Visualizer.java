@@ -114,7 +114,7 @@ public class Visualizer extends JFrame
         }
 
         /* Draw the destinations */
-        final int R1 = 8;
+        final int R1 = 6;
         g2.setStroke(new BasicStroke(1.5f));
         for (int i = 0; i < output.K; i++) {
             Color c = Color.getHSBColor((1.0f / (float)input.M) * (float)output.T[i], 1.0f, 0.95f);
@@ -128,7 +128,7 @@ public class Visualizer extends JFrame
         }
 
         /* Draw the last destination visited by each track. */
-        final int R2 = 12;
+        final int R2 = 10;
         g2.setStroke(new BasicStroke(3.0f));
         for (int i = 0; i < input.M; i++) {
             Color c = Color.getHSBColor((1.0f / (float)input.M) * (float)i, 1.0f, 0.95f);
@@ -139,7 +139,7 @@ public class Visualizer extends JFrame
         }
 
         /* Draw the depot */
-        final int R3 = 20;
+        final int R3 = 16;
         g2.setColor(new Color(0x000000));
         g2.fillOval(input.depotX - R3 / 2, input.depotY - R3 / 2, R3, R3);
 
