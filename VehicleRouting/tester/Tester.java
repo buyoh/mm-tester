@@ -19,12 +19,12 @@ public class Tester
             OutputData output = new OutputData(input, proc.getInputStream(), proc.getOutputStream());
             proc.waitFor();
             proc.destroy();
-            System.out.println("Score = " + output.score);
             if (output.score >= 0.0) {
                 Visualizer v = new Visualizer(input, output);
                 if (save) v.saveImage(seed);
                 if (vis ) v.visualize();
             }
+            System.out.println("Score = " + output.score);
         } catch (Exception e) {
             e.printStackTrace();
             System.err.println("Failed to get result from your answer.");
