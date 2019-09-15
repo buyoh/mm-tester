@@ -53,15 +53,15 @@ public class Visualizer extends JFrame
     }
 
     /**
-     * int input.WIDTH
-     * int input.HEIGHT
-     * int input.N
-     * int[] input.posX
-     * int[] input.posY
-     * int output.M
-     * int[] output.addPosX
-     * int[] output.addPosY
-     * int output.score
+     * int input.WIDTH          The width of the board.
+     * int input.HEIGHT         The height of the board.
+     * int input.N              The number of panels placed in advance.
+     * int[] input.posX         The x coordinate of panels placed in advance.
+     * int[] input.posY         The y coordinate of panels placed in advance.
+     * int output.M             The number of panels to be placed later.
+     * int[] output.addPosX     The x coordinate of panels to be placed later.
+     * int[] output.addPosY     The y coordinate of panels to be placed later.
+     * int output.score         Score.
      + 
      * @see InputData
      * @see OutputData
