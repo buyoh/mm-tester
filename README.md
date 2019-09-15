@@ -29,6 +29,9 @@ $ cd MM-Tester
 $ make
 ```
 
+### 問題文が読めない時
+Githubが数式に対応していないので，[ここ](http://marxi.co)とかに貼り付けて読んでください．
+
 ### 問題毎のファイル構成
 ```
 .
@@ -37,7 +40,7 @@ $ make
 │   ├── Tester.jar
 │   ├── Tester.java
 │   ...
-└── sample
+└── solver
     ├── cpp
     │   ├── run.sh
     │   └── main.cpp
@@ -48,9 +51,6 @@ $ make
         ├── run.sh
         └── main.py
 ```
-
-### 問題文が読めない時
-Githubが数式に対応していないので，[ここ](http://marxi.co)とかに貼り付けて読んでください．
 
 ## 問題
 ### [Traveling Salesman](TravelingSalesman/)
