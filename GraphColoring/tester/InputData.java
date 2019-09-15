@@ -25,7 +25,7 @@ public class InputData
     {
         SecureRandom rnd = SecureRandom.getInstance("SHA1PRNG");
         rnd.setSeed(seed);
-        M = rnd.nextInt(N * (N - 1) / 2 - 2 * N) + 2 * N;
+        M = rnd.nextInt(N * (N - 1) / 4 - 2 * N) + 2 * N;
         a = new int[M];
         b = new int[M];
         edge = new boolean[N][N];
