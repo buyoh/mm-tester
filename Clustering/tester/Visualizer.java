@@ -53,6 +53,14 @@ public class Visualizer extends JFrame
     }
 
     /**
+     * int input.N               Number of vertexs.
+     * int input.K               Number of centor vertexs.
+     * int[] input.posX          The x coordinate of the vertex.
+     * int[] input.posY          The y coordinate of the vertex.
+     * int[] output.centorX      The x coordinate of the centor vertex.
+     * int[] output.centorY      The y coordinate of the centor vertex.
+     * int[] output.belongV      Centor number to which each vertex belongs.
+     * double output.score       Score
      *
      * @see InputData
      * @see OutputData
@@ -68,40 +76,38 @@ public class Visualizer extends JFrame
         g2.setColor(new Color(0xFFFFFF));
         g2.fillRect(PADDING, PADDING, FIELD_WIDTH, FIELD_HEIGHT);
 
+        /* Converts the origin of the graphics context to a 
+           point (x, y) in the current coordinate system.*/
+        g2.translate(PADDING, PADDING);
+
+        /* Draw lines */
         Color [] dotColor = new Color[input.N];
         for (int i = 0; i < input.N; i++) {
-            int idx = -1;
-            double dist = 1.0e9;
-            for (int j = 0; j < input.K; j++) {
-                int lx = Math.abs(input.posX[i] - output.centorX[j]);
-                int ly = Math.abs(input.posY[i] - output.centorY[j]);
-                double dt = Math.sqrt((double)(lx * lx + ly * ly));
-                if (dist > dt) {
-                    dist = dt;
-                    idx = j;
-                }
-            }
-
-            dotColor[i] = Color.getHSBColor((1.0f / (float)input.K) * (float)idx, 1.0f, 0.95f);
-            g2.setColor(dotColor[i]);
+            final int bidx = output.belongV[i];
+            Color c = Color.getHSBColor((1.0f / (float)input.K) * (float)bidx, 1.0f, 0.95f);
+            g2.setColor(c);
             g2.setStroke(new BasicStroke(1.5f));
-            g2.drawLine(PADDING + input.posX[i], PADDING + input.posY[i], PADDING + output.centorX[idx], PADDING + output.centorY[idx]);
+            g2.drawLine(input.posX[i], input.posY[i], output.centorX[bidx], output.centorY[bidx]);
         }
 
+        /* Draw vertexs */
+        final int R1 = 8;
         for (int i = 0; i < input.N; i++) {
-            g2.setColor(dotColor[i]);
-            g2.fillOval(input.posX[i] + 6, input.posY[i] + 6, 8, 8);
+            Color c = Color.getHSBColor((1.0f / (float)input.K) * (float)output.belongV[i], 1.0f, 0.95f);
+            g2.setColor(c);
+            g2.fillOval(input.posX[i] - R1 / 2, input.posY[i] - R1 / 2, R1, R1);
             g2.setColor(new Color(0x000000));
-            g2.drawOval(input.posX[i] + 6, input.posY[i] + 6, 8, 8);
+            g2.drawOval(input.posX[i] - R1 / 2, input.posY[i] - R1 / 2, R1, R1);
         }
 
+        final int R2 = 12;
         g2.setStroke(new BasicStroke(3.0f));
         for (int i = 0; i < input.K; i++) {
             Color c = Color.getHSBColor((1.0f / (float)input.K) * (float)i, 1.0f, 1.0f);
             g2.setColor(c);
-            g2.fillOval(output.centorX[i] + 4, output.centorY[i] + 4, 12, 12);
+            g2.fillOval(output.centorX[i] - R2 / 2, output.centorY[i] - R2 / 2, R2, R2);
             g2.setColor(new Color(0x000000));
-            g2.drawOval(output.centorX[i] + 4, output.centorY[i] + 4, 12, 12);
+            g2.drawOval(output.centorX[i] - R2 / 2, output.centorY[i] - R2 / 2, R2, R2);
         }
 
         return bi;

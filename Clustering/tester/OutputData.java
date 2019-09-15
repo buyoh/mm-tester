@@ -5,6 +5,7 @@ public class OutputData
 {
     final int[] centorX;
     final int[] centorY;
+    final int[] belongV;
     final double score;
 
     public String getString ()
@@ -29,6 +30,25 @@ public class OutputData
             centorY[i] = sc.nextInt();
         }
 
+        /* Calculate the score. */
+        double sum = 0.0;
+        belongV = new int[input.N];
+        for (int i = 0; i < input.N; i++) {
+            int idx = -1;
+            double dist = 1.0e9;
+            for (int j = 0; j < input.K; j++) {
+                int lx = Math.abs(input.posX[i] - centorX[j]);
+                int ly = Math.abs(input.posY[i] - centorY[j]);
+                double dt = Math.sqrt((double)(lx * lx + ly * ly));
+                if (dist > dt) {
+                    dist = dt;
+                    idx = j;
+                }
+            }
+            sum += dist;
+            belongV[i] = idx;
+        }
+
         /* Check whether the output satisfies the constraints. */
         boolean [][] used = new boolean[input.WIDTH][input.HEIGHT];
         for (int i = 0; i < input.K; i++) {
@@ -44,19 +64,7 @@ public class OutputData
             }
             used[centorX[i]][centorY[i]] = true;
         }
-
-        /* Calculate the score. */
-        double sum = 0.0;
-        for (int i = 0; i < input.N; i++) {
-            double dist = 1.0e9;
-            for (int j = 0; j < input.K; j++) {
-                int lx = Math.abs(input.posX[i] - centorX[j]);
-                int ly = Math.abs(input.posY[i] - centorY[j]);
-                double dt = Math.sqrt((double)(lx * lx + ly * ly));
-                dist = Math.min(dist, dt);
-            }
-            sum += dist;
-        }
+        
         score = sum;
     }
 }
