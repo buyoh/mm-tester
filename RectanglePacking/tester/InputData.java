@@ -3,8 +3,8 @@ import java.security.*;
 
 public class InputData
 {
-    final int N = 400;
-    final int RECT_MAX = 50;
+    final int N = 100;
+    final int RECT_MAX = 100;
     final int RECT_MIN = 5;
 
     final int[] h;
