@@ -15,7 +15,7 @@ all: $(TARGET).jar
 $(TARGET).jar: tester.mf *.class
 	$(JAR) cvfm $(TARGET).jar $^
 
-*.class: $(TARGET).java
+*.class: *.java
 	$(JAVAC) $^
 	
 clean:
