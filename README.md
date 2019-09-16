@@ -60,25 +60,25 @@ Githubが数式に対応していないので，[ここ](http://marxi.co)とか�
 
 ## 問題
 ### [Traveling Salesman](TravelingSalesman/)
-<img src="images/TravelingSalesman.png" width="400px">
+<img src="TravelingSalesman/vis.png" width="400px">
 
 ### [Vehicle Routing](VehicleRouting/) 
-<img src="images/VehicleRouting.png" width="400px">
+<img src="VehicleRouting/vis.png" width="400px">
 
 ### [Rectangle Packing](RectanglePacking/)
-<img src="images/RectanglePacking.png" width="400px">
+<img src="RectanglePacking/vis.png" width="400px">
 
 ### [Graph Coloring](GraphColoring/)
-<img src="images/GraphColoring.png" width="400px">
+<img src="GraphColoring/vis.png" width="400px">
 
 ### [Clustering](Clustering/)
-<img src="images/Clustering.png" width="400px">
+<img src="Clustering/vis.png" width="400px">
 
 ### [Sliding Puzzle](SlidingPuzzle)
-<img src="images/SlidingPuzzle.gif" width="400px">
+<img src="SlidingPuzzle/vis.gif" width="400px">
 
 ### [Rectilinear Steiner Tree](RectilinearSteinerTree/)
-<img src="images/RectilinearSteinerTree.png" width="400px">
+<img src="RectilinearSteinerTree/vis.png" width="400px">
 
 ### [Disk Covering](DiskCovering/)
-<img src="images/DiskCovering.png" width="400px">
+<img src="DiskCovering/vis.png" width="400px">
