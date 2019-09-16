@@ -5,7 +5,7 @@
 ### Ubuntu
 ```
 $ sudo apt update
-$ sudo apt install default-jre default-jdk build-essential git
+$ sudo apt install default-jre default-jdk build-essential git gradle
 ```
 
 ### macOS
@@ -16,13 +16,8 @@ $ xcode-select --install
 2. [Homebrew](https://brew.sh)
 ```
 $ brew update
-$ brew install git
+$ brew install git gradle
 $ brew cask install java
-```
-
-3. Gradle
-```
-$ brew install gradle
 ```
 
 ## 使い方
@@ -31,7 +26,7 @@ $ brew install gradle
 ```
 $ git clone --depth 1 https://github.com/kosakkun/MM-Tester.git
 $ cd MM-Tester
-$ make
+$ gradle build
 ```
 
 ### 問題文が読めない時
