@@ -1,7 +1,7 @@
 #!/bin/bash
 
 PYTHON="python3"
-TESTER="../../tester/Tester.jar"
+TESTER="../../build/libs/Tester.jar"
 TESTNUM=10
 
 for i in `seq 1 $TESTNUM`; do

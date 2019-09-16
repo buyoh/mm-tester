@@ -41,10 +41,16 @@ Githubが数式に対応していないので，[ここ](http://marxi.co)とか�
 ```
 .
 ├── README.md
+├── build.gradle
+├── build
+│   └── libs
+│       └── Tester.jar
 ├── tester
-│   ├── Tester.jar
 │   ├── Tester.java
-│   ...
+│   ├── InputData.java
+│   ├── OutputData.java
+│   ├── Visualizer.java
+│   └── ErrorReader.java
 └── solver
     ├── cpp
     │   ├── run.sh
