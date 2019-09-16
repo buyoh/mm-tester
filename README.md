@@ -20,6 +20,11 @@ $ brew install git
 $ brew cask install java
 ```
 
+3. Gradle
+```
+$ brew install gradle
+```
+
 ## 使い方
 
 ### 入手 & テスタのビルド
