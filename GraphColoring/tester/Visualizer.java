@@ -73,7 +73,7 @@ public class Visualizer extends JFrame
         /* Draw background */
         g2.setColor(new Color(0xD3D3D3));
         g2.fillRect(0, 0, VIS_SIZE_X, VIS_SIZE_Y);
-        g2.setColor(new Color(0x000000));
+        g2.setColor(new Color(0xFFFFFF));
         g2.fillRect(PADDING, PADDING, FIELD_WIDTH, FIELD_HEIGHT);
 
         /* Converts the origin of the graphics context to a 
