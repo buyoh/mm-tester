@@ -1,7 +1,7 @@
 #!/bin/bash
 
 JAVAC="javac"
-TESTER="../../tester/Tester.jar"
+TESTER="../../build/libs/Tester.jar"
 TESTNUM=10
 
 if [ -e *.class ]; then

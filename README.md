@@ -5,7 +5,7 @@
 ### Ubuntu
 ```
 $ sudo apt update
-$ sudo apt install default-jre default-jdk build-essential git
+$ sudo apt install default-jre default-jdk build-essential git gradle
 ```
 
 ### macOS
@@ -16,7 +16,7 @@ $ xcode-select --install
 2. [Homebrew](https://brew.sh)
 ```
 $ brew update
-$ brew install git
+$ brew install git gradle
 $ brew cask install java
 ```
 
@@ -26,7 +26,7 @@ $ brew cask install java
 ```
 $ git clone --depth 1 https://github.com/kosakkun/MM-Tester.git
 $ cd MM-Tester
-$ make
+$ gradle build
 ```
 
 ### 問題文が読めない時
@@ -36,10 +36,16 @@ Githubが数式に対応していないので，[ここ](http://marxi.co)とか�
 ```
 .
 ├── README.md
+├── build.gradle
+├── build
+│   └── libs
+│       └── Tester.jar
 ├── tester
-│   ├── Tester.jar
 │   ├── Tester.java
-│   ...
+│   ├── InputData.java
+│   ├── OutputData.java
+│   ├── Visualizer.java
+│   └── ErrorReader.java
 └── solver
     ├── cpp
     │   ├── run.sh
