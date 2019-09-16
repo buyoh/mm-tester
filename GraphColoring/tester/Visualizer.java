@@ -106,14 +106,11 @@ public class Visualizer extends JFrame
 
         /* Draw a number meter of colors. */
         for (int i = 0; i < input.N; i++) {
-            Color c = Color.getHSBColor((1.0f / (float)input.N) * (float)i, 0.80f, 1.0f);
+            Color c = Color.getHSBColor((1.0f / (float)input.N) * (float)i, i < output.score ? 1.0f : 0.10f, 1.0f);
             g2.setColor(c);
             g2.fillRect(0, FIELD_HEIGHT / input.N * i, METER_WIDTH - 10, FIELD_HEIGHT / input.N);
         }
-        g2.setStroke(new BasicStroke(2.0f));
         g2.setColor(new Color(0x000000));
-        g2.drawRect(0, 0, METER_WIDTH - 12, FIELD_HEIGHT / input.N * output.score);
-        
         FontMetrics fm = g2.getFontMetrics();
         char[] ch = ("" + output.score).toCharArray();
         g2.setFont(new Font("Courier", Font.BOLD, 14));
