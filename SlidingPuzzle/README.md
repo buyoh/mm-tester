@@ -60,5 +60,5 @@ $ java -jar Tester.jar -exec "[command]" -seed [seed]
 <h4>その他オプション</h4>
 <pre>
 -vis            : ビジュアライズ
--delay [second] : 1操作の時間(ms),デフォルト100ms
+-delay [second] : 1操作の時間(s),デフォルト0.1s
 </pre>
