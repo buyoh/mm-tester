@@ -24,14 +24,14 @@ public class Tester {
 
                 g2.setFont(new Font("Arial", Font.BOLD, 15));
                 for (int x = 0; x < N; x++) {
-                    for (int y = 0; y < M; y++) {
+                    for (int y = 0; y < N; y++) {
                         if (Board[x][y] >= 0) {
                             int pos_x = x * PANNEL_SIZE + 10;
                             int pos_y = y * PANNEL_SIZE + 10;
                             int num = Board[x][y];
                             g2.setColor(new Color(0xFFFFFF));
                             g2.fillRect(pos_y, pos_x, PANNEL_SIZE, PANNEL_SIZE);
-                            g2.setColor(Color.getHSBColor((1.0f / (float)(N * M)) * (float)num, 1.0f, 0.95f));
+                            g2.setColor(Color.getHSBColor((1.0f / (float)(N * N)) * (float)num, 1.0f, 0.95f));
                             g2.fillRect(pos_y + 1, pos_x + 1, PANNEL_SIZE - 2, PANNEL_SIZE - 2);
                             char[] ch = ("" + num).toCharArray();
                             g2.setColor(new Color(0x000000));
@@ -89,7 +89,7 @@ public class Tester {
     final int PANNEL_SIZE = 40;
     int VIS_SIZE_X;
     int VIS_SIZE_Y;
-    int N,M;
+    int N;
     int [][] Board;
     int AnswerN;
     int posX [];
@@ -102,7 +102,7 @@ public class Tester {
     private boolean move_pannel (int x, int y)
     {
         if (bposX < 0 || bposX >= N) return false;
-        if (bposY < 0 || bposY >= M) return false;
+        if (bposY < 0 || bposY >= N) return false;
         if (x == bposX && y != bposY) {
             if (y < bposY) {
                 for (int i = bposY; i > y; i--) {
@@ -143,37 +143,36 @@ public class Tester {
             long seed = Long.parseLong(seedStr);
             rnd.setSeed(seed);
             N = rnd.nextInt(MAXN - MINN + 1) + MINN;
-            M = rnd.nextInt(MAXM - MINM + 1) + MINM;
             if (seedStr.equals("1")) {
-                N = 4; M = 4;
+                N = 4;
             } else if (seedStr.equals("2")) {
-                N = 5; M = 5;
+                N = 5;
             } else if (seedStr.equals("3")) {
-                N = 6; M = 6;
+                N = 6;
             }  else if (seedStr.equals("4")) {
-                N = 7; M = 7;
+                N = 7;
             } else if (seedStr.equals("5")) {
-                N = 8; M = 8;
+                N = 8;
             }  else if (seedStr.equals("6")) {
-                N = 9; M = 9;
+                N = 9;
             } else if (seedStr.equals("7")) {
-                N = 10; M = 10;
+                N = 10;
             }
             VIS_SIZE_X = N * PANNEL_SIZE;
-            VIS_SIZE_Y = M * PANNEL_SIZE;
-            Board = new int[N][M];
+            VIS_SIZE_Y = N * PANNEL_SIZE;
+            Board = new int[N][N];
             bposX = N - 1;
-            bposY = M - 1;
+            bposY = N - 1;
             for (int x = 0; x < N; x++) {
-                for (int y = 0; y < M; y++) {
-                    Board[x][y] = x * M + y + 1;
+                for (int y = 0; y < N; y++) {
+                    Board[x][y] = x * N + y + 1;
                 }
             }
             Board[bposX][bposY] = -1;
             for (int i = 0; i < SHUFFLE; i++) {
                 while (true) {
                     int x = rnd.nextInt(N);
-                    int y = rnd.nextInt(M);
+                    int y = rnd.nextInt(N);
                     if (move_pannel(x, y)) break;
                 }
             }
@@ -216,10 +215,10 @@ public class Tester {
 
         int Score = AnswerN;
         for (int x = 0; x < N; x++) {
-            for (int y = 0; y < M; y++) {
+            for (int y = 0; y < N; y++) {
                 if (Board[x][y] >= 0) {
-                    int nx = (Board[x][y] - 1) / M;
-                    int ny = (Board[x][y] - 1) % M;
+                    int nx = (Board[x][y] - 1) / N;
+                    int ny = (Board[x][y] - 1) % N;
                     int diff = Math.abs(x - nx) + Math.abs(y - ny);
                     Score += diff * 100000;
                 }
@@ -230,12 +229,11 @@ public class Tester {
 
     private void getAnswer () throws IOException {
         StringBuffer sb = new StringBuffer();
-        sb.append(N).append(' ');
-        sb.append(M).append('\n');
+        sb.append(N).append('\n');
         for (int x = 0; x < N; x++) {
-            for (int y = 0; y < M; y++) {
+            for (int y = 0; y < N; y++) {
                 sb.append(Board[x][y]);
-                sb.append((y == M - 1) ? '\n' : ' ');
+                sb.append((y == N - 1) ? '\n' : ' ');
             }
         }
         os.write(sb.toString().getBytes());
