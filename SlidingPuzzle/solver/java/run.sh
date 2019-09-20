@@ -15,5 +15,5 @@ if [ $? -ne 0 ]; then
 fi
 
 for i in `seq 1 $TESTNUM`; do
-    java -jar $TESTER -exec "java Main" -seed $i -vis -delay 0.2 | { read rslt; echo "case $i: $rslt"; }
+    java -jar $TESTER -exec "java Main" -seed $i -vis -delay 0.05 | { read rslt; echo "case $i: $rslt"; }
 done
