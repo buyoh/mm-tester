@@ -41,11 +41,7 @@ Githubが数式に対応していないので，[ここ](http://marxi.co)とか�
 │   └── libs
 │       └── Tester.jar
 ├── tester
-│   ├── Tester.java
-│   ├── InputData.java
-│   ├── OutputData.java
-│   ├── Visualizer.java
-│   └── ErrorReader.java
+│   └── Tester.java
 └── solver
     ├── cpp
     │   ├── run.sh
