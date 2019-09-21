@@ -13,20 +13,17 @@ public class Tester
     static boolean save = false;
     static boolean vis  = false;
     static boolean json = false;
-
+    static boolean debug = false;
     private double score;
-    private Input input;
-    private Output output;
-
-    public class Json {
-        public long seed;
-        public double score;        
-    }
 
     private String getJsonString ()
     {
         String ret = "";
         try {
+            class Json {
+                public long seed;
+                public double score;    
+            }
             Json json = new Json();
             json.seed = seed;
             json.score = score;
@@ -43,13 +40,20 @@ public class Tester
     {
         try {
             Process proc = Runtime.getRuntime().exec(exec);
-            InputStream  is = proc.getInputStream();
-            InputStream  es = proc.getErrorStream();
-            OutputStream os = proc.getOutputStream();
-            new ErrorReader(es).start();
-            input  = new Input(seed);
-            output = new Output(input, is, os);
+            new ErrorReader(proc.getErrorStream()).start();
+            Input input = new Input(seed);
+            Output output = new Output(input, proc.getInputStream(), proc.getOutputStream());
             proc.destroy();
+            if (debug) {
+                File ifile = new File("input-" + seed + ".txt");
+                FileWriter ifw = new FileWriter(ifile);
+                ifw.write(input.getString());
+                ifw.close();
+                File ofile = new File("output-" + seed + ".txt");
+                FileWriter ofw = new FileWriter(ofile);
+                ofw.write(output.getString());
+                ofw.close();
+            }
             if ((vis || save) && output.score >= 0) {
                 Visualizer v = new Visualizer(input, output);
                 if (save) v.saveImage(String.valueOf(seed));
@@ -82,6 +86,8 @@ public class Tester
                 save = true;
             } else if (args[i].equals("-json")) {
                 json = true;
+            } else if (args[i].equals("-debug")) {
+                debug = true;
             }
         }
         Tester test = new Tester();
