@@ -1,7 +1,7 @@
 import java.io.*;
 import java.security.*;
 
-public class InputData
+public class Input
 {
     final int MAXN   = 1000;
     final int MINN   = 50;
@@ -12,18 +12,7 @@ public class InputData
     final int[] posX;
     final int[] posY;
 
-    public String getString ()
-    {
-        StringBuffer sb = new StringBuffer();
-        sb.append(N).append('\n');
-        for (int i = 0; i < N; ++i) {
-            sb.append(posX[i]).append(' ');
-            sb.append(posY[i]).append('\n');
-        }
-        return sb.toString();
-    }
-
-    public InputData (final long seed) throws Exception
+    public Input (final long seed) throws Exception
     {
         SecureRandom rnd = SecureRandom.getInstance("SHA1PRNG");
         rnd.setSeed(seed);
@@ -42,5 +31,16 @@ public class InputData
                 break;
             }
         }
+    }
+
+    public String getString ()
+    {
+        StringBuffer sb = new StringBuffer();
+        sb.append(N).append('\n');
+        for (int i = 0; i < N; ++i) {
+            sb.append(posX[i]).append(' ');
+            sb.append(posY[i]).append('\n');
+        }
+        return sb.toString();
     }
 }

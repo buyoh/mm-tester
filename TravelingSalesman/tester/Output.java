@@ -1,21 +1,12 @@
 import java.io.*;
 import java.util.*;
 
-public class OutputData
+public class Output
 {
     final int[] perm;
     final double score;
 
-    public String getString ()
-    {
-        StringBuffer sb = new StringBuffer();
-        for (int i = 0; i < perm.length; ++i) {
-            sb.append(perm[i]).append('\n');
-        }
-        return sb.toString();
-    }
-
-    public OutputData (final InputData input, InputStream is, OutputStream os) throws IOException
+    public Output (final Input input, InputStream is, OutputStream os) throws IOException
     {
         os.write(input.getString().getBytes());
         os.flush();
@@ -51,5 +42,14 @@ public class OutputData
             dist += Math.sqrt(dx * dx + dy * dy);
         }
         score = dist;
+    }
+
+    public String getString ()
+    {
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < perm.length; ++i) {
+            sb.append(perm[i]).append('\n');
+        }
+        return sb.toString();
     }
 }

@@ -13,10 +13,10 @@ public class Visualizer extends JFrame
     final int VIS_SIZE_X = FIELD_WIDTH + PADDING * 2;
     final int VIS_SIZE_Y = FIELD_HEIGHT + PADDING * 2;
     
-    final InputData input;
-    final OutputData output;
+    final Input input;
+    final Output output;
 
-    public Visualizer (final InputData _input, final OutputData _output) throws Exception
+    public Visualizer (final Input _input, final Output _output) throws Exception
     {
         this.input = _input;
         this.output = _output;
@@ -58,8 +58,8 @@ public class Visualizer extends JFrame
      * int[] input.posY     The y coordinate of the vertex.
      * int[] output.perm    Order of visiting vertices.
      *
-     * @see InputData
-     * @see OutputData
+     * @see Input
+     * @see Output
      */
     private BufferedImage drawImage ()
     {
