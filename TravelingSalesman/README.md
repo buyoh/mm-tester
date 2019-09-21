@@ -42,4 +42,5 @@ $ java -jar Tester.jar -exec "[command]" -seed [seed]
 <pre>
 -vis  : ビジュアライズ
 -save : 画像の保存
+-json : 結果をJSON形式で出力
 </pre>

@@ -11,6 +11,15 @@ buildscript {
 apply plugin: 'java'
 apply plugin: 'org.springframework.boot'
 
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.10.0.pr1'
+}
+
 sourceSets {
     main {
         java {
@@ -24,13 +33,4 @@ bootJar {
         baseName 'Tester'
         attributes 'Start-Class': 'Tester'
     }
-}
-
-repositories {
-    mavenCentral()
-}
-
-dependencies {
-    // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind
-    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.10.0.pr1'
 }
