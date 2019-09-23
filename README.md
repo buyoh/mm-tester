@@ -5,7 +5,12 @@
 ### Ubuntu
 ```
 $ sudo apt update
-$ sudo apt install default-jre default-jdk build-essential git
+$ sudo apt install default-jre default-jdk build-essential git curl
+```
+```
+$ curl -s http://get.sdkman.io | bash
+$ source ~/.sdkman/bin/sdkman-init.sh
+$ sdk install gradle
 ```
 
 ### macOS
@@ -16,17 +21,17 @@ $ xcode-select --install
 2. [Homebrew](https://brew.sh)
 ```
 $ brew update
-$ brew install git
+$ brew install git gradle
 $ brew cask install java
 ```
 
 ## 使い方
 
-### 入手 & テスタのビルド
+### テスタのビルド
 ```
 $ git clone --depth 1 https://github.com/kosakkun/MM-Tester.git
 $ cd MM-Tester
-$ ./gradlew build
+$ gradle build
 ```
 
 ### 問題文が読めない時
