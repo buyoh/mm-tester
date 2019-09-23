@@ -1,12 +1,13 @@
-import java.io.*;
-import java.util.*;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.Scanner;
 
 public class Output
 {
     final int[] perm;
     final double score;
 
-    public Output (final Input input, InputStream is, OutputStream os) throws IOException
+    public Output (final Input input, InputStream is, OutputStream os) throws Exception
     {
         os.write(input.getString().getBytes());
         os.flush();

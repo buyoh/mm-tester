@@ -1,9 +1,14 @@
-import java.io.*;
-import java.awt.*;
-import java.awt.image.*;
-import java.awt.event.*;
-import javax.swing.*;
-import javax.imageio.*;
+import java.io.File;
+import java.io.IOException;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.Color;
+import java.awt.BasicStroke;
+import java.awt.Insets;
+import java.awt.image.BufferedImage;
+import javax.swing.JFrame;
+import javax.imageio.ImageIO;
 
 public class Visualizer extends JFrame
 {

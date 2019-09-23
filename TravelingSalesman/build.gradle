@@ -1,11 +1,6 @@
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        // https://plugins.gradle.org/plugin/org.springframework.boot
-        classpath('org.springframework.boot:spring-boot-gradle-plugin:2.1.8.RELEASE')
-    }
+plugins {
+    // https://plugins.gradle.org/plugin/org.springframework.boot
+    id "org.springframework.boot" version "2.1.8.RELEASE"
 }
 
 apply plugin: 'java'

@@ -1,5 +1,4 @@
-import java.io.*;
-import java.security.*;
+import java.security.SecureRandom;
 
 public class Input
 {

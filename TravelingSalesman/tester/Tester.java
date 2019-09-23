@@ -1,10 +1,6 @@
-import java.awt.*;
-import javax.swing.*;
-import java.io.*;
-import java.util.*;
-import com.fasterxml.jackson.core.*;
-import com.fasterxml.jackson.databind.*;
-
+import java.io.File;
+import java.io.FileWriter;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class Tester 
 {
