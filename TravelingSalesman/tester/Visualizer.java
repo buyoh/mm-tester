@@ -1,5 +1,4 @@
 import java.io.File;
-import java.io.IOException;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
@@ -17,20 +16,22 @@ public class Visualizer extends JFrame
     final int PADDING = 10;
     final int VIS_SIZE_X = FIELD_WIDTH + PADDING * 2;
     final int VIS_SIZE_Y = FIELD_HEIGHT + PADDING * 2;
-    
-    final Input input;
-    final Output output;
+    final Tester tester;
 
-    public Visualizer (final Input _input, final Output _output) throws Exception
+    public Visualizer (final Tester _tester)
     {
-        this.input = _input;
-        this.output = _output;
+        this.tester = _tester;
     }
 
-    public void saveImage (String fileName) throws IOException
+    public void saveImage (String fileName)
     {
-        BufferedImage bi = drawImage();
-        ImageIO.write(bi, "png", new File(fileName +".png"));
+        try {
+            BufferedImage bi = drawImage();
+            ImageIO.write(bi, "png", new File(fileName +".png"));
+        } catch (Exception e) {
+            System.err.println("Visualizer failed to save the image.");
+            e.printStackTrace();
+        }
     }
 
     public void visualize ()
@@ -49,22 +50,21 @@ public class Visualizer extends JFrame
     public void paint (Graphics g)
     {
         try {
-            super.paint(g);
             BufferedImage bi = drawImage();
             g.drawImage(bi, getInsets().left, getInsets().top, VIS_SIZE_X, VIS_SIZE_Y, null);
-        } catch (Exception e) { 
+        } catch (Exception e) {
+            System.err.println("Visualizer failed to draw.");
             e.printStackTrace();
         }
     }
 
     /**
-     * int input.N          Number of vertices.
-     * int[] input.posX     The x coordinate of the vertex.
-     * int[] input.posY     The y coordinate of the vertex.
-     * int[] output.perm    Order of visiting vertices.
+     * int   tester.N    Number of vertices.
+     * int[] tester.x    The x coordinate of the vertex.
+     * int[] tester.y    The y coordinate of the vertex.
+     * int[] tester.v    Order of visiting vertices.
      *
-     * @see Input
-     * @see Output
+     * @see Tester
      */
     private BufferedImage drawImage ()
     {
@@ -85,20 +85,20 @@ public class Visualizer extends JFrame
         /* Draw path */
         g2.setColor(new Color(0x000000));
         g2.setStroke(new BasicStroke(1.5f));
-        for (int i = 0; i < input.N; i++) {
-            int a = output.perm[i];
-            int b = output.perm[(i + 1) % input.N];
-            g2.drawLine(input.posX[a], input.posY[a], input.posX[b], input.posY[b]);
+        for (int i = 0; i < tester.N; i++) {
+            int a = tester.v[i];
+            int b = tester.v[(i + 1) % tester.N];
+            g2.drawLine(tester.x[a], tester.y[a], tester.x[b], tester.y[b]);
         }
 
         /* Draw vertex */
         final int R = 6;
         g2.setStroke(new BasicStroke(1.5f));
-        for (int i = 0; i < input.N; i++) {
+        for (int i = 0; i < tester.N; i++) {
             g2.setColor(new Color(0xFFFFFF));
-            g2.fillOval(input.posX[i] - R / 2, input.posY[i] - R / 2, R, R);
+            g2.fillOval(tester.x[i] - R / 2, tester.y[i] - R / 2, R, R);
             g2.setColor(new Color(0x000000));
-            g2.drawOval(input.posX[i] - R / 2, input.posY[i] - R / 2, R, R);
+            g2.drawOval(tester.x[i] - R / 2, tester.y[i] - R / 2, R, R);
         }
 
         return bi;

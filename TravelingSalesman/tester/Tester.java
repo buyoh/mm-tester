@@ -1,91 +1,106 @@
-import java.io.File;
-import java.io.FileWriter;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Scanner;
+import java.security.SecureRandom;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class Tester 
 {
-    static long seed = 1;
-    static String exec = "";
-    static boolean save = false;
-    static boolean vis  = false;
-    static boolean json = false;
-    static boolean debug = false;
-    private double score;
+    @JsonIgnore public final int MAXN   = 1000;
+    @JsonIgnore public final int MINN   = 50;
+    @JsonIgnore public final int WIDTH  = 1000 + 1;
+    @JsonIgnore public final int HEIGHT = 1000 + 1;
 
-    private String getJsonString ()
+    public final long seed;
+    @JsonIgnore public final int N;
+    @JsonIgnore public final int[] x;
+    @JsonIgnore public final int[] y;
+    @JsonIgnore public final int[] v;
+
+    @JsonIgnore
+    public String getInputString ()
     {
-        String ret = "";
-        try {
-            class Json {
-                public long seed;
-                public double score;    
-            }
-            Json json = new Json();
-            json.seed = seed;
-            json.score = score;
-            ObjectMapper mapper = new ObjectMapper();
-            ret = mapper.writeValueAsString(json);
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.err.println("JSON generation failed.");
+        StringBuffer sb = new StringBuffer();
+        sb.append(N).append('\n');
+        for (int i = 0; i < N; ++i) {
+            sb.append(x[i]).append(' ');
+            sb.append(y[i]).append('\n');
         }
-        return ret;
+        return sb.toString();
     }
 
-    private Tester ()
+    @JsonIgnore
+    public String getOutputString ()
     {
-        try {
-            Process proc = Runtime.getRuntime().exec(exec);
-            new ErrorReader(proc.getErrorStream()).start();
-            Input input = new Input(seed);
-            Output output = new Output(input, proc.getInputStream(), proc.getOutputStream());
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < v.length; ++i) {
+            sb.append(v[i]).append('\n');
+        }
+        return sb.toString();
+    }
+
+    public double getScore ()
+    {
+        /* Check whether the output satisfies the constraints. */
+        boolean[] used = new boolean[N];
+        for (int i = 0; i < N; i++) {
+            if (v[i] < 0 || v[i] >= N) {
+                System.err.println("All elements of your return must be between 0 and " +
+                                   (N - 1) + ", and your return contained " + v[i] + ".");
+                return -1.0;
+            }
+            if (used[v[i]]) {
+                System.err.println("All elements of your return must be unique, " +
+                                   "and your return contained " + v[i] + " twice.");
+                return -1.0;
+            }
+            used[v[i]] = true;
+        }
+
+        /* Calculate the score. */
+        double dist = 0.0;
+        for (int i = 0; i < N; i++) {
+            double dx = (double)(x[v[i]] - x[v[(i + 1) % N]]);
+            double dy = (double)(y[v[i]] - y[v[(i + 1) % N]]);
+            dist += Math.sqrt(dx * dx + dy * dy);
+        }
+        return dist;
+    }
+
+    public Tester (final long _seed, final String exec) throws Exception
+    {
+        this.seed = _seed;
+        Process proc = Runtime.getRuntime().exec(exec);
+        new ErrorReader(proc.getErrorStream()).start();
+
+        /* Generate input. */
+        SecureRandom rnd = SecureRandom.getInstance("SHA1PRNG");
+        rnd.setSeed(_seed);
+        N = rnd.nextInt(MAXN - MINN + 1) + MINN;
+        x = new int[N];
+        y = new int[N];
+        boolean [][] usedPos = new boolean[WIDTH][HEIGHT];
+        for (int i = 0; i < N; i++) {
+            while (true) {
+                int xt = rnd.nextInt(WIDTH);
+                int yt = rnd.nextInt(HEIGHT);
+                if (usedPos[xt][yt]) continue;
+                usedPos[xt][yt] = true;
+                x[i] = xt;
+                y[i] = yt;
+                break;
+            }
+        }
+
+        /* Get the output. */
+        proc.getOutputStream().write(getInputString().getBytes());
+        proc.getOutputStream().flush();
+        Scanner sc = new Scanner(proc.getInputStream());
+        v = new int[N];
+        for (int i = 0; i < N; i++) {
+            v[i] = sc.nextInt();
+        }
+
+        if (proc != null) {
             proc.destroy();
-            if (debug) {
-                File ifile = new File("input-" + seed + ".txt");
-                FileWriter ifw = new FileWriter(ifile);
-                ifw.write(input.getString());
-                ifw.close();
-                File ofile = new File("output-" + seed + ".txt");
-                FileWriter ofw = new FileWriter(ofile);
-                ofw.write(output.getString());
-                ofw.close();
-            }
-            if ((vis || save) && output.score >= 0) {
-                Visualizer v = new Visualizer(input, output);
-                if (save) v.saveImage(String.valueOf(seed));
-                if (vis ) v.visualize();
-            }
-            score = output.score;
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.err.println("Failed to get result from your answer.");
-            score = -1.0;
-        } finally {
-            if (json) {
-                System.out.println(getJsonString());
-            } else {
-                System.out.println("Score = " + score);
-            }
         }
-    }
-
-    public static void main (String[] args)
-    {
-        for (int i = 0; i < args.length; ++i) {
-            if (args[i].equals("-seed")) {
-                seed = Long.parseLong(args[++i]);
-            } else if (args[i].equals("-exec")) {
-                exec = args[++i];
-            } else if (args[i].equals("-vis")) {
-                vis = true;
-            } else if (args[i].equals("-save")) {
-                save = true;
-            } else if (args[i].equals("-json")) {
-                json = true;
-            } else if (args[i].equals("-debug")) {
-                debug = true;
-            }
-        }
-        Tester test = new Tester();
     }
 }

@@ -26,6 +26,6 @@ sourceSets {
 bootJar {
     manifest {
         baseName 'Tester'
-        attributes 'Start-Class': 'Tester'
+        attributes 'Start-Class': 'Main'
     }
 }
