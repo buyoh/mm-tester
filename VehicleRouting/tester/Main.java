@@ -4,13 +4,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class Main
 {
-    static String seed = "";
-    static String exec = "";
+    static String seed  = "1";
+    static String exec  = "";
     static boolean save = false;
     static boolean vis  = false;
     static boolean json = false;
     static boolean debug = false;
-
+    
     private String getJsonString (Tester tester)
     {
         try {
@@ -67,7 +67,7 @@ public class Main
     {
         for (int i = 0; i < args.length; ++i) {
             if (args[i].equals("-seed")) {
-                seed = args[++i];
+            	seed = args[++i];
             } else if (args[i].equals("-exec")) {
                 exec = args[++i];
             } else if (args[i].equals("-vis")) {
