@@ -15,7 +15,7 @@ public class Main {
                 h[i] = sc.nextInt();
             }
             for (int i = 0; i < N; ++i) {
-                System.out.println((50 * (i % 20)) + " " + (50 * (i / 20)));
+                System.out.println((100 * (i % 10)) + " " + (100 * (i / 10)));
             }
         }
         catch (Exception e) {

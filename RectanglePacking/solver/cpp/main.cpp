@@ -13,7 +13,7 @@ int main(int argc, char *argv[]) {
     }
 
     for (int i = 0; i < N; i++) {
-        cout << 50 * (i % 20) << " " << 50 * (i / 20) << endl;
+        cout << 100 * (i % 10) << " " << 100 * (i / 10) << endl;
     }
 
     return 0;

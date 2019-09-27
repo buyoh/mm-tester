@@ -10,6 +10,6 @@ for i in range(N):
 	h.append(ht)
 
 for i in range(N):
-	print(str(50 * (i % 20)) + " " + str(50 * (i // 20)))
+	print(str(100 * (i % 10)) + " " + str(100 * (i // 10)))
 
 sys.stdout.flush()
