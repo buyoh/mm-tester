@@ -14,6 +14,7 @@ public class Tester
     @JsonIgnore public final int[] x;
     @JsonIgnore public final int[] y;
     @JsonIgnore public final int[] v;
+    @JsonIgnore private double score_t = -2.0;
 
     @JsonIgnore
     public String getInputString ()
@@ -39,18 +40,22 @@ public class Tester
 
     public double getScore ()
     {
+        if (score_t >= -1.0) {
+            return score_t;
+        }
+
         /* Check whether the output satisfies the constraints. */
         boolean[] used = new boolean[N];
         for (int i = 0; i < N; i++) {
             if (v[i] < 0 || v[i] >= N) {
                 System.err.println("All elements of your return must be between 0 and " +
                                    (N - 1) + ", and your return contained " + v[i] + ".");
-                return -1.0;
+                return score_t = -1.0;
             }
             if (used[v[i]]) {
                 System.err.println("All elements of your return must be unique, " +
                                    "and your return contained " + v[i] + " twice.");
-                return -1.0;
+                return score_t = -1.0;
             }
             used[v[i]] = true;
         }
@@ -62,7 +67,7 @@ public class Tester
             double dy = (double)(y[v[i]] - y[v[(i + 1) % N]]);
             dist += Math.sqrt(dx * dx + dy * dy);
         }
-        return dist;
+        return score_t = dist;
     }
 
     public Tester (final long _seed, final String exec) throws Exception
