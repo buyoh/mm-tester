@@ -22,7 +22,6 @@ public class Tester
     @JsonIgnore public final int[] y;
     @JsonIgnore public final int[] cap;
     @JsonIgnore public final int[] speed;
-
     @JsonIgnore public final int K;
     @JsonIgnore public final int[] T;
     @JsonIgnore public final int[] L;
@@ -30,6 +29,7 @@ public class Tester
     @JsonIgnore public double[] dist;
     @JsonIgnore public double[] time;
     @JsonIgnore public int[] last_idx;
+    @JsonIgnore private double score_t = -2.0;
 
     @JsonIgnore
     public String getInputString ()
@@ -75,6 +75,10 @@ public class Tester
 
     public double getScore ()
     {
+        if (score_t >= -1.0) {
+            return score_t;
+        }
+
         dist = new double[M];
         time = new double[M];
         last_idx = new int[M];
@@ -86,29 +90,33 @@ public class Tester
             if (T[i] < 0 || T[i] >= M) {
                 System.err.println("The track number must be between 0 and " + (M - 1)
                                    + ", and your output contains " + T[i] + ".");
-                return -1.0;
+                return score_t = -1.0;
             }
             if (L[i] <= 0 || L[i] > cap[T[i]]) {
                 System.err.println("The load on truck " + T[i] + " must be between 1 and " + cap[T[i]]
                                    + ", but in your output you are trying to load " + L[i] + " pieces of luggage.");
-                return -1.0;
+                return score_t = -1.0;
             }
             for (int j = 0; j < L[i]; j++) {
                 int idx = D[i][j];
-                if (!used[idx]) {
-                    used[idx] = true;
-                    continue;
+                if (idx < 0 || idx >= N) {
+                    System.err.println("The delivery number must be between 0 and " + (N - 1) +
+                                       ", but your output contains " + idx + ".");
+                    return score_t = -1.0;
                 }
-                System.err.println("Your delivery destination must be visited once, but your output has visited"
-                                   + idx + " more than once.");
-                return -1.0;
+                if (used[idx]) {
+                    System.err.println("Your delivery destination must be visited once, but your output "
+                                       + "has visited " + idx + " more than once.");
+                    return score_t = -1.0;
+                }
+                used[idx] = true;
             }
         }   
         for (int i = 0; i < N; i++) {
             if (!used[i]) {
                 System.err.println("The delivery destination must visit everything from 0 to "
                                    + (N - 1) + ", and your output does not include " + i + ".");
-                return -1.0;
+                return score_t = -1.0;
             }
         }
 
@@ -131,7 +139,7 @@ public class Tester
             time[i] = dist[i] / (double)speed[i];
             max_time = Math.max(max_time, time[i]);
         }
-        return max_time;
+        return score_t = max_time;
     }
 
     public Tester (final long _seed, final String exec) throws Exception
