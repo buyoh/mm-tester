@@ -41,8 +41,7 @@ public class Main
     {
         try {
             Tester tester = new Tester(Long.parseLong(seed), exec);
-            int score = tester.getScore();
-            if ((vis || save) && score >= 0) {
+            if ((vis || save) && tester.getScore() >= 0) {
                 Visualizer v = new Visualizer(tester);
                 if (save) v.saveImage(seed);
                 if (vis ) v.visualize();
@@ -54,7 +53,7 @@ public class Main
             if (json) {
                 System.out.println(getJsonString(tester));
             } else {
-                System.out.println("Score = " + score);
+                System.out.println("Score = " + tester.getScore());
             }
         } catch (Exception e) {
             e.printStackTrace();
