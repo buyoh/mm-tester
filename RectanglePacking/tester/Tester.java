@@ -14,6 +14,7 @@ public class Tester
     @JsonIgnore public final int[] w;
     @JsonIgnore public final int[] x;
     @JsonIgnore public final int[] y;
+    @JsonIgnore private int score_t = -2;
 
     @JsonIgnore
     public String getInputString ()
@@ -40,6 +41,10 @@ public class Tester
 
     public int getScore ()
     {
+        if (score_t >= -1) {
+            return score_t;
+        }
+
         /* Check whether the output satisfies the constraints. */
         boolean[][] used = new boolean[BOX_SIZE][BOX_SIZE];
         for (int i = 0; i < N; i++) {
@@ -47,11 +52,11 @@ public class Tester
                 for (int yt = y[i]; yt < y[i] + h[i]; yt++) {
                     if (xt < 0 || yt < 0 || xt >= BOX_SIZE || yt >= BOX_SIZE) {
                         System.err.println("There is a rectangle which does not fit in the box.");
-                        return -1;
+                        return score_t = -1;
                     }
                     if (used[xt][yt]) {
                         System.err.println("There are overlapping rectangles.");
-                        return -1;
+                        return score_t = -1;
                     }
                     used[xt][yt] = true;
                 }
@@ -63,7 +68,7 @@ public class Tester
         for (int i = 0; i < N; i++) {
             highest_pos = Math.max(highest_pos, y[i] + h[i]);
         }
-        return highest_pos;
+        return score_t = highest_pos;
     }
 
     public Tester (final long _seed, final String exec) throws Exception
