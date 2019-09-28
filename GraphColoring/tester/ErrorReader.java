@@ -1,4 +1,4 @@
-import java.io.*;
+import java.io.InputStream;
 
 class ErrorReader extends Thread
 {
