@@ -1,4 +1,19 @@
+plugins {
+    // https://plugins.gradle.org/plugin/org.springframework.boot
+    id "org.springframework.boot" version "2.1.8.RELEASE"
+}
+
 apply plugin: 'java'
+apply plugin: 'org.springframework.boot'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.10.0.pr1'
+}
 
 sourceSets {
     main {
@@ -8,9 +23,9 @@ sourceSets {
     }
 }
 
-jar {
+bootJar {
     manifest {
-        attributes 'Main-Class': 'Tester'
         baseName 'Tester'
-    }   
+        attributes 'Start-Class': 'Main'
+    }
 }

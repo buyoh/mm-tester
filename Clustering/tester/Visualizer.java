@@ -1,31 +1,40 @@
-import java.io.*;
-import java.awt.*;
-import java.awt.image.*;
-import java.awt.event.*;
-import javax.swing.*;
-import javax.imageio.*;
+import java.io.File;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.BasicStroke;
+import java.awt.Insets;
+import java.awt.image.BufferedImage;
+import javax.swing.JFrame;
+import javax.imageio.ImageIO;
 
 public class Visualizer extends JFrame
 {
     final int FIELD_HEIGHT = 1000;
     final int FIELD_WIDTH  = 1000;
+    final int METER_WIDTH  = 50;
     final int PADDING = 10;
-    final int VIS_SIZE_X = FIELD_WIDTH + PADDING * 2;
+    final int VIS_SIZE_X = FIELD_WIDTH + PADDING * 2 + METER_WIDTH;
     final int VIS_SIZE_Y = FIELD_HEIGHT + PADDING * 2;
-    
-    final InputData input;
-    final OutputData output;
+    final Tester tester;
 
-    public Visualizer (final InputData _input, final OutputData _output) throws Exception
+    public Visualizer (final Tester _tester)
     {
-        this.input = _input;
-        this.output = _output;
+        this.tester = _tester;
     }
 
-    public void saveImage (String fileName) throws IOException
+    public void saveImage (String fileName)
     {
-        BufferedImage bi = drawImage();
-        ImageIO.write(bi, "png", new File(fileName +".png"));
+        try {
+            BufferedImage bi = drawImage();
+            ImageIO.write(bi, "png", new File(fileName +".png"));
+        } catch (Exception e) {
+            System.err.println("Visualizer failed to save the image.");
+            e.printStackTrace();
+        }
     }
 
     public void visualize ()
@@ -44,26 +53,24 @@ public class Visualizer extends JFrame
     public void paint (Graphics g)
     {
         try {
-            super.paint(g);
             BufferedImage bi = drawImage();
             g.drawImage(bi, getInsets().left, getInsets().top, VIS_SIZE_X, VIS_SIZE_Y, null);
-        } catch (Exception e) { 
+        } catch (Exception e) {
+            System.err.println("Visualizer failed to draw.");
             e.printStackTrace();
         }
     }
 
     /**
-     * int input.N               Number of vertexs.
-     * int input.K               Number of centor vertexs.
-     * int[] input.posX          The x coordinate of the vertex.
-     * int[] input.posY          The y coordinate of the vertex.
-     * int[] output.centorX      The x coordinate of the centor vertex.
-     * int[] output.centorY      The y coordinate of the centor vertex.
-     * int[] output.belongV      Centor number to which each vertex belongs.
-     * double output.score       Score
+     * int    tester.N               Number of vertexs.
+     * int    tester.K               Number of centor vertexs.
+     * int[]  tester.posX          The x coordinate of the vertex.
+     * int[]  tester.posY          The y coordinate of the vertex.
+     * int[]  tester.centorX      The x coordinate of the centor vertex.
+     * int[]  tester.centorY      The y coordinate of the centor vertex.
+     * int[]  tester.belongV      Centor number to which each vertex belongs.
      *
-     * @see InputData
-     * @see OutputData
+     * @see Tester
      */
     private BufferedImage drawImage ()
     {
@@ -81,33 +88,33 @@ public class Visualizer extends JFrame
         g2.translate(PADDING, PADDING);
 
         /* Draw lines */
-        Color [] dotColor = new Color[input.N];
-        for (int i = 0; i < input.N; i++) {
-            final int bidx = output.belongV[i];
-            Color c = Color.getHSBColor((1.0f / (float)input.K) * (float)bidx, 1.0f, 0.95f);
+        Color [] dotColor = new Color[tester.N];
+        for (int i = 0; i < tester.N; i++) {
+            final int bidx = tester.belongV[i];
+            Color c = Color.getHSBColor((1.0f / (float)tester.K) * (float)bidx, 1.0f, 0.95f);
             g2.setColor(c);
             g2.setStroke(new BasicStroke(1.5f));
-            g2.drawLine(input.posX[i], input.posY[i], output.centorX[bidx], output.centorY[bidx]);
+            g2.drawLine(tester.x[i], tester.y[i], tester.cx[bidx], tester.cy[bidx]);
         }
 
         /* Draw vertexs */
         final int R1 = 8;
-        for (int i = 0; i < input.N; i++) {
-            Color c = Color.getHSBColor((1.0f / (float)input.K) * (float)output.belongV[i], 1.0f, 0.95f);
+        for (int i = 0; i < tester.N; i++) {
+            Color c = Color.getHSBColor((1.0f / (float)tester.K) * (float)tester.belongV[i], 1.0f, 0.95f);
             g2.setColor(c);
-            g2.fillOval(input.posX[i] - R1 / 2, input.posY[i] - R1 / 2, R1, R1);
+            g2.fillOval(tester.x[i] - R1 / 2, tester.y[i] - R1 / 2, R1, R1);
             g2.setColor(new Color(0x000000));
-            g2.drawOval(input.posX[i] - R1 / 2, input.posY[i] - R1 / 2, R1, R1);
+            g2.drawOval(tester.x[i] - R1 / 2, tester.y[i] - R1 / 2, R1, R1);
         }
 
         final int R2 = 12;
         g2.setStroke(new BasicStroke(3.0f));
-        for (int i = 0; i < input.K; i++) {
-            Color c = Color.getHSBColor((1.0f / (float)input.K) * (float)i, 1.0f, 1.0f);
+        for (int i = 0; i < tester.K; i++) {
+            Color c = Color.getHSBColor((1.0f / (float)tester.K) * (float)i, 1.0f, 1.0f);
             g2.setColor(c);
-            g2.fillOval(output.centorX[i] - R2 / 2, output.centorY[i] - R2 / 2, R2, R2);
+            g2.fillOval(tester.cx[i] - R2 / 2, tester.cy[i] - R2 / 2, R2, R2);
             g2.setColor(new Color(0x000000));
-            g2.drawOval(output.centorX[i] - R2 / 2, output.centorY[i] - R2 / 2, R2, R2);
+            g2.drawOval(tester.cx[i] - R2 / 2, tester.cy[i] - R2 / 2, R2, R2);
         }
 
         return bi;
