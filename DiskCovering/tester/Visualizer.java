@@ -1,9 +1,15 @@
-import java.io.*;
-import java.awt.*;
-import java.awt.image.*;
-import java.awt.event.*;
-import javax.swing.*;
-import javax.imageio.*;
+import java.io.File;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.BasicStroke;
+import java.awt.Insets;
+import java.awt.image.BufferedImage;
+import javax.swing.JFrame;
+import javax.imageio.ImageIO;
 
 public class Visualizer extends JFrame
 {
@@ -12,20 +18,22 @@ public class Visualizer extends JFrame
     final int PADDING = 10;
     final int VIS_SIZE_X = FIELD_WIDTH + PADDING * 2;
     final int VIS_SIZE_Y = FIELD_HEIGHT + PADDING * 2;
-    
-    final InputData input;
-    final OutputData output;
+    final Tester tester;
 
-    public Visualizer (final InputData _input, final OutputData _output) throws Exception
+    public Visualizer (final Tester _tester)
     {
-        this.input = _input;
-        this.output = _output;
+        this.tester = _tester;
     }
 
-    public void saveImage (String fileName) throws IOException
+    public void saveImage (String fileName)
     {
-        BufferedImage bi = drawImage();
-        ImageIO.write(bi, "png", new File(fileName +".png"));
+        try {
+            BufferedImage bi = drawImage();
+            ImageIO.write(bi, "png", new File(fileName +".png"));
+        } catch (Exception e) {
+            System.err.println("Visualizer failed to save the image.");
+            e.printStackTrace();
+        }
     }
 
     public void visualize ()
@@ -44,28 +52,26 @@ public class Visualizer extends JFrame
     public void paint (Graphics g)
     {
         try {
-            super.paint(g);
             BufferedImage bi = drawImage();
             g.drawImage(bi, getInsets().left, getInsets().top, VIS_SIZE_X, VIS_SIZE_Y, null);
-        } catch (Exception e) { 
+        } catch (Exception e) {
+            System.err.println("Visualizer failed to draw.");
             e.printStackTrace();
         }
     }
 
     /**
-     * int input.WIDTH        The width of the board.
-     * int input.HEIGHT       The height of the board.
-     * int input.N            Number of vertices.
-     * int input.R            The radius of the disk.
-     * int[] input.px         x coordinate of the i-th vertex.
-     * int[] input.py         y coordinate of the i-th vertex.
-     * int output.M           Number of disks.
-     * int[] output.rx        x coordinate of the i-th disk.
-     * int[] output.ry        y coordinate of the i-th disk.
-     * int output.score       Score.
+     * int   tester.WIDTH    The width of the board.
+     * int   tester.HEIGHT   The height of the board.
+     * int   tester.N        Number of vertices.
+     * int   tester.R        The radius of the disk.
+     * int[] tester.px       x coordinate of the i-th vertex.
+     * int[] tester.py       y coordinate of the i-th vertex.
+     * int   tester.M        Number of disks.
+     * int[] tester.rx       x coordinate of the i-th disk.
+     * int[] tester.ry       y coordinate of the i-th disk.
      *
-     * @see InputData
-     * @see OutputData
+     * @see Tester
      */
     private BufferedImage drawImage ()
     {
@@ -83,21 +89,21 @@ public class Visualizer extends JFrame
 
         /* Draw the disk */
         g2.setColor(new Color(0xF4F4FF));
-        for (int i = 0; i < output.M; i++) {
-            g2.fillOval(output.rx[i] - input.R, output.ry[i] - input.R, input.R * 2, input.R * 2);
+        for (int i = 0; i < tester.M; i++) {
+            g2.fillOval(tester.rx[i] - tester.R, tester.ry[i] - tester.R, tester.R * 2, tester.R * 2);
         }
         g2.setColor(new Color(0x4169e1));
-        for (int i = 0; i < output.M; i++) {
-            g2.drawOval(output.rx[i] - input.R, output.ry[i] - input.R, input.R * 2, input.R * 2);
+        for (int i = 0; i < tester.M; i++) {
+            g2.drawOval(tester.rx[i] - tester.R, tester.ry[i] - tester.R, tester.R * 2, tester.R * 2);
         }
 
         /* Draw the vertex */
         final int R1 = 6;
-        for (int i = 0; i < input.N; i++) {
+        for (int i = 0; i < tester.N; i++) {
             g2.setColor(new Color(0x454552));
-            g2.fillOval(input.px[i] - R1 / 2, input.py[i] - R1 / 2, R1, R1);
+            g2.fillOval(tester.px[i] - R1 / 2, tester.py[i] - R1 / 2, R1, R1);
             g2.setColor(new Color(0x000000));
-            g2.drawOval(input.px[i] - R1 / 2, input.py[i] - R1 / 2, R1, R1);
+            g2.drawOval(tester.px[i] - R1 / 2, tester.py[i] - R1 / 2, R1, R1);
         }
 
         /* Converts the origin of the graphics context to a 
