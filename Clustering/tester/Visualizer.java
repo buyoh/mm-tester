@@ -15,9 +15,8 @@ public class Visualizer extends JFrame
 {
     final int FIELD_HEIGHT = 1000;
     final int FIELD_WIDTH  = 1000;
-    final int METER_WIDTH  = 50;
     final int PADDING = 10;
-    final int VIS_SIZE_X = FIELD_WIDTH + PADDING * 2 + METER_WIDTH;
+    final int VIS_SIZE_X = FIELD_WIDTH + PADDING * 2;
     final int VIS_SIZE_Y = FIELD_HEIGHT + PADDING * 2;
     final Tester tester;
 
@@ -62,13 +61,13 @@ public class Visualizer extends JFrame
     }
 
     /**
-     * int    tester.N               Number of vertexs.
-     * int    tester.K               Number of centor vertexs.
-     * int[]  tester.posX          The x coordinate of the vertex.
-     * int[]  tester.posY          The y coordinate of the vertex.
-     * int[]  tester.centorX      The x coordinate of the centor vertex.
-     * int[]  tester.centorY      The y coordinate of the centor vertex.
-     * int[]  tester.belongV      Centor number to which each vertex belongs.
+     * int    tester.N         Number of vertexs.
+     * int    tester.K         Number of centor vertexs.
+     * int[]  tester.posX      The x coordinate of the vertex.
+     * int[]  tester.posY      The y coordinate of the vertex.
+     * int[]  tester.centorX   The x coordinate of the centor vertex.
+     * int[]  tester.centorY   The y coordinate of the centor vertex.
+     * int[]  tester.belongV   Centor number to which each vertex belongs.
      *
      * @see Tester
      */
