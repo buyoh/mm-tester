@@ -1,31 +1,40 @@
-import java.io.*;
-import java.awt.*;
-import java.awt.image.*;
-import java.awt.event.*;
-import javax.swing.*;
-import javax.imageio.*;
+import java.io.File;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.BasicStroke;
+import java.awt.Insets;
+import java.awt.image.BufferedImage;
+import javax.swing.JFrame;
+import javax.imageio.ImageIO;
 
 public class Visualizer extends JFrame
 {
     final int FIELD_HEIGHT = 1000;
     final int FIELD_WIDTH  = 1000;
+    final int METER_WIDTH  = 50;
     final int PADDING = 10;
-    final int VIS_SIZE_X = FIELD_WIDTH + PADDING * 2;
+    final int VIS_SIZE_X = FIELD_WIDTH + PADDING * 2 + METER_WIDTH;
     final int VIS_SIZE_Y = FIELD_HEIGHT + PADDING * 2;
-    
-    final InputData input;
-    final OutputData output;
+    final Tester tester;
 
-    public Visualizer (final InputData _input, final OutputData _output) throws Exception
+    public Visualizer (final Tester _tester)
     {
-        this.input = _input;
-        this.output = _output;
+        this.tester = _tester;
     }
 
-    public void saveImage (String fileName) throws IOException
+    public void saveImage (String fileName)
     {
-        BufferedImage bi = drawImage();
-        ImageIO.write(bi, "png", new File(fileName +".png"));
+        try {
+            BufferedImage bi = drawImage();
+            ImageIO.write(bi, "png", new File(fileName +".png"));
+        } catch (Exception e) {
+            System.err.println("Visualizer failed to save the image.");
+            e.printStackTrace();
+        }
     }
 
     public void visualize ()
@@ -44,27 +53,25 @@ public class Visualizer extends JFrame
     public void paint (Graphics g)
     {
         try {
-            super.paint(g);
             BufferedImage bi = drawImage();
             g.drawImage(bi, getInsets().left, getInsets().top, VIS_SIZE_X, VIS_SIZE_Y, null);
-        } catch (Exception e) { 
+        } catch (Exception e) {
+            System.err.println("Visualizer failed to draw.");
             e.printStackTrace();
         }
     }
 
     /**
-     * int input.WIDTH          The width of the board.
-     * int input.HEIGHT         The height of the board.
-     * int input.N              The number of panels placed in advance.
-     * int[] input.posX         The x coordinate of panels placed in advance.
-     * int[] input.posY         The y coordinate of panels placed in advance.
-     * int output.M             The number of panels to be placed later.
-     * int[] output.addPosX     The x coordinate of panels to be placed later.
-     * int[] output.addPosY     The y coordinate of panels to be placed later.
-     * int output.score         Score.
-     + 
-     * @see InputData
-     * @see OutputData
+     * int   tester.WIDTH   The width of the board.
+     * int   tester.HEIGHT  The height of the board.
+     * int   tester.N       The number of panels placed in advance.
+     * int[] tester.x       The x coordinate of panels placed in advance.
+     * int[] tester.y       The y coordinate of panels placed in advance.
+     * int   tester.M       The number of panels to be placed later.
+     * int[] tester.ax      The x coordinate of panels to be placed later.
+     * int[] tester.ay      The y coordinate of panels to be placed later.
+     *
+     * @see Tester
      */
     private BufferedImage drawImage ()
     {
@@ -83,25 +90,25 @@ public class Visualizer extends JFrame
         g2.translate(PADDING, PADDING);
 
         /* Draw pannels */
-        final int cellw = FIELD_WIDTH / input.WIDTH;
-        final int cellh = FIELD_HEIGHT / input.HEIGHT; 
+        final int cellw = FIELD_WIDTH / tester.WIDTH;
+        final int cellh = FIELD_HEIGHT / tester.HEIGHT; 
 
         g2.setColor(new Color(0xdc143c));
-        for (int i = 0; i < input.N; i++) {
-            g2.fillRect(input.posX[i] * cellw, input.posY[i] * cellh, cellw, cellh);
+        for (int i = 0; i < tester.N; i++) {
+            g2.fillRect(tester.x[i] * cellw, tester.y[i] * cellh, cellw, cellh);
         }
 
         g2.setColor(new Color(0x4169e1));
-        for (int i = 0; i < output.M; i++) {
-            g2.fillRect(output.addPosX[i] * cellw, output.addPosY[i] * cellh, cellw, cellh);
+        for (int i = 0; i < tester.M; i++) {
+            g2.fillRect(tester.ax[i] * cellw, tester.ay[i] * cellh, cellw, cellh);
         }
 
         g2.setStroke(new BasicStroke(1.0f));
         g2.setColor(new Color(0xD3D3D3));
-        for (int i = 1; i <= input.WIDTH; i++) {
+        for (int i = 1; i <= tester.WIDTH; i++) {
             g2.drawLine(i * cellw, 0, i * cellw, FIELD_HEIGHT);
         }
-        for (int i = 1; i <= input.HEIGHT; i++) {
+        for (int i = 1; i <= tester.HEIGHT; i++) {
             g2.drawLine(0, i * cellh, FIELD_WIDTH, i * cellh);
         }
 

@@ -15,5 +15,5 @@ if [ $? -ne 0 ]; then
 fi
 
 for i in `seq 1 $TESTNUM`; do
-    java -Xss18m -jar $TESTER -exec "java Main" -seed $i -vis -save | { read rslt; echo "case $i: $rslt"; }
+    java -Xss18m -jar $TESTER -exec "java Main" -seed $i -json
 done
