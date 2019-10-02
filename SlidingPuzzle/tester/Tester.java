@@ -1,103 +1,52 @@
-import java.awt.*;
-import java.awt.event.*;
-import java.awt.image.*;
-import java.io.*;
-import java.util.*;
-import java.security.*;
-import javax.swing.*;
-import javax.imageio.*;
+import java.util.Scanner;
+import java.security.SecureRandom;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
-public class Tester {
+public class Tester 
+{
+    @JsonIgnore public final int MAXN = 10;
+    @JsonIgnore public final int MINN = 4;
+    @JsonIgnore public final int SHUFFLE = 100000;
+    
+    public final long seed;
+    @JsonIgnore public final int N;
+    @JsonIgnore public final int initBposX;
+    @JsonIgnore public final int initBposY;
+    @JsonIgnore public final int[][] initBoard;
+    @JsonIgnore public int turn;
+    @JsonIgnore public int bposX;
+    @JsonIgnore public int bposY;
+    @JsonIgnore public int[][] curBoard;
+    @JsonIgnore public final int M;
+    @JsonIgnore public final int[] posX;
+    @JsonIgnore public final int[] posY;
+    @JsonIgnore private long score_t = -2;
 
-    public class Visualizer extends JPanel implements WindowListener 
-    {    
-        public void paint(Graphics g) 
-        {
-            try {
-                BufferedImage bi = new BufferedImage(VIS_SIZE_Y + 20, VIS_SIZE_X + 20, BufferedImage.TYPE_INT_RGB);
-                Graphics2D g2 = (Graphics2D)bi.getGraphics();
-                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                g2.setColor(new Color(0xD3D3D3));
-                g2.fillRect(0, 0, VIS_SIZE_Y + 20, VIS_SIZE_X + 20);
-                g2.setColor(new Color(0xFFFFFF));
-                g2.fillRect(10, 10, VIS_SIZE_Y, VIS_SIZE_X);
-
-                g2.setFont(new Font("Arial", Font.BOLD, 15));
-                for (int x = 0; x < N; x++) {
-                    for (int y = 0; y < N; y++) {
-                        if (Board[x][y] >= 0) {
-                            int pos_x = x * PANNEL_SIZE + 10;
-                            int pos_y = y * PANNEL_SIZE + 10;
-                            int num = Board[x][y];
-                            g2.setColor(new Color(0xFFFFFF));
-                            g2.fillRect(pos_y, pos_x, PANNEL_SIZE, PANNEL_SIZE);
-                            g2.setColor(Color.getHSBColor((1.0f / (float)(N * N)) * (float)num, 1.0f, 0.95f));
-                            g2.fillRect(pos_y + 1, pos_x + 1, PANNEL_SIZE - 2, PANNEL_SIZE - 2);
-                            char[] ch = ("" + num).toCharArray();
-                            g2.setColor(new Color(0x000000));
-                            g2.drawChars(ch, 0, ch.length, pos_y + 20 - ch.length * 4, pos_x + 25);
-                        }
-                    }
-                }
-
-                g.drawImage(bi, 0, 0, VIS_SIZE_Y + 20, VIS_SIZE_X + 20, null);
-            } catch (Exception e) { 
-                e.printStackTrace();
+    @JsonIgnore
+    public String getInputString ()
+    {
+        StringBuffer sb = new StringBuffer();
+        sb.append(N).append('\n');
+        for (int x = 0; x < N; x++) {
+            for (int y = 0; y < N; y++) {
+                sb.append(initBoard[x][y]);
+                sb.append((y < N - 1) ? ' ' : '\n');
             }
         }
-
-        public Visualizer () {
-            jf.addWindowListener(this);
-        }
-
-        public void windowClosing(WindowEvent e) {
-            if (proc != null) {
-                try { 
-                    proc.destroy();
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            }
-            System.exit(0);
-        }
-
-        public void windowActivated(WindowEvent e) { }
-        public void windowDeactivated(WindowEvent e) { }
-        public void windowOpened(WindowEvent e) { }
-        public void windowClosed(WindowEvent e) { }
-        public void windowIconified(WindowEvent e) { }
-        public void windowDeiconified(WindowEvent e) { }
-
+        return sb.toString();
     }
 
-    /********************************************************************/
-
-    JFrame jf;
-    Visualizer v;
-    InputStream is;
-    OutputStream os;
-    Scanner sc;
-
-    static Process proc;
-    static String fileName, exec;
-    static boolean vis;
-    static double delay;
-
-    final int MAXN = 10, MINN = 4;
-    final int MAXM = 10, MINM = 4;
-    final int SHUFFLE = 100000;
-    final int PANNEL_SIZE = 40;
-    int VIS_SIZE_X;
-    int VIS_SIZE_Y;
-    int N;
-    int [][] Board;
-    int AnswerN;
-    int posX [];
-    int posY [];
-    int bposX;
-    int bposY;
-
-    /********************************************************************/
+    @JsonIgnore
+    public String getOutputString ()
+    {
+        StringBuffer sb = new StringBuffer();
+        sb.append(M).append('\n');
+        for (int i = 0; i < M; ++i) {
+            sb.append(posX[i]).append(' ');
+            sb.append(posY[i]).append('\n');
+        }
+        return sb.toString();
+    }
 
     private boolean move_pannel (int x, int y)
     {
@@ -106,14 +55,14 @@ public class Tester {
         if (x == bposX && y != bposY) {
             if (y < bposY) {
                 for (int i = bposY; i > y; i--) {
-                    Board[x][i] = Board[x][i - 1];
+                    curBoard[x][i] = curBoard[x][i - 1];
                 }
             } else {
                 for (int i = bposY; i < y; i++) {
-                    Board[x][i] = Board[x][i + 1];
+                    curBoard[x][i] = curBoard[x][i + 1];
                 }
             }
-            Board[x][y] = -1;
+            curBoard[x][y] = -1;
             bposX = x;
             bposY = y;
             return true;
@@ -121,14 +70,14 @@ public class Tester {
         if (x != bposX && y == bposY) {
             if (x < bposX) {
                 for (int i = bposX; i > x; i--) {
-                    Board[i][y] = Board[i - 1][y];
+                    curBoard[i][y] = curBoard[i - 1][y];
                 }
             } else {
                 for (int i = bposX; i < x; i++) {
-                    Board[i][y] = Board[i + 1][y];
+                    curBoard[i][y] = curBoard[i + 1][y];
                 }
             }
-            Board[x][y] = -1;
+            curBoard[x][y] = -1;
             bposX = x;
             bposY = y;
             return true;
@@ -136,182 +85,98 @@ public class Tester {
         return false;
     }
 
-    public void generate (String seedStr) 
+    public void initPuzzle ()
     {
-        try {   
-            SecureRandom rnd = SecureRandom.getInstance("SHA1PRNG");
-            long seed = Long.parseLong(seedStr);
-            rnd.setSeed(seed);
+        turn = 0;
+        bposX = initBposX;
+        bposY = initBposY;
+        curBoard = initBoard;
+    }
+
+    public boolean nextPuzzle ()
+    {
+        if (turn >= M) {
+            return false;
+        }
+        move_pannel(posX[turn], posY[turn]);
+        turn++;
+        return true;
+    }
+
+    public long getScore ()
+    {
+        if (score_t >= -1) {
+            return score_t;
+        }
+
+        if (M > SHUFFLE) {
+            System.err.println("The number of slides must be less than or equal to " + 
+                               SHUFFLE + ", but your output is " + M + ".");
+            return score_t = -1;
+        }
+
+        long score = M;
+        for (int x = 0; x < N; x++) {
+            for (int y = 0; y < N; y++) {
+                if (curBoard[x][y] >= 0) {
+                    long nx = (curBoard[x][y] - 1) / N;
+                    long ny = (curBoard[x][y] - 1) % N;
+                    long diff = Math.abs(x - nx) + Math.abs(y - ny);
+                    score += diff * 100000;
+                }
+            }
+        }
+        return score_t = score;
+    }
+
+    public Tester (final long _seed, final String exec) throws Exception
+    {
+        this.seed = _seed;
+        Process proc = Runtime.getRuntime().exec(exec);
+        new ErrorReader(proc.getErrorStream()).start();
+
+        /* Generate input. */
+        SecureRandom rnd = SecureRandom.getInstance("SHA1PRNG");
+        rnd.setSeed(_seed);
+        if (_seed <= 7) {
+            N = (int)_seed + 3;
+        } else {
             N = rnd.nextInt(MAXN - MINN + 1) + MINN;
-            if (seedStr.equals("1")) {
-                N = 4;
-            } else if (seedStr.equals("2")) {
-                N = 5;
-            } else if (seedStr.equals("3")) {
-                N = 6;
-            }  else if (seedStr.equals("4")) {
-                N = 7;
-            } else if (seedStr.equals("5")) {
-                N = 8;
-            }  else if (seedStr.equals("6")) {
-                N = 9;
-            } else if (seedStr.equals("7")) {
-                N = 10;
-            }
-            VIS_SIZE_X = N * PANNEL_SIZE;
-            VIS_SIZE_Y = N * PANNEL_SIZE;
-            Board = new int[N][N];
-            bposX = N - 1;
-            bposY = N - 1;
-            for (int x = 0; x < N; x++) {
-                for (int y = 0; y < N; y++) {
-                    Board[x][y] = x * N + y + 1;
-                }
-            }
-            Board[bposX][bposY] = -1;
-            for (int i = 0; i < SHUFFLE; i++) {
-                while (true) {
-                    int x = rnd.nextInt(N);
-                    int y = rnd.nextInt(N);
-                    if (move_pannel(x, y)) break;
-                }
-            }
-        } catch (Exception e) {
-            System.err.println("An exception occurred while generating test case.");
-            e.printStackTrace();
         }
-
-    }
-
-    public int runTest (String seed) 
-    {
-        try {
-            generate(seed);
-            if (vis) {
-                jf.getContentPane().setPreferredSize(new Dimension(VIS_SIZE_Y + 20, VIS_SIZE_X + 20));
-                jf.pack();
-                jf.setVisible(true);
-                Thread.sleep(2000);
-            }
-            if (proc != null) try {
-                getAnswer();
-                for (int i = 0; i < AnswerN; i++) {
-                    if (move_pannel(posX[i], posY[i])) {
-                        if (vis) {
-                            v.repaint();
-                            Thread.sleep((long)(delay * 1000.0));
-                        }
-                    }
-                }
-            } catch (Exception e) {
-                System.err.println("Failed to get result from your output.");
-                return -1;
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            return -1;
-        }
-
-        int Score = AnswerN;
+        curBoard = new int[N][N];
+        bposX = N - 1;
+        bposY = N - 1;
         for (int x = 0; x < N; x++) {
             for (int y = 0; y < N; y++) {
-                if (Board[x][y] >= 0) {
-                    int nx = (Board[x][y] - 1) / N;
-                    int ny = (Board[x][y] - 1) % N;
-                    int diff = Math.abs(x - nx) + Math.abs(y - ny);
-                    Score += diff * 100000;
-                }
+                curBoard[x][y] = x * N + y + 1;
             }
         }
-        return Score;
-    }
+        curBoard[bposX][bposY] = -1;
+        for (int i = 0; i < SHUFFLE; i++) {
+            while (true) {
+                int x = rnd.nextInt(N);
+                int y = rnd.nextInt(N);
+                if (move_pannel(x, y)) break;
+            }
+        }
+        initBoard = curBoard;
+        initBposX = bposX;
+        initBposY = bposY;
 
-    private void getAnswer () throws IOException {
-        StringBuffer sb = new StringBuffer();
-        sb.append(N).append('\n');
-        for (int x = 0; x < N; x++) {
-            for (int y = 0; y < N; y++) {
-                sb.append(Board[x][y]);
-                sb.append((y == N - 1) ? '\n' : ' ');
-            }
-        }
-        os.write(sb.toString().getBytes());
-        os.flush();
-        AnswerN = sc.nextInt();
-        posX = new int[AnswerN];
-        posY = new int[AnswerN];
-        for (int i = 0; i < AnswerN; ++i) {
+        /* Get the output. */
+        proc.getOutputStream().write(getInputString().getBytes());
+        proc.getOutputStream().flush();
+        Scanner sc = new Scanner(proc.getInputStream());
+        M = sc.nextInt();
+        posX = new int[M];
+        posY = new int[M];
+        for (int i = 0; i < M; ++i) {
             posX[i] = sc.nextInt();
             posY[i] = sc.nextInt();
         }
-    }
 
-    public Tester (String seed) {
-        if (vis) {
-            jf = new JFrame();
-            v = new Visualizer();
-            jf.getContentPane().add(v);
-        }
-        if (exec != null) {
-            try {
-                Runtime rt = Runtime.getRuntime();
-                proc = rt.exec(exec);
-                os = proc.getOutputStream();
-                is = proc.getInputStream();
-                sc = new Scanner(is);
-                new ErrorReader(proc.getErrorStream()).start();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        System.out.println("Score = " + runTest(seed));
         if (proc != null) {
-            try { 
-                proc.destroy(); 
-            } catch (Exception e) { 
-                e.printStackTrace(); 
-            }
-        }
-    }
-
-    public static void main (String[] args) {
-        String seed = "1";
-        delay = 1.0;
-        for (int i = 0; i < args.length; ++i) {
-            if (args[i].equals("-seed")) {
-                seed = args[++i];
-            } else if (args[i].equals("-exec")) {
-                exec = args[++i];
-            } else if (args[i].equals("-vis")) {
-                vis = true;
-            } else if (args[i].equals("-delay")) {
-                delay = Double.parseDouble(args[++i]);
-            }
-        }
-        fileName = seed;
-        Tester test = new Tester(seed);
-    }
-
-}
-
-class ErrorReader extends Thread {
-
-    private final InputStream error;
-
-    public ErrorReader(InputStream is) {
-        error = is;
-    }
-
-    @Override
-    public void run() {
-        try (Scanner scanner = new Scanner(error)) {
-            while (scanner.hasNextLine()) {
-                String s = scanner.nextLine();
-                
-                System.out.println("[STDERR] " + s);
-                System.out.flush();
-            }
+            proc.destroy();
         }
     }
 }
