@@ -15,9 +15,8 @@ public class Visualizer extends JFrame
 {
     final int FIELD_HEIGHT = 1000;
     final int FIELD_WIDTH  = 1000;
-    final int METER_WIDTH  = 50;
     final int PADDING = 10;
-    final int VIS_SIZE_X = FIELD_WIDTH + PADDING * 2 + METER_WIDTH;
+    final int VIS_SIZE_X = FIELD_WIDTH + PADDING * 2;
     final int VIS_SIZE_Y = FIELD_HEIGHT + PADDING * 2;
     final Tester tester;
 
@@ -106,22 +105,6 @@ public class Visualizer extends JFrame
                 g2.fillRect(cell_width * x + 2, cell_width * y + 2, cell_width - 4, cell_height - 4);
             }
         }
-
-        /* Converts the origin of the graphics context to a 
-           point (x, y) in the current coordinate system.*/
-        g2.translate(FIELD_WIDTH + 10, 0);
-
-        /* Draw a number meter of colors. */
-        for (int i = 0; i < tester.N; i++) {
-            Color c = Color.getHSBColor((1.0f / (float)tester.N) * (float)i, i < tester.getScore() ? 1.0f : 0.10f, 1.0f);
-            g2.setColor(c);
-            g2.fillRect(0, FIELD_HEIGHT / tester.N * i, METER_WIDTH - 10, FIELD_HEIGHT / tester.N);
-        }
-        g2.setColor(new Color(0x000000));
-        FontMetrics fm = g2.getFontMetrics();
-        char[] ch = ("" + tester.getScore()).toCharArray();
-        g2.setFont(new Font("Courier", Font.BOLD, 14));
-        g2.drawChars(ch, 0, ch.length, METER_WIDTH / 4,FIELD_HEIGHT / tester.N * (tester.getScore() - 1));
 
         return bi;
     }
