@@ -1,5 +1,8 @@
 import java.util.Scanner;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.Arrays;
 import java.security.SecureRandom;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -9,6 +12,7 @@ public class Tester
     @JsonIgnore public final int MINN   = 50;
     @JsonIgnore public final int WIDTH  = 1000 + 1;
     @JsonIgnore public final int HEIGHT = 1000 + 1;
+    @JsonIgnore public final int MIN_DIST = 20;
 
     public final long seed;
     @JsonIgnore public final int N,M;
@@ -55,13 +59,13 @@ public class Tester
 
         /* Check whether the output satisfies the constraints. */
         boolean[] used = new boolean[N];
-        for (int i = 0; i < N; i++) {
+        for (int i = 0; i < K; i++) {
             if (v[i] < 0 || v[i] >= N) {
                 System.err.println("All elements of your return must be between 0 and " +
                                    (N - 1) + ", and your return contained " + v[i] + ".");
                 return score_t = -1.0;
             }
-            if (i > 0 && !connect[a[v[(i - 1 + K) % K]]][b[v[i]]]) {
+            if (i > 0 && !connect[v[i - 1]][v[i]]) {
                 System.err.println("There is no edge connecting vertex " + v[i - 1] + 
                                    " and vertex " + v[i] + ".");
                 return score_t = -1.0;
@@ -76,7 +80,7 @@ public class Tester
 
         /* Calculate the score. */
         double dist = 0.0;
-        for (int i = 1; i < N; i++) {
+        for (int i = 1; i < K; i++) {
             double dx = (double)(x[v[i - 1]] - x[v[i]]);
             double dy = (double)(y[v[i - 1]] - y[v[i]]);
             dist += Math.sqrt(dx * dx + dy * dy);
@@ -85,18 +89,14 @@ public class Tester
     }
 
     private boolean intersect (
-        int l1_ax, int l1_ay, int l1_bx, int l1_by,
-        int l2_ax, int l2_ay, int l2_bx, int l2_by)
+        long l1_ax, long l1_ay, long l1_bx, long l1_by,
+        long l2_ax, long l2_ay, long l2_bx, long l2_by)
     {
-        int ta = (l2_ax - l2_bx) * (l1_ay - l2_ay) + (l2_ay - l2_by) * (l2_ax - l1_ax);
-        int tb = (l2_ax - l2_bx) * (l1_by - l2_ay) + (l2_ay - l2_by) * (l2_ax - l1_bx);
-        int tc = (l1_ax - l1_bx) * (l2_ay - l1_ay) + (l1_ay - l1_by) * (l1_ax - l2_ax);
-        int td = (l1_ax - l1_bx) * (l2_by - l1_ay) + (l1_ay - l1_by) * (l1_ax - l2_bx);
-        if (ta * tb < 0 && tc * td < 0) {
-            return true;
-        } else {
-            return false;
-        }
+        long tc1 = (l1_ax - l1_bx) * (l2_ay - l1_ay) + (l1_ay - l1_by) * (l1_ax - l2_ax);
+        long tc2 = (l1_ax - l1_bx) * (l2_by - l1_ay) + (l1_ay - l1_by) * (l1_ax - l2_bx);
+        long td1 = (l2_ax - l2_bx) * (l1_ay - l2_ay) + (l2_ay - l2_by) * (l2_ax - l1_ax);
+        long td2 = (l2_ax - l2_bx) * (l1_by - l2_ay) + (l2_ay - l2_by) * (l2_ax - l1_bx);
+        return tc1 * tc2 < 0 && td1 * td2 < 0;
     }
 
     public Tester (final long _seed, final String exec) throws Exception
@@ -111,44 +111,73 @@ public class Tester
         N = rnd.nextInt(MAXN - MINN + 1) + MINN;
         x = new int[N];
         y = new int[N];
-        boolean [][] usedPos = new boolean[WIDTH][HEIGHT];
         for (int i = 0; i < N; i++) {
             while (true) {
                 int xt = rnd.nextInt(WIDTH);
                 int yt = rnd.nextInt(HEIGHT);
-                if (usedPos[xt][yt]) continue;
-                usedPos[xt][yt] = true;
-                x[i] = xt;
-                y[i] = yt;
-                break;
-            }
-        }
-        ArrayList<Integer> edges = new ArrayList<Integer>();
-        for (int i = 0; i < N * N; i++) {
-            int a1 = i / N;
-            int b1 = i % N;
-            boolean cross = false;
-            for (int j = 0; j < edges.size(); j++) {
-                int a2 = edges.get(j) / N;
-                int b2 = edges.get(j) % N;
-                if (intersect(x[a1], y[a1], x[b1], y[b1], x[a2], y[a2], x[b2], y[b2])) {
-                    cross = true;
+                boolean ok = true;
+                for (int j = 0; j < i; j++) {
+                    int lx = x[j] - xt;
+                    int ly = y[j] - yt;
+                    if (lx * lx + ly * ly <= MIN_DIST * MIN_DIST) {
+                        ok = false;
+                        break;
+                    }
+                }
+                if (ok) {
+                    x[i] = xt;
+                    y[i] = yt;
                     break;
                 }
             }
-            if (!cross) {
-                edges.add(i);
+        }
+
+        Map<Integer,Integer> mMap = new HashMap<Integer,Integer>();
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < N; j++) {
+                if (i == j) continue;
+                int key = rnd.nextInt(Integer.MAX_VALUE);
+                int value = i * N + j;
+                mMap.put(key, value);
+            }
+        }
+        Object[] mapkey = mMap.keySet().toArray();
+        Arrays.sort(mapkey);
+
+        connect = new boolean[N][N];
+        ArrayList<Integer> edges = new ArrayList<Integer>();
+        final int MAX_DIST = (int)(2000.0 / Math.sqrt(N));
+        for (Integer key : mMap.keySet()) {
+            int at = mMap.get(key) / N;
+            int bt = mMap.get(key) % N;
+            if (connect[at][bt]) continue;
+            int lx = x[at] - x[bt];
+            int ly = y[at] - y[bt];
+            if (lx * lx + ly * ly <= MAX_DIST * MAX_DIST) {
+                boolean cross = false;
+                for (int j = 0; j < edges.size(); j++) {
+                    int as = edges.get(j) / N;
+                    int bs = edges.get(j) % N;
+                    if (intersect(x[at], y[at], x[bt], y[bt], 
+                                  x[as], y[as], x[bs], y[bs]))
+                    {
+                        cross = true;
+                        break;
+                    }
+                }
+                if (!cross) {
+                    edges.add(at * N + bt);
+                    connect[at][bt] = true;
+                    connect[bt][at] = true;
+                }
             }
         }
         M = edges.size();
         a = new int[M];
         b = new int[M];
-        connect = new boolean[N][N];
         for (int i = 0; i < edges.size(); i++) {
             a[i] = edges.get(i) / N;
             b[i] = edges.get(i) % N;
-            connect[a[i]][b[i]] = true;
-            connect[b[i]][a[i]] = true;
         }
 
         /* Get the output. */

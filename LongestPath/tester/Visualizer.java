@@ -59,14 +59,14 @@ public class Visualizer extends JFrame
     }
 
     /**
-     * int   tester.N
-     * int   tester.M
-     * int[] tester.x
-     * int[] tester.y
-     * int[] tester.a
-     * int[] tester.b
-     * int   tester.K
-     * int[] tester.v
+     * int   tester.N  Number of vertices.
+     * int   tester.M  Number of edges.
+     * int[] tester.x  The x coordinate of the vertex.
+     * int[] tester.y  The y coordinate of the vertex.
+     * int[] tester.a  Edge vertex A.
+     * int[] tester.b  Edge vertex B.
+     * int   tester.K  Number of vertices on simple path.
+     * int[] tester.v  Simple path.
      *
      * @see Tester
      */
@@ -94,6 +94,12 @@ public class Visualizer extends JFrame
             int b = tester.b[i];
             g2.drawLine(tester.x[a], tester.y[a], tester.x[b], tester.y[b]);
         }
+        g2.setColor(new Color(0xDC143C));
+        for (int i = 1; i < tester.K; i++) {
+            int a = tester.v[i - 1];
+            int b = tester.v[i];
+            g2.drawLine(tester.x[a], tester.y[a], tester.x[b], tester.y[b]);
+        }
 
         /* Draw vertexs */
         final int R = 6;
@@ -103,6 +109,14 @@ public class Visualizer extends JFrame
             g2.fillOval(tester.x[i] - R / 2, tester.y[i] - R / 2, R, R);
             g2.setColor(new Color(0xF0F0F0));
             g2.drawOval(tester.x[i] - R / 2, tester.y[i] - R / 2, R, R);
+        }
+        g2.setStroke(new BasicStroke(1.5f));
+        for (int i = 0; i < tester.K; i++) {
+            int v = tester.v[i];
+            g2.setColor(new Color(0xFFFFFF));
+            g2.fillOval(tester.x[v] - R / 2, tester.y[v] - R / 2, R, R);
+            g2.setColor(new Color(0xDC143C));
+            g2.drawOval(tester.x[v] - R / 2, tester.y[v] - R / 2, R, R);
         }
 
         return bi;
