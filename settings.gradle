@@ -5,4 +5,5 @@ include 'TravelingSalesman',
         'Clustering',
         'SlidingPuzzle',
         'RectilinearSteinerTree',
-        'DiskCovering'
+        'DiskCovering',
+        'LongestPath'
