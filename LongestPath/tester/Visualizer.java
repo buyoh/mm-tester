@@ -86,37 +86,39 @@ public class Visualizer extends JFrame
            point (x, y) in the current coordinate system.*/
         g2.translate(PADDING, PADDING);
 
-        /* Draw edges */
-        g2.setColor(new Color(0xF0F0F0));
+        /* Draw the graph */
+        final int R1 = 6;
+        g2.setColor(new Color(0xE6E6E6));
         g2.setStroke(new BasicStroke(1.5f));
         for (int i = 0; i < tester.M; i++) {
             int a = tester.a[i];
             int b = tester.b[i];
             g2.drawLine(tester.x[a], tester.y[a], tester.x[b], tester.y[b]);
         }
+        g2.setStroke(new BasicStroke(1.5f));
+        for (int i = 0; i < tester.N; i++) {
+            g2.setColor(new Color(0xFFFFFF));
+            g2.fillOval(tester.x[i] - R1 / 2, tester.y[i] - R1 / 2, R1, R1);
+            g2.setColor(new Color(0xE6E6E6));
+            g2.drawOval(tester.x[i] - R1 / 2, tester.y[i] - R1 / 2, R1, R1);
+        }
+
+        /* Draw the path */
+        final int R2 = 6;
         g2.setColor(new Color(0xDC143C));
+        g2.setStroke(new BasicStroke(1.5f));
         for (int i = 1; i < tester.K; i++) {
             int a = tester.v[i - 1];
             int b = tester.v[i];
             g2.drawLine(tester.x[a], tester.y[a], tester.x[b], tester.y[b]);
         }
-
-        /* Draw vertexs */
-        final int R = 6;
-        g2.setStroke(new BasicStroke(1.5f));
-        for (int i = 0; i < tester.N; i++) {
-            g2.setColor(new Color(0xFFFFFF));
-            g2.fillOval(tester.x[i] - R / 2, tester.y[i] - R / 2, R, R);
-            g2.setColor(new Color(0xF0F0F0));
-            g2.drawOval(tester.x[i] - R / 2, tester.y[i] - R / 2, R, R);
-        }
         g2.setStroke(new BasicStroke(1.5f));
         for (int i = 0; i < tester.K; i++) {
             int v = tester.v[i];
             g2.setColor(new Color(0xFFFFFF));
-            g2.fillOval(tester.x[v] - R / 2, tester.y[v] - R / 2, R, R);
+            g2.fillOval(tester.x[v] - R2 / 2, tester.y[v] - R2 / 2, R2, R2);
             g2.setColor(new Color(0xDC143C));
-            g2.drawOval(tester.x[v] - R / 2, tester.y[v] - R / 2, R, R);
+            g2.drawOval(tester.x[v] - R2 / 2, tester.y[v] - R2 / 2, R2, R2);
         }
 
         return bi;
