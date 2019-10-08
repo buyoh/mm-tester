@@ -88,7 +88,7 @@ public class Visualizer extends JFrame
 
         /* Draw the graph */
         final int R1 = 6;
-        g2.setColor(new Color(0xE6E6E6));
+        g2.setColor(new Color(0xE0E0E0));
         g2.setStroke(new BasicStroke(1.0f));
         for (int i = 0; i < tester.M; i++) {
             int a = tester.a[i];
@@ -99,7 +99,7 @@ public class Visualizer extends JFrame
         for (int i = 0; i < tester.N; i++) {
             g2.setColor(new Color(0xFFFFFF));
             g2.fillOval(tester.x[i] - R1 / 2, tester.y[i] - R1 / 2, R1, R1);
-            g2.setColor(new Color(0xE6E6E6));
+            g2.setColor(new Color(0xE0E0E0));
             g2.drawOval(tester.x[i] - R1 / 2, tester.y[i] - R1 / 2, R1, R1);
         }
 
