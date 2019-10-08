@@ -105,7 +105,7 @@ public class Visualizer extends JFrame
 
         /* Draw the path */
         final int R2 = 6;
-        g2.setColor(new Color(0xDC143C));
+        g2.setColor(new Color(0x000000));
         g2.setStroke(new BasicStroke(1.0f));
         for (int i = 1; i < tester.K; i++) {
             int a = tester.v[i - 1];
@@ -117,7 +117,7 @@ public class Visualizer extends JFrame
             int v = tester.v[i];
             g2.setColor(new Color(0xFFFFFF));
             g2.fillOval(tester.x[v] - R2 / 2, tester.y[v] - R2 / 2, R2, R2);
-            g2.setColor(new Color(0xDC143C));
+            g2.setColor(new Color(0x000000));
             g2.drawOval(tester.x[v] - R2 / 2, tester.y[v] - R2 / 2, R2, R2);
         }
 

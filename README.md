@@ -3,10 +3,12 @@
 ## 環境
 
 ### Ubuntu
+1. apt
 ```
 $ sudo apt update
 $ sudo apt install default-jre default-jdk build-essential git curl
 ```
+2. sdkman
 ```
 $ curl -s http://get.sdkman.io | bash
 $ source ~/.sdkman/bin/sdkman-init.sh
@@ -21,8 +23,8 @@ $ xcode-select --install
 2. [Homebrew](https://brew.sh)
 ```
 $ brew update
-$ brew install git gradle
 $ brew cask install java
+$ brew install git gradle
 ```
 
 ## 使い方
@@ -34,8 +36,15 @@ $ cd MM-Tester
 $ gradle build
 ```
 
+### サンプル
+例）Traveling Salesmanのjavaのサンプルを実行する場合．
+```
+$ cd TravelingSalesman/solver/java
+$ sh run.sh
+```
+
 ### 問題文が読めない時
-Githubが数式に対応していないので，[ここ](http://marxi.co)とかに貼り付けて読んでください．
+[ここ](http://marxi.co)とかに貼り付けて読んでください．
 
 ### 問題毎のファイル構成
 ```
@@ -83,3 +92,6 @@ Githubが数式に対応していないので，[ここ](http://marxi.co)とか�
 
 ### [Disk Covering](DiskCovering/)
 <img src="images/DiskCovering.png" width="400px">
+
+### [Longest Path](LongestPath/)
+<img src="images/LongestPath.png" width="400px">
