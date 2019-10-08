@@ -89,7 +89,7 @@ public class Visualizer extends JFrame
         /* Draw the graph */
         final int R1 = 6;
         g2.setColor(new Color(0xE6E6E6));
-        g2.setStroke(new BasicStroke(1.5f));
+        g2.setStroke(new BasicStroke(1.0f));
         for (int i = 0; i < tester.M; i++) {
             int a = tester.a[i];
             int b = tester.b[i];
@@ -106,7 +106,7 @@ public class Visualizer extends JFrame
         /* Draw the path */
         final int R2 = 6;
         g2.setColor(new Color(0xDC143C));
-        g2.setStroke(new BasicStroke(1.5f));
+        g2.setStroke(new BasicStroke(1.0f));
         for (int i = 1; i < tester.K; i++) {
             int a = tester.v[i - 1];
             int b = tester.v[i];

@@ -146,29 +146,31 @@ public class Tester
 
         connect = new boolean[N][N];
         ArrayList<Integer> edges = new ArrayList<Integer>();
-        final int MAX_DIST = (int)(2000.0 / Math.sqrt(N));
-        for (Integer key : mMap.keySet()) {
-            int at = mMap.get(key) / N;
-            int bt = mMap.get(key) % N;
-            if (connect[at][bt]) continue;
-            int lx = x[at] - x[bt];
-            int ly = y[at] - y[bt];
-            if (lx * lx + ly * ly <= MAX_DIST * MAX_DIST) {
-                boolean cross = false;
-                for (int j = 0; j < edges.size(); j++) {
-                    int as = edges.get(j) / N;
-                    int bs = edges.get(j) % N;
-                    if (intersect(x[at], y[at], x[bt], y[bt], 
-                                  x[as], y[as], x[bs], y[bs]))
-                    {
-                        cross = true;
-                        break;
+        for (int i = 0; i < 2; i++) {
+            final int MAX_DIST = (int)((i + 1) * 1500.0 / Math.sqrt(N));
+            for (Integer key : mMap.keySet()) {
+                int at = mMap.get(key) / N;
+                int bt = mMap.get(key) % N;
+                if (connect[at][bt]) continue;
+                int lx = x[at] - x[bt];
+                int ly = y[at] - y[bt];
+                if (lx * lx + ly * ly <= MAX_DIST * MAX_DIST) {
+                    boolean cross = false;
+                    for (int j = 0; j < edges.size(); j++) {
+                        int as = edges.get(j) / N;
+                        int bs = edges.get(j) % N;
+                        if (intersect(x[at], y[at], x[bt], y[bt], 
+                                      x[as], y[as], x[bs], y[bs]))
+                        {
+                            cross = true;
+                            break;
+                        }
                     }
-                }
-                if (!cross) {
-                    edges.add(at * N + bt);
-                    connect[at][bt] = true;
-                    connect[bt][at] = true;
+                    if (!cross) {
+                        edges.add(at * N + bt);
+                        connect[at][bt] = true;
+                        connect[bt][at] = true;
+                    }
                 }
             }
         }
