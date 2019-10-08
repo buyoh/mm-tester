@@ -33,7 +33,7 @@ $v_{K-1}$<br>
 </div>
 
 <h3>スコア</h3>
-$v_{0} \ \rightarrow v_{1} \ \rightarrow \ \cdots \ \rightarrow \ v_{N-1}$と頂点を訪れた時の移動距離をスコアとします．単純路になっていない場合$-1$となります．
+$v_{0} \ \rightarrow v_{1} \ \rightarrow \ \cdots \ \rightarrow \ v_{N-1}$と頂点を訪れた時の移動距離をスコアとします．制約を満たしていない場合$-1$となります．
 
 <h3>テスタ</h3>
 TopCoder の Marathon Match と同じです．<code>"[command]"</code>にプログラムの実行コマンド，<code>[seed]</code>に乱数のシードを入れてください．
