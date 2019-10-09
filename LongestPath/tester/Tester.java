@@ -147,7 +147,7 @@ public class Tester
         connect = new boolean[N][N];
         ArrayList<Integer> edges = new ArrayList<Integer>();
         for (int i = 0; i < 2; i++) {
-            final int MAX_DIST = (int)((i + 1) * 1500.0 / Math.sqrt(N));
+            final int MAX_DIST = (int)((i + 1) * 1000.0 / Math.sqrt(N));
             for (Integer key : mMap.keySet()) {
                 int at = mMap.get(key) / N;
                 int bt = mMap.get(key) % N;
