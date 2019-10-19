@@ -98,7 +98,7 @@ public class Visualizer extends JFrame
         }
 
         /* Draw the vertex */
-        final int R1 = 6;
+        final int R1 = 4;
         for (int i = 0; i < tester.N; i++) {
             g2.setColor(new Color(0x454552));
             g2.fillOval(tester.px[i] - R1 / 2, tester.py[i] - R1 / 2, R1, R1);
