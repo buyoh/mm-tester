@@ -62,6 +62,12 @@ public class Tester
         }
 
         /* Check whether the output satisfies the constraints. */
+        if (M < MINM || M > MAXM) {
+            System.err.println("The number of added vertices must be between " + MINM + 
+                                " and " + MAXM + ", but your output is " + M + ".");
+            return score_t = -1.0;
+        }
+
         boolean[][] used = new boolean[HEIGHT][WIDTH];
         for (int i = 0; i < N; i++) {
             used[x[i]][y[i]] = true;
