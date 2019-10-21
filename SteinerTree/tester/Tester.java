@@ -1,6 +1,6 @@
 import java.util.Scanner;
 import java.util.Map;
-import java.util.HashMap;
+import java.util.TreeMap;
 import java.util.Arrays;
 import java.security.SecureRandom;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -51,7 +51,7 @@ public class Tester
         int x1 = idx1 < N ? x[idx1] : ax[idx1 - N];
         int y1 = idx1 < N ? y[idx1] : ay[idx1 - N];
         int x2 = idx2 < N ? x[idx2] : ax[idx2 - N];
-        int y2 = idx2 < N ? x[idx2] : ay[idx2 - N];
+        int y2 = idx2 < N ? y[idx2] : ay[idx2 - N];
         return new Edge(x1, y1, x2, y2);
     }
 
@@ -68,12 +68,12 @@ public class Tester
             return score_t = -1.0;
         }
 
-        boolean[][] used = new boolean[HEIGHT][WIDTH];
+        boolean[][] used = new boolean[WIDTH][HEIGHT];
         for (int i = 0; i < N; i++) {
             used[x[i]][y[i]] = true;
         }
         for (int i = 0; i < M; i++) {
-            if (ax[i] < 0 || ay[i] < 0 || ax[i] >= HEIGHT || ay[i] >= WIDTH) {
+            if (ax[i] < 0 || ay[i] < 0 || ax[i] >= WIDTH || ay[i] >= HEIGHT) {
                 System.err.println("All vertex coordinates must be 0 <= xi,yi <= 1000, " +
                                    "but your output includes (" + ax[i] + ", " + ay[i] + ").");
                 return score_t = -1.0;
@@ -88,27 +88,26 @@ public class Tester
         }
 
         /* Calculate the score. */
-        Map<Double,Integer> mMap = new HashMap<Double,Integer>();
+        Map<Double,Integer> mMap = new TreeMap<Double,Integer>();
         for (int i = 0; i < N + M; i++) {
             for (int j = i + 1; j < N + M; j++) {
                 Edge e = getEdge(i, j);
-                mMap.put(e.calcDist(), i * j);
+                double EPS = 1.0e-10 * (i * (N + M) + j);
+                mMap.put(e.calcDist() + EPS, i * (N + M) + j);
             }
         }
-        Object[] mapkey = mMap.keySet().toArray();
-        Arrays.sort(mapkey);
 
         double cost = 0.0;
         int MSTSize = 0;
-        MST = new Edge[N + M];
+        MST = new Edge[N + M - 1];
         DisjointSet ds = new DisjointSet(N + M);
         for (Double key : mMap.keySet()) {
             int at = mMap.get(key) / (N + M);
             int bt = mMap.get(key) % (N + M);
             if (!ds.same(at, bt)) {
                 ds.unite(at, bt);
-                cost += key;
                 MST[MSTSize++] = getEdge(at, bt);
+                cost += MST[MSTSize - 1].calcDist();
             }
         }
 

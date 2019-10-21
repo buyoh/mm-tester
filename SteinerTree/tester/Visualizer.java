@@ -83,8 +83,8 @@ public class Visualizer extends JFrame
         g2.setColor(new Color(0x000000));
         g2.setStroke(new BasicStroke(1.5f));
         for (int i = 0; i < tester.MST.length; i++) {
-            g2.drawLine(tester.MST[i].x1, tester.MST[i].x1, 
-                        tester.MST[i].x2, tester.MST[i].x2);
+            g2.drawLine(tester.MST[i].x1, tester.MST[i].y1, 
+                        tester.MST[i].x2, tester.MST[i].y2);
         }
 
         /* Draw vertex */
@@ -99,11 +99,11 @@ public class Visualizer extends JFrame
         
         final int R2 = 6;
         g2.setStroke(new BasicStroke(1.5f));
-        for (int i = 0; i < tester.N; i++) {
+        for (int i = 0; i < tester.M; i++) {
             g2.setColor(new Color(0x4169E1));
-            g2.fillOval(tester.x[i] - R2 / 2, tester.y[i] - R2 / 2, R2, R2);
+            g2.fillOval(tester.ax[i] - R2 / 2, tester.ay[i] - R2 / 2, R2, R2);
             g2.setColor(new Color(0x000000));
-            g2.drawOval(tester.x[i] - R2 / 2, tester.y[i] - R2 / 2, R2, R2);
+            g2.drawOval(tester.ax[i] - R2 / 2, tester.ay[i] - R2 / 2, R2, R2);
         }
 
         return bi;
