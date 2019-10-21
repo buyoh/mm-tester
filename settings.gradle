@@ -6,4 +6,5 @@ include 'TravelingSalesman',
         'SlidingPuzzle',
         'RectilinearSteinerTree',
         'DiskCovering',
-        'LongestPath'
+        'LongestPath',
+        'SteinerTree'
