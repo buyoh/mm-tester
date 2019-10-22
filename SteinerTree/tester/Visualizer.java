@@ -59,13 +59,14 @@ public class Visualizer extends JFrame
     }
 
     /**
-     * int    N           Number of input vertices.
-     * int    M           Number of output vertices.
-     * int[]  x           The x coordinate of the input vertex.
-     * int[]  y           The y coordinate of the input vertex.
-     * int[]  ax          The x coordinate of the output vertex.
-     * int[]  ay          The y coordinate of the output vertex.
-     * LineSegment[] MST  The line segments of the minimum spanning tree.
+     * int    tester.N            Number of input vertices.
+     * int    tester.M            Number of output vertices.
+     * int[]  tester.x            The x coordinate of the input vertex.
+     * int[]  tester.y            The y coordinate of the input vertex.
+     * int[]  tester.ax           The x coordinate of the output vertex.
+     * int[]  tester.ay           The y coordinate of the output vertex.
+     * LineSegment[] teater.MST1  The line segments of the initial minimum spanning tree.
+     * LineSegment[] tester.MST2  The line segments of the minimum spanning tree with added vertices.
      *
      * @see Tester
      * @see LineSegment
@@ -87,21 +88,40 @@ public class Visualizer extends JFrame
         g2.translate(PADDING, PADDING);
 
         /* Draw edges */
-        g2.setColor(new Color(0x000000));
-        g2.setStroke(new BasicStroke(1.0f));
-        for (int i = 0; i < tester.MST.length; i++) {
-            g2.drawLine(tester.MST[i].x1, tester.MST[i].y1, 
-                        tester.MST[i].x2, tester.MST[i].y2);
+        g2.setColor(new Color(0xBBBBBB));
+        g2.setStroke(new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 1.0f, new float[]{3}, 0));
+        for (int i = 0; i < tester.MST1.length; i++) {
+            g2.drawLine(tester.MST1[i].x1, tester.MST1[i].y1, 
+                        tester.MST1[i].x2, tester.MST1[i].y2);
+        }
+
+        for (int i = 0; i < tester.MST2.length; i++) {
+            boolean addLine = false;
+            for (int j = 0; j < tester.MST1.length; j++) {
+                if (tester.MST2[i].equals(tester.MST1[j])) {
+                    addLine = true;
+                    break;
+                }
+            }
+            if (addLine) {
+                g2.setColor(new Color(0x000000));
+                g2.setStroke(new BasicStroke(1.0f));
+            } else {
+                g2.setColor(new Color(0x32cd32));
+                g2.setStroke(new BasicStroke(1.5f));
+            }
+            g2.drawLine(tester.MST2[i].x1, tester.MST2[i].y1, 
+                        tester.MST2[i].x2, tester.MST2[i].y2);
         }
 
         /* Draw vertex */
-        final int R1 = 6;
+        final int R1 = 8;
         for (int i = 0; i < tester.N; i++) {
             g2.setColor(new Color(0xDC143C));
             g2.fillOval(tester.x[i] - R1 / 2, tester.y[i] - R1 / 2, R1, R1);
         }
         
-        final int R2 = 6;
+        final int R2 = 8;
         for (int i = 0; i < tester.M; i++) {
             g2.setColor(new Color(0x4169E1));
             g2.fillOval(tester.ax[i] - R2 / 2, tester.ay[i] - R2 / 2, R2, R2);

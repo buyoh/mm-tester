@@ -11,12 +11,14 @@ public class Tester
     @JsonIgnore public final int MINM   = 0;
     @JsonIgnore public final int WIDTH  = 1000 + 1;
     @JsonIgnore public final int HEIGHT = 1000 + 1;
+    @JsonIgnore public final int MIN_DIST = 30;
 
     public final long seed;
     @JsonIgnore public final int N,M;
     @JsonIgnore public final int[] x,y;
     @JsonIgnore public final int[] ax,ay;
-    @JsonIgnore public LineSegment[] MST;
+    @JsonIgnore public LineSegment[] MST1;
+    @JsonIgnore public LineSegment[] MST2;
     @JsonIgnore private double score_t = -2.0;
 
     @JsonIgnore
@@ -96,29 +98,53 @@ public class Tester
             }
         }
 
-        ArrayList<Tuple> order = new ArrayList<Tuple>();
+        /* Compute the initial minimum spanning tree. */
+        ArrayList<Tuple> order1 = new ArrayList<Tuple>();
+        for (int i = 0; i < N; i++) {
+            for (int j = i + 1; j < N; j++) {
+                LineSegment e = getLineSegment(i, j);
+                order1.add(new Tuple(e.calcDist(), i, j));
+            }
+        }
+        order1.sort((a, b) -> a.dist.compareTo(b.dist));
+
+        ArrayList<LineSegment> tree1 = new ArrayList<LineSegment>();
+        DisjointSet ds1 = new DisjointSet(N);
+        for (int i = 0; i < order1.size(); i++) {
+            int at = order1.get(i).a;
+            int bt = order1.get(i).b;
+            if (!ds1.same(at, bt)) {
+                ds1.unite(at, bt);
+                tree1.add(getLineSegment(at, bt));
+            }
+        }
+        MST1 = new LineSegment[tree1.size()];
+        tree1.toArray(MST1);
+
+        /* Computes the minimum spanning tree with added vertices. */
+        ArrayList<Tuple> order2 = new ArrayList<Tuple>();
         for (int i = 0; i < N + M; i++) {
             for (int j = i + 1; j < N + M; j++) {
                 LineSegment e = getLineSegment(i, j);
-                order.add(new Tuple(e.calcDist(), i, j));
+                order2.add(new Tuple(e.calcDist(), i, j));
             }
         }
-        order.sort((a, b) -> a.dist.compareTo(b.dist));
+        order2.sort((a, b) -> a.dist.compareTo(b.dist));
 
         double cost = 0.0;
-        ArrayList<LineSegment> tree = new ArrayList<LineSegment>();
-        DisjointSet ds = new DisjointSet(N + M);
-        for (int i = 0; i < order.size(); i++) {
-            int at = order.get(i).a;
-            int bt = order.get(i).b;
-            if (!ds.same(at, bt)) {
-                ds.unite(at, bt);
-                tree.add(getLineSegment(at, bt));
-                cost += order.get(i).dist;
+        ArrayList<LineSegment> tree2 = new ArrayList<LineSegment>();
+        DisjointSet ds2 = new DisjointSet(N + M);
+        for (int i = 0; i < order2.size(); i++) {
+            int at = order2.get(i).a;
+            int bt = order2.get(i).b;
+            if (!ds2.same(at, bt)) {
+                ds2.unite(at, bt);
+                tree2.add(getLineSegment(at, bt));
+                cost += order2.get(i).dist;
             }
         }
-        MST = new LineSegment[tree.size()];
-        tree.toArray(MST);
+        MST2 = new LineSegment[tree2.size()];
+        tree2.toArray(MST2);
 
         return score_t = cost;
     }
@@ -141,10 +167,20 @@ public class Tester
                 int xt = rnd.nextInt(WIDTH);
                 int yt = rnd.nextInt(HEIGHT);
                 if (usedPos[xt][yt]) continue;
-                usedPos[xt][yt] = true;
-                x[i] = xt;
-                y[i] = yt;
-                break;
+                boolean valid = true;
+                for (int j = 0; j < i; j++) {
+                    int lx = xt - x[j];
+                    int ly = yt - y[j];
+                    if (lx * lx + ly * ly <= MIN_DIST * MIN_DIST) {
+                        valid = false;
+                    }
+                }
+                if (valid) {
+                    usedPos[xt][yt] = true;
+                    x[i] = xt;
+                    y[i] = yt;
+                    break;
+                }
             }
         }
 
