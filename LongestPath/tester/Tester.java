@@ -1,8 +1,5 @@
 import java.util.Scanner;
 import java.util.ArrayList;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.Arrays;
 import java.security.SecureRandom;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -132,33 +129,40 @@ public class Tester
             }
         }
 
-        Map<Integer,Integer> mMap = new HashMap<Integer,Integer>();
+        class Tuple {
+            public Integer key,a,b;
+            public Tuple (int _k, int _a, int _b) {
+                key = _k;
+                a = _a;
+                b = _b;
+            }
+        }
+
+        ArrayList<Tuple> order = new ArrayList<Tuple>();
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
                 if (i == j) continue;
                 int key = rnd.nextInt(Integer.MAX_VALUE);
-                int value = i * N + j;
-                mMap.put(key, value);
+                order.add(new Tuple(key, i, j));
             }
         }
-        Object[] mapkey = mMap.keySet().toArray();
-        Arrays.sort(mapkey);
+        order.sort((a, b) -> a.key.compareTo(b.key));
 
         connect = new boolean[N][N];
-        ArrayList<Integer> edges = new ArrayList<Integer>();
+        ArrayList<Tuple> edges = new ArrayList<Tuple>();
         for (int i = 0; i < 2; i++) {
             final int MAX_DIST = (int)((i + 1) * 1000.0 / Math.sqrt(N));
-            for (Integer key : mMap.keySet()) {
-                int at = mMap.get(key) / N;
-                int bt = mMap.get(key) % N;
+            for (int key = 0; key < order.size(); key++) {
+                int at = order.get(key).a;
+                int bt = order.get(key).b;
                 if (connect[at][bt]) continue;
                 int lx = x[at] - x[bt];
                 int ly = y[at] - y[bt];
                 if (lx * lx + ly * ly <= MAX_DIST * MAX_DIST) {
                     boolean cross = false;
                     for (int j = 0; j < edges.size(); j++) {
-                        int as = edges.get(j) / N;
-                        int bs = edges.get(j) % N;
+                        int as = edges.get(j).a;
+                        int bs = edges.get(j).b;
                         if (intersect(x[at], y[at], x[bt], y[bt], 
                                       x[as], y[as], x[bs], y[bs]))
                         {
@@ -167,7 +171,7 @@ public class Tester
                         }
                     }
                     if (!cross) {
-                        edges.add(at * N + bt);
+                        edges.add(new Tuple(0, at, bt));
                         connect[at][bt] = true;
                         connect[bt][at] = true;
                     }
@@ -178,8 +182,8 @@ public class Tester
         a = new int[M];
         b = new int[M];
         for (int i = 0; i < edges.size(); i++) {
-            a[i] = edges.get(i) / N;
-            b[i] = edges.get(i) % N;
+            a[i] = edges.get(i).a;
+            b[i] = edges.get(i).b;
         }
 
         /* Get the output. */
