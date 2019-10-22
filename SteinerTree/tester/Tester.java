@@ -1,15 +1,13 @@
 import java.util.Scanner;
-import java.util.Map;
-import java.util.TreeMap;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.security.SecureRandom;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class Tester
 {
-    @JsonIgnore public final int MAXN   = 1000;
-    @JsonIgnore public final int MINN   = 50;
-    @JsonIgnore public final int MAXM   = 2000;
+    @JsonIgnore public final int MAXN   = 200;
+    @JsonIgnore public final int MINN   = 10;
+    @JsonIgnore public final int MAXM   = 1000;
     @JsonIgnore public final int MINM   = 0;
     @JsonIgnore public final int WIDTH  = 1000 + 1;
     @JsonIgnore public final int HEIGHT = 1000 + 1;
@@ -18,7 +16,7 @@ public class Tester
     @JsonIgnore public final int N,M;
     @JsonIgnore public final int[] x,y;
     @JsonIgnore public final int[] ax,ay;
-    @JsonIgnore public Edge[] MST;
+    @JsonIgnore public LineSegment[] MST;
     @JsonIgnore private double score_t = -2.0;
 
     @JsonIgnore
@@ -46,13 +44,13 @@ public class Tester
     }
 
     @JsonIgnore
-    public Edge getEdge (int idx1, int idx2)
+    public LineSegment getLineSegment (int idx1, int idx2)
     {
         int x1 = idx1 < N ? x[idx1] : ax[idx1 - N];
         int y1 = idx1 < N ? y[idx1] : ay[idx1 - N];
         int x2 = idx2 < N ? x[idx2] : ax[idx2 - N];
         int y2 = idx2 < N ? y[idx2] : ay[idx2 - N];
-        return new Edge(x1, y1, x2, y2);
+        return new LineSegment(x1, y1, x2, y2);
     }
 
     public double getScore ()
@@ -88,25 +86,36 @@ public class Tester
         }
 
         /* Calculate the score. */
-        Map<Double,Integer> mMap = new TreeMap<Double,Integer>();
-        for (int i = 0; i < N + M; i++) {
-            for (int j = i + 1; j < N + M; j++) {
-                Edge e = getEdge(i, j);
-                double EPS = 1.0e-10 * (i * (N + M) + j);
-                mMap.put(e.calcDist() + EPS, i * (N + M) + j);
+        class Tuple {
+            public Double dist;
+            public Integer a,b;
+            public Tuple (double _d, int _a, int _b) {
+                dist = _d;
+                a = _a;
+                b = _b;
             }
         }
 
+        ArrayList<Tuple> order = new ArrayList<Tuple>();
+        for (int i = 0; i < N + M; i++) {
+            for (int j = i + 1; j < N + M; j++) {
+                LineSegment e = getLineSegment(i, j);
+                order.add(new Tuple(e.calcDist(), i, j));
+            }
+        }
+        order.sort((a, b) -> a.dist.compareTo(b.dist));
+
         double cost = 0.0;
         int MSTSize = 0;
-        MST = new Edge[N + M - 1];
+        MST = new LineSegment[N + M - 1];
         DisjointSet ds = new DisjointSet(N + M);
-        for (Double key : mMap.keySet()) {
-            int at = mMap.get(key) / (N + M);
-            int bt = mMap.get(key) % (N + M);
+        for (int i = 0; i < order.size(); i++) {
+            int at = order.get(i).a;
+            int bt = order.get(i).b;
+            System.out.println(order.get(i).dist);
             if (!ds.same(at, bt)) {
                 ds.unite(at, bt);
-                MST[MSTSize++] = getEdge(at, bt);
+                MST[MSTSize++] = getLineSegment(at, bt);
                 cost += MST[MSTSize - 1].calcDist();
             }
         }

@@ -59,9 +59,16 @@ public class Visualizer extends JFrame
     }
 
     /**
-     * 
+     * int    N           Number of input vertices.
+     * int    M           Number of output vertices.
+     * int[]  x           The x coordinate of the input vertex.
+     * int[]  y           The y coordinate of the input vertex.
+     * int[]  ax          The x coordinate of the output vertex.
+     * int[]  ay          The y coordinate of the output vertex.
+     * LineSegment[] MST  The line segments of the minimum spanning tree.
      *
      * @see Tester
+     * @see LineSegment
      */
     private BufferedImage drawImage ()
     {
@@ -81,7 +88,7 @@ public class Visualizer extends JFrame
 
         /* Draw edges */
         g2.setColor(new Color(0x000000));
-        g2.setStroke(new BasicStroke(1.5f));
+        g2.setStroke(new BasicStroke(1.0f));
         for (int i = 0; i < tester.MST.length; i++) {
             g2.drawLine(tester.MST[i].x1, tester.MST[i].y1, 
                         tester.MST[i].x2, tester.MST[i].y2);
@@ -89,21 +96,15 @@ public class Visualizer extends JFrame
 
         /* Draw vertex */
         final int R1 = 6;
-        g2.setStroke(new BasicStroke(1.5f));
         for (int i = 0; i < tester.N; i++) {
             g2.setColor(new Color(0xDC143C));
             g2.fillOval(tester.x[i] - R1 / 2, tester.y[i] - R1 / 2, R1, R1);
-            g2.setColor(new Color(0x000000));
-            g2.drawOval(tester.x[i] - R1 / 2, tester.y[i] - R1 / 2, R1, R1);
         }
         
         final int R2 = 6;
-        g2.setStroke(new BasicStroke(1.5f));
         for (int i = 0; i < tester.M; i++) {
             g2.setColor(new Color(0x4169E1));
             g2.fillOval(tester.ax[i] - R2 / 2, tester.ay[i] - R2 / 2, R2, R2);
-            g2.setColor(new Color(0x000000));
-            g2.drawOval(tester.ax[i] - R2 / 2, tester.ay[i] - R2 / 2, R2, R2);
         }
 
         return bi;
