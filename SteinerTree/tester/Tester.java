@@ -106,19 +106,19 @@ public class Tester
         order.sort((a, b) -> a.dist.compareTo(b.dist));
 
         double cost = 0.0;
-        int MSTSize = 0;
-        MST = new LineSegment[N + M - 1];
+        ArrayList<LineSegment> tree = new ArrayList<LineSegment>();
         DisjointSet ds = new DisjointSet(N + M);
         for (int i = 0; i < order.size(); i++) {
             int at = order.get(i).a;
             int bt = order.get(i).b;
-            System.out.println(order.get(i).dist);
             if (!ds.same(at, bt)) {
                 ds.unite(at, bt);
-                MST[MSTSize++] = getLineSegment(at, bt);
-                cost += MST[MSTSize - 1].calcDist();
+                tree.add(getLineSegment(at, bt));
+                cost += order.get(i).dist;
             }
         }
+        MST = new LineSegment[tree.size()];
+        tree.toArray(MST);
 
         return score_t = cost;
     }
