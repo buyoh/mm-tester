@@ -5,13 +5,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class Tester
 {
-    @JsonIgnore public final int MAXN   = 200;
+    @JsonIgnore public final int MAXN   = 500;
     @JsonIgnore public final int MINN   = 10;
     @JsonIgnore public final int MAXM   = 1000;
     @JsonIgnore public final int MINM   = 0;
     @JsonIgnore public final int WIDTH  = 1000 + 1;
     @JsonIgnore public final int HEIGHT = 1000 + 1;
-    @JsonIgnore public final int MIN_DIST = 30;
+    @JsonIgnore public final int MIN_DIST = 20;
 
     public final long seed;
     @JsonIgnore public final int N,M;

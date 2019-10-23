@@ -88,8 +88,8 @@ public class Visualizer extends JFrame
         g2.translate(PADDING, PADDING);
 
         /* Draw edges */
-        g2.setColor(new Color(0xBBBBBB));
-        g2.setStroke(new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 1.0f, new float[]{3}, 0));
+        g2.setColor(new Color(0x999999));
+        g2.setStroke(new BasicStroke(1.5f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 1.0f, new float[]{3}, 0));
         for (int i = 0; i < tester.MST1.length; i++) {
             g2.drawLine(tester.MST1[i].x1, tester.MST1[i].y1, 
                         tester.MST1[i].x2, tester.MST1[i].y2);
@@ -105,7 +105,7 @@ public class Visualizer extends JFrame
             }
             if (addLine) {
                 g2.setColor(new Color(0x000000));
-                g2.setStroke(new BasicStroke(1.0f));
+                g2.setStroke(new BasicStroke(1.5f));
             } else {
                 g2.setColor(new Color(0x32cd32));
                 g2.setStroke(new BasicStroke(1.5f));
@@ -115,13 +115,13 @@ public class Visualizer extends JFrame
         }
 
         /* Draw vertex */
-        final int R1 = 8;
+        final int R1 = 6;
         for (int i = 0; i < tester.N; i++) {
             g2.setColor(new Color(0xDC143C));
             g2.fillOval(tester.x[i] - R1 / 2, tester.y[i] - R1 / 2, R1, R1);
         }
         
-        final int R2 = 8;
+        final int R2 = 6;
         for (int i = 0; i < tester.M; i++) {
             g2.setColor(new Color(0x4169E1));
             g2.fillOval(tester.ax[i] - R2 / 2, tester.ay[i] - R2 / 2, R2, R2);
