@@ -96,5 +96,5 @@ $ sh run.sh
 ### [Longest Path](LongestPath/)
 <img src="images/LongestPath.png" width="400px">
 
-### [Steiner Tree](SteinerTree/)
-<img src="images/SteinerTree.png" width="400px">
+### [Euclidean Steiner Tree](EuclideanSteinerTree/)
+<img src="images/EuclideanSteinerTree.png" width="400px">

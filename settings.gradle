@@ -7,4 +7,4 @@ include 'TravelingSalesman',
         'RectilinearSteinerTree',
         'DiskCovering',
         'LongestPath',
-        'SteinerTree'
+        'EuclideanSteinerTree'
