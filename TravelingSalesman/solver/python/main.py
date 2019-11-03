@@ -1,15 +1,25 @@
 import sys
 
-N = int(input())
-posX = [];
-posY = [];
+class TravelingSalesman:
+    def solve (self, N, x, y):
+        ret = []
+        for i in range(N):
+            ret.append(i)
+        return ret
 
-for i in range(N):
-	x,y = map(int,input().split())
-	posX.append(x)
-	posY.append(y)
+def main():
+    N = int(input())
+    x = []
+    y = []
+    for i in range(N):
+        xt,yt = map(int,input().split())
+        x.append(xt)
+        y.append(yt)
+    ts = TravelingSalesman()
+    ret = ts.solve(N, x, y)
+    for i in ret:
+        print(i)
+    sys.stdout.flush()
 
-for i in range(N):
-	print (i)
-
-sys.stdout.flush()
+if __name__ == '__main__':
+    main()

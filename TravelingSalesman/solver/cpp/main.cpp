@@ -2,19 +2,36 @@
 #include <vector>
 using namespace std;
 
-int main () {
+class TravelingSalesman
+{
+public:
+    vector<int> solve (int N, vector<int> x, vector<int> y)
+    {
+        vector<int> ret(N);
+        for (int i = 0; i < N; i++) {
+            ret[i] = i;
+        }
+        return ret;
+    }
+};
 
+int main ()
+{
     int N; 
     cin >> N;
 
-    vector < int > posX(N), posY(N);
+    vector<int> x(N), y(N);
     for (int i = 0; i < N; i++) {
-        cin >> posX[i] >> posY[i];
+        cin >> x[i] >> y[i];
     }
-    
-    for (int i = 0; i < N; i++) {
-        cout << i << endl;
+
+    TravelingSalesman ts;
+    vector<int> ret = ts.solve(N, x, y);
+    for (int i = 0; i < ret.size(); i++) {
+        cout << ret[i] << endl;
     }
+
+    cout.flush();
     
     return 0;
 }
