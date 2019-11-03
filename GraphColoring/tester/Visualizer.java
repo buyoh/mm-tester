@@ -87,12 +87,14 @@ public class Visualizer extends JFrame
         g2.translate(PADDING, PADDING);
 
         /* Draw edges information. */
-        int cell_width  = FIELD_WIDTH / tester.N;
-        int cell_height = FIELD_HEIGHT / tester.N;
+        final int cell_width  = FIELD_WIDTH / tester.N;
+        final int cell_height = FIELD_HEIGHT / tester.N;
+        final float max_c = 30.0f;
         for (int x = 0; x < tester.N; x++) {
             for (int y = 0; y < tester.N; y++) {
                 if (!tester.edge[x][y]) continue;
-                Color c = Color.getHSBColor((1.0f / (float)tester.N) * (float)tester.col[x], 0.75f, 1.0f);
+                float cval = Math.min(max_c, (float)tester.col[x]);
+                Color c = Color.getHSBColor((0.4f / max_c) * cval, 1.0f, 1.0f);
                 g2.setColor(c);
                 g2.fillRect(cell_width * x, cell_width * y, cell_width, cell_height);
             }
@@ -100,7 +102,8 @@ public class Visualizer extends JFrame
         for (int x = 0; x < tester.N; x++) {
             for (int y = 0; y < tester.N; y++) {
                 if (!tester.edge[x][y]) continue;
-                Color c = Color.getHSBColor((1.0f / (float)tester.N) * (float)tester.col[y], 0.75f, 1.0f);
+                float cval = Math.min(max_c, (float)tester.col[y]);
+                Color c = Color.getHSBColor((0.4f / max_c) * cval, 1.0f, 1.0f);
                 g2.setColor(c);
                 g2.fillRect(cell_width * x + 2, cell_width * y + 2, cell_width - 4, cell_height - 4);
             }

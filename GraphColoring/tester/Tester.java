@@ -65,6 +65,16 @@ public class Tester
                 cnum++;
             }
         }
+        int cntc = 0;
+        int[] recol = new int[N];
+        for (int i = 0; i < N; i++) {
+            if (used[i]) {
+                recol[i] = cntc++;
+            }
+        }
+        for (int i = 0; i < N; i++) {
+            col[i] = recol[col[i]];
+        }
         return score_t = cnum;
     }
 
