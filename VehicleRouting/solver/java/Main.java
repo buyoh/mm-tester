@@ -1,21 +1,43 @@
-import java.io.*;
-import java.security.*;
-import java.util.*;
+import java.util.Scanner;
 
-public class Main {
+class VehicleRouting
+{
+    public int[][] solve (int N, int M, int depotX, int depotY,
+                          int[] x, int[] y, int[] cap, int[] speed)
+    {
+        int T = 0;
+        int K = N / cap[T] + (N % cap[T] > 0 ? 1 : 0);
+        int[][] ret = new int[K * 2][];
+        int idx = 0;
+        while (N > 0) {
+            int L = Math.min(N, cap[T]);
+            int[] truck = {T, L};
+            int[] D = new int[L];
+            for (int i = 0; i < L; i++) {
+                D[i] = --N;
+            }
+            ret[idx++] = truck;
+            ret[idx++] = D;
+        }
+        return ret;
+    }
+}
 
-    public static void main (String[] args) {
+public class Main
+{
+    public static void main (String[] args)
+    {
         try {
             Scanner sc = new Scanner(System.in);
             int N = sc.nextInt();
             int M = sc.nextInt();
             int depotX = sc.nextInt();
             int depotY = sc.nextInt();
-            int[] posX = new int[N];
-            int[] posY = new int[N];
+            int[] x = new int[N];
+            int[] y = new int[N];
             for (int i = 0; i < N; i++) {
-                posX[i] = sc.nextInt();
-                posY[i] = sc.nextInt();
+                x[i] = sc.nextInt();
+                y[i] = sc.nextInt();
             }
             int[] cap = new int[M];
             int[] speed = new int[M];
@@ -23,28 +45,18 @@ public class Main {
                 cap[i] = sc.nextInt();
                 speed[i] = sc.nextInt();
             }
-
-            int T = 0;
-            int K = N / cap[T] + (N % cap[T] > 0 ? 1 : 0);
-            int[][] ans = new int[K][];
-            for (int i = 0; i < K; i++) {
-                int[] truck = new int[2 + Math.min(N, cap[T])];
-                truck[0] = T;
-                truck[1] = Math.min(N, cap[T]);
-                for (int j = 0; j < truck[1]; j++) {
-                    truck[j + 2] = --N;
-                }
-                ans[i] = truck;
-            }
-            System.out.println(K);
-            for (int i = 0; i < K; i++) {
-                for (int j = 0; j < ans[i].length; j++) {
-                    System.out.print(ans[i][j]);
-                    System.out.print((j < ans[i].length - 1 ? " " : "\n"));
+            VehicleRouting vr = new VehicleRouting();
+            int[][] ret = vr.solve(N, M, depotX, depotY, x, y, cap, speed);
+            System.out.println(ret.length / 2);
+            for (int i = 0; i < ret.length; i++) {
+                for (int j = 0; j < ret[i].length; j++) {
+                    System.out.print(ret[i][j]);
+                    System.out.print((j < ret[i].length - 1 ? " " : "\n"));
                 }
             }
+            System.out.flush();
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
     }
 

@@ -56,12 +56,12 @@ public class Tester
         StringBuffer sb = new StringBuffer();
         sb.append(K).append('\n');
         for (int i = 0; i < K; i++) {
-            sb.append(T[i]);
-            sb.append(' ').append(L[i]);
+            sb.append(T[i]).append(' ');
+            sb.append(L[i]).append('\n');
             for (int j = 0; j < L[i]; j++) {
-                sb.append(' ').append(D[i][j]);
+                sb.append(D[i][j]);
+                sb.append((j < L[i] - 1) ? ' ' : '\n');
             }
-            sb.append('\n');
         }
         return sb.toString();
     }
