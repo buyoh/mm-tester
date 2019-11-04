@@ -18,8 +18,8 @@ def main():
         h.append(ht)
     rp = RectanglePacking()
     ret = rp.solve(N, w, h)
-    for i in range(N):
-        print(str(ret[i][0]) + " " + str(ret[i][1]))
+    for p in ret:
+        print(' '.join(map(str, p)))
     sys.stdout.flush()
 
 if __name__ == '__main__':
