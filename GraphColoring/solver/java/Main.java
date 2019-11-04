@@ -1,10 +1,21 @@
-import java.io.*;
-import java.security.*;
-import java.util.*;
+import java.util.Scanner;
 
-public class Main {
+class GraphColoring
+{
+    public int[] solve (int N, int M, int[] a, int[] b)
+    {
+        int[] ret = new int[N];
+        for (int i = 0; i < N; i++) {
+            ret[i] = i;
+        }
+        return ret;
+    }
+}
 
-    public static void main (String[] args) {
+public class Main
+{
+    public static void main (String[] args)
+    {
         try {
             Scanner sc = new Scanner(System.in);
             int N = sc.nextInt();
@@ -15,13 +26,15 @@ public class Main {
                 a[i] = sc.nextInt();
                 b[i] = sc.nextInt();
             }
-            for (int i = 0; i < N; ++i) {
-                System.out.println(i);
+            GraphColoring gc = new GraphColoring();
+            int[] ret = gc.solve(N, M, a, b);
+            for (int i = 0; i < ret.length; ++i) {
+                System.out.println(ret[i]);
             }
+            System.out.flush();
         }
         catch (Exception e) {
-
+            e.printStackTrace();
         }
     }
-
 }
