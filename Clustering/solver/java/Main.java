@@ -1,10 +1,22 @@
-import java.io.*;
-import java.security.*;
-import java.util.*;
+import java.util.Scanner;
 
-public class Main {
+class Clustering
+{
+    public int[][] solve (int N, int K, int[] x, int[] y)
+    {
+        int[][] ret = new int[K][2];
+        for (int i = 0; i < K; i++) {
+            ret[i][0] = (i / 4) * 200 + 100;
+            ret[i][1] = (i % 4) * 250 + 100;
+        }
+        return ret;
+    }
+}
 
-    public static void main (String[] args) {
+public class Main
+{
+    public static void main (String[] args)
+    {
         try {
             Scanner sc = new Scanner(System.in);
             int N = sc.nextInt();
@@ -15,13 +27,15 @@ public class Main {
                 x[i] = sc.nextInt();
                 y[i] = sc.nextInt();
             }
-            for (int i = 0; i < K; ++i) {
-                System.out.println((i / 4 * 200 + 100) + " " + (i % 4 * 250 + 100));
+            Clustering c = new Clustering();
+            int[][] ret = c.solve(N, K, x, y);
+            for (int i = 0; i < ret.length; ++i) {
+                System.out.println(ret[i][0] + " " + ret[i][1]);
             }
+            System.out.flush();
         }
         catch (Exception e) {
-
+            e.printStackTrace();
         }
     }
-
 }
