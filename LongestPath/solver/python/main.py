@@ -1,24 +1,30 @@
 import sys
 
-N,M = map(int, input().split())
-x = []
-y = []
-a = []
-b = []
+class LongestPath:
+    def solve (self, N, M, x, y, a, b):
+        ret = [a[0], b[0]]
+        return ret
 
-for i in range(N):
-	xt,yt = map(int,input().split())
-	x.append(xt)
-	y.append(yt)
+def main():
+    N,M = map(int, input().split())
+    x = []
+    y = []
+    a = []
+    b = []
+    for i in range(N):
+        xt,yt = map(int,input().split())
+        x.append(xt)
+        y.append(yt)
+    for i in range(M):
+        at,bt = map(int,input().split())
+        a.append(at)
+        b.append(bt)
+    lp = LongestPath()
+    ret = lp.solve(N, M, x, y, a, b)
+    print(len(ret))
+    for v in ret:
+        print(v)
+    sys.stdout.flush()
 
-for i in range(M):
-	at,bt = map(int,input().split())
-	a.append(at)
-	b.append(bt)
-
-K = 2
-print(K)
-print(a[0])
-print(b[0])
-
-sys.stdout.flush()
+if __name__ == '__main__':
+    main()

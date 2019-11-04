@@ -1,10 +1,18 @@
-import java.io.*;
-import java.security.*;
-import java.util.*;
+import java.util.Scanner;
 
-public class Main {
+class LongestPath
+{
+    public int[] solve (int N, int M, int[] x, int[] y, int[] a, int[] b)
+    {
+        int[] ret = {a[0], b[0]};
+        return ret;
+    }
+}
 
-    public static void main (String[] args) {
+public class Main
+{
+    public static void main (String[] args)
+    {
         try {
             Scanner sc = new Scanner(System.in);
             int N = sc.nextInt();
@@ -21,14 +29,16 @@ public class Main {
                 a[i] = sc.nextInt();
                 b[i] = sc.nextInt();
             }
-            int K = 2;
-            System.out.println(K);
-            System.out.println(a[0]);
-            System.out.println(b[0]);
+            LongestPath lp = new LongestPath();
+            int[] ret = lp.solve(N, M, x, y, a, b);
+            System.out.println(ret.length);
+            for (int i = 0; i < ret.length; i++) {
+                System.out.println(ret[i]);
+            }
+            System.out.flush();
         }
         catch (Exception e) {
-
+            e.printStackTrace();
         }
     }
-
 }

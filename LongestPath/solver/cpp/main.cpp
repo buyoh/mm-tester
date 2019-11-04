@@ -2,6 +2,18 @@
 #include <vector>
 using namespace std;
 
+class LongestPath
+{
+public:
+    vector<int> solve (int N, int M, vector<int> x, vector<int> y, vector<int> a, vector<int> b)
+    {
+        vector<int> ret;
+        ret.push_back(a[0]);
+        ret.push_back(b[0]);
+        return ret;
+    }
+};
+
 int main ()
 {
     int N,M;
@@ -17,8 +29,14 @@ int main ()
         cin >> a[i] >> b[i];
     }
 
-    int K = 2;
-    cout << K << endl;
-    cout << a[0] << endl;
-    cout << b[0] << endl;
+    LongestPath lp;
+    vector<int> ret = lp.solve(N, M, x, y, a, b);
+    cout << ret.size() << endl;
+    for (int i = 0; i < ret.size(); i++) {
+        cout << ret[i] << endl;
+    }
+
+    cout.flush();
+
+    return 0;
 }
