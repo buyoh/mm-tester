@@ -1,30 +1,49 @@
 #include <iostream>
 #include <vector>
-#include <cmath>
 #include <set>
 using namespace std;
+
+class RectilinearSteinerTree
+{
+public:
+    vector<vector<int>> solve (int N, vector<int> x, vector<int> y)
+    {
+        set<vector<int>> used;
+        for (int i = 0; i < N; i++) {
+            used.insert({x[i], y[i]});
+        }
+        const int size = 100;
+        vector<vector<int>> ret;
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                vector<int> p = {i, j};
+                if (used.find(p) == used.end()) {
+                    ret.push_back(p);
+                }
+            }
+        }
+        return ret;
+    }
+};
 
 int main ()
 {
     int N;
     cin >> N;
 
-    set < pair < int,int > > used;
+    vector<int> x(N), y(N);
     for (int i = 0; i < N; i++) {
-        int x,y;
-        cin >> x >> y;
-        used.insert(make_pair(x, y));
+        cin >> x[i] >> y[i];
     }
 
-    const int size = 100;
-    cout << size * size - N << endl;
-    for (int x = 0; x < size; x++) {
-        for (int y = 0; y < size; y++) {
-            if (used.find(make_pair(x, y)) == used.end()) {
-                cout << x << " " << y << endl;
-            }
-        }
+    RectilinearSteinerTree rst;
+    vector<vector<int>> ret = rst.solve(N, x, y);
+    cout << ret.size() << endl;
+    for (int i = 0; i < ret.size(); i++) {
+        cout << ret[i][0] << " " << ret[i][1] << endl;
     }
+
+    cout.flush();
 
     return 0;
 }

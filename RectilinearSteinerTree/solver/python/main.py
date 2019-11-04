@@ -1,21 +1,33 @@
 import sys
 
-posX = [];
-posY = [];
-used = set([])
+class RectilinearSteinerTree:
+    def solve (self, N, x, y):
+        size = 100
+        used = set([])
+        for i in range(N):
+            used.add(x[i] * size + y[i])
+        ret = []
+        for i in range(size):
+            for j in range(size):
+                p = i * size + j
+                if p not in used:
+                    ret.append([i, j])
+        return ret
 
-N = int(input())
-for i in range(N):
-	x,y = map(int,input().split())
-	posX.append(x)
-	posY.append(y)
-	used.add(x * 100 + y)
+def main():
+    N = int(input())
+    x = []
+    y = []
+    for i in range(N):
+        xt,yt = map(int,input().split())
+        x.append(xt)
+        y.append(yt)
+    rst = RectilinearSteinerTree()
+    ret = rst.solve(N, x, y)
+    print(len(ret))
+    for p in ret:
+        print(' '.join(map(str, p)))
+    sys.stdout.flush()
 
-print(10000 - N)
-for x in range(100):
-	for y in range(100):
-		p = x * 100 + y
-		if p not in used:
-			print(str(x) + " " + str(y))
-
-sys.stdout.flush()
+if __name__ == '__main__':
+    main()
